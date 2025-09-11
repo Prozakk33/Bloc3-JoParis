@@ -1,0 +1,9 @@
+spring:
+ datasource:
+  url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
+  password: ^N.m*"J2c4j-T!C
+  username: pchab_joparis
+ jpa:
+  hibernate:
+   ddl-auto: create-drop
+  show-sql: true
