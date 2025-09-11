@@ -19,7 +19,7 @@ public class Ticket {
     // private Event event;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticket_id;
+    private Long id;
 
     //@OneToMany
     private String userId;

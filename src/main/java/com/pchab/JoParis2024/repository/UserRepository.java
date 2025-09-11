@@ -8,6 +8,6 @@ import com.pchab.JoParis2024.pojo.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findUserById(Long user_id);
+    User findUserById(Long id);
 
 }

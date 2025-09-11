@@ -16,18 +16,18 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
 
     @Override
-    public Event findEventById(Long event_id) {
-        return eventRepository.findById(event_id).orElse(null);
+    public Event findEventById(Long id) {
+        return eventRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteEventById(Long event_id) {
-        eventRepository.deleteById(event_id);
+    public void deleteEventById(Long id) {
+        eventRepository.deleteById(id);
     }
 
     @Override
-    public void updateEventById(Event event, Long event_id) {
-        Event oldEvent = this.findEventById(event_id);
+    public void updateEventById(Event event, Long id) {
+        Event oldEvent = this.findEventById(id);
 
         if (oldEvent != null) {
 //		oldEvent.setDescription(event.getDescription());
