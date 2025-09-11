@@ -1,0 +1,10 @@
+{
+	"title": "FRANCE - ESPAGNE",
+    "description" : "Quart de Finale",
+    "city" : "BORDEAUX",
+    "stadium" : "Stade Chaban-Delmas",
+    "date" : "2024-07-12T15:00:00",
+    "capacity" : 60000,
+    "sport" : "FOOTBALL",
+    "price" : 50
+}

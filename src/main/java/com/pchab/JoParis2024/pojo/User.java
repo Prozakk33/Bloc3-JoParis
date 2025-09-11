@@ -33,4 +33,7 @@ public class User {
     @NotNull(message = "userKey can't be null")
     private String userKey;
 
+	@NotNull(message = "Role can't be null")
+	private String role = "USER";
+
 }
