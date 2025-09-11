@@ -1,9 +1,13 @@
 spring:
- datasource:
-  url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
-  password: ^N.m*"J2c4j-T!C
-  username: pchab_joparis
- jpa:
-  hibernate:
-   ddl-auto: create-drop
-  show-sql: true
+  datasource:
+    url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
+    password: ^N.m*"J2c4j-T!C
+    username: pchab_joparis
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: DEBUG
+    org.hibernate.type.descriptor.java: DEBUG

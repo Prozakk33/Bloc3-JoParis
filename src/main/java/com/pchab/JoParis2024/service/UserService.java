@@ -1,19 +1,19 @@
 package com.pchab.JoParis2024.service;
 
-import pojo.User;
+import com.pchab.JoParis2024.pojo.User;
 
 public interface UserService {
 
-    // Find Event
-    User findUserById(Long id);
+    // Find User
+    User findUserById(Long user_id);
 
-    // Update Event
-    void updateUserById(User user, Long id);
+    // Update User
+    void updateUserById(User user, Long user_id);
 
-    // Delete Event
-    void deleteUserById(Long id);
+    // Delete User
+    void deleteUserById(Long user_id);
 
-    //Create Event
+    //Create User
     void createUser(User user);
 
 }

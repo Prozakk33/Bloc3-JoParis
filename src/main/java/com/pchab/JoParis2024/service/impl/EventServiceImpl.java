@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.service.EventService;
-
-import pojo.Event;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -17,21 +16,21 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
 
     @Override
-    public Event findEventById(Long id) {
-        return eventRepository.findById(id).orElse(null);
+    public Event findEventById(Long event_id) {
+        return eventRepository.findById(event_id).orElse(null);
     }
 
     @Override
-    public void deleteEventById(Long id) {
-        eventRepository.deleteById(id);
+    public void deleteEventById(Long event_id) {
+        eventRepository.deleteById(event_id);
     }
 
     @Override
-    public void updateEventById(Event event, Long id) {
-        Event oldEvent = this.findEventById(id);
+    public void updateEventById(Event event, Long event_id) {
+        Event oldEvent = this.findEventById(event_id);
 
         if (oldEvent != null) {
-//			oldEvent.setDescription(event.getDescription());
+//		oldEvent.setDescription(event.getDescription());
 //			oldEvent.setTitle(event.getTitle());
         }
 
