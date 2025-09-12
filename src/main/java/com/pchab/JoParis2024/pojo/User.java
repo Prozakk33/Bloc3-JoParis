@@ -1,9 +1,12 @@
 package com.pchab.JoParis2024.pojo;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,4 +39,7 @@ public class User {
 	@NotNull(message = "Role can't be null")
 	private String role = "USER";
 
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> tickets;
+    
 }

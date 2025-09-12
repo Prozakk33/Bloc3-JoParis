@@ -1,6 +1,7 @@
 package com.pchab.JoParis2024.pojo;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -51,5 +53,8 @@ public class Event {
     @NotNull(message = "Price can't be null")
     @Positive(message = "Price must be positive")
     private Float price;
+
+    @OneToMany(mappedBy = "event")
+    private List<Ticket> tickets;
 
 }
