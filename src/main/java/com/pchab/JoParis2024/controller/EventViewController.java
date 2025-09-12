@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,7 +36,7 @@ public class EventViewController {
         return "allEvents";  
     }
         
-    @GetMapping("/newEvent)")
+    @GetMapping("/newEvent")
     public String newEvent(Model model) {
         model.addAttribute("event", new Event());
         model.addAttribute("sport", SportEnum.values());
@@ -43,7 +44,7 @@ public class EventViewController {
         return "newEvent";
     }
 
-    @PostMapping
+    @PostMapping("/createEvent")
     public String createEvent(@Valid @ModelAttribute("event") Event event  , BindingResult result) {
         if (result.hasErrors()) {
             return "newEvent";
@@ -51,5 +52,11 @@ public class EventViewController {
         eventService.createEvent(event); 
         return "redirect:/allEvents";
        }
+    
+    @GetMapping("/eventDetail/{id}")
+    public String eventDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("event", eventService.findEventById(id));
+        return "eventDetail";
+    }
 
 }

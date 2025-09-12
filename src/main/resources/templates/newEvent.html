@@ -31,42 +31,95 @@
 
 <body class="bg-gray-100 text-gray-800">
 
+    <!-- Form Section      -->
     <section class="text-gray-600 body-font">
         <div class="container px-5 py-24 mx-auto">
+
+            <!-- Form Header -->
             <div class="flex flex-col text-center w-full mb-12">
                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Créer une nouvelle épreuve</h1>
                 <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Saisissez l'ensemble des champs ci-dessous pour créer une nouvelle épreuve</p>
             </div>
 
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
-                <div class="relative flex-grow w-full">
-                    <label for="title" class="leading-7 text-sm text-gray-600">Title</label>
-                    <input type="text" id="title" th:field="*{title}" name="title" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                </div>
-                <div class="relative flex-grow w-full">
-                    <label for="description" class="leading-7 text-sm text-gray-600">Description</label>
-                    <input type="text" id="description" th:field="*{description}" name="description" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <!-- Formulaire -->
+            <form th:action="@{/createEvent}" th:object="${event}" method="post">
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+                    <!-- Champ Title -->
+                    <div class="relative flex-grow w-full">
+                        <label for="title" class="leading-7 text-sm text-gray-600">Title</label>
+                        <input type="text" id="title" th:field="*{title}" name="title" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Description -->
+                    <div class="relative flex-grow w-full">
+                        <label for="description" class="leading-7 text-sm text-gray-600">Description</label>
+                        <input type="text" id="description" th:field="*{description}" name="description" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Date -->
+                    <div class="relative flex-grow w-full">
+                        <label for="date" class="leading-7 text-sm text-gray-600">Date</label>
+                        <input type="datetime-local" id="date" th:field="*{date}" name="date" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-red-500 text-sm"></div>
+                    </div>
                 </div>
 
-            </div>
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
-                <div class="relative flex-grow w-full">
-                    <label for="City" class="leading-7 text-sm text-gray-600">City</label>
-                    <select id="City" th:field="*{city}" name="City" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                    <option value="" disabled selected>Choisissez une ville</option>
-                    <option th:each="city : ${city}" th:value="${city}" th:text="${city}"></option>
-                    </select>
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+
+                    <!-- Champ City -->
+                    <div class="relative flex-grow w-full">
+                        <label for="city" class="leading-7 text-sm text-gray-600">City</label>
+                            <select id="city" th:field="*{city}" name="City" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                <option value="" disabled selected>Choisissez une ville</option>
+                                <option th:each="city : ${city}" th:value="${city}" th:text="${city}">City</option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Sport -->
+                    <div class="relative flex-grow w-full">
+                        <label for="sport" class="leading-7 text-sm text-gray-600">Sport</label>
+                        <select id="sport" th:field="*{sport}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                            <option value="" disabled selected>Choisissez un sport</option>
+                            <option th:each="sport : ${sport}" th:value="${sport}" th:text="${sport}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('sport')}" th:errors="*{sport}" class="text-red-500 text-sm"></div>
+                    </div>
                 </div>
-                <div class="relative flex-grow w-full">
-                    <label for="Sport" class="leading-7 text-sm text-gray-600">Sport</label>
-                    <select id="Sport" th:field="*{sport}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                    <option value="" disabled selected>Choisissez un sport</option>
-                    <option th:each="sport : ${sport}" th:value="${sport}" th:text="${sport}"></option>
-                    </select>
+                
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+
+                    <!-- Champ Stadium -->
+                    <div class="relative flex-grow w-full">
+                        <label for="stadium" class="leading-7 text-sm text-gray-600">Stadium</label>
+                            <input type="text" id="stadium" th:field="*{stadium}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <div th:if="${#fields.hasErrors('stadium')}" th:errors="*{stadium}" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Capacity -->
+                    <div class="relative flex-grow w-full">
+                        <label for="capacity" class="leading-7 text-sm text-gray-600">Capacity</label>
+                        <input type="number" id="capacity" th:field="*{capacity}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                        <div th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Price -->
+                    <div class="relative flex-grow w-full">
+                        <label for="price" class="leading-7 text-sm text-gray-600">Price</label>
+                        <input type="number" id="price" th:field="*{price}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                        <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-red-500 text-sm"></div>
+                    </div>
                 </div>
 
-                <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
-            </div>
+
+                <!-- Boutons -->
+                 <div class="lg:w-2/3 w-full mx-auto px-8 sm:px-0 mt-4">   
+                    <button type="submit" class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Save</button>
+                    <a href="/" class="ml-4 text-blue-500">Back to Home</a>
+                </div>
+            </form>
         </div>
     </section>
 </body>
@@ -110,5 +163,4 @@
             </span>
         </div>
     </footer>
-
 </html>
