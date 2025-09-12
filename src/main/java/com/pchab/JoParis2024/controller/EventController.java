@@ -3,7 +3,6 @@ package com.pchab.JoParis2024.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +18,6 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-
-    @RequestMapping("/")
-    public String index(Model model) {
-        model.addAttribute("events", eventService.findAllEvent());
-        return "index";
-    }
 
     @GetMapping("/all")
     List<Event> findAllEvent() {
