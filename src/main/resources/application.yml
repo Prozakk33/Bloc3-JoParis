@@ -16,3 +16,7 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: DEBUG
     org.hibernate.type.descriptor.java: DEBUG
+paris:
+  security:
+    secret: CeciEstUneCleDeSecuriteTresSecretePourJwtPourLeBloc3-JoParis2024
+    expiration: 3600000 # 1 heure en millisecondes

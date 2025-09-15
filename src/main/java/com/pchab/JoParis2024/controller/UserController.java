@@ -29,5 +29,11 @@ public class UserController {
     @PostMapping
     void createUser(@RequestBody User user) {
         userService.createUser(user);
-    }    
+    }
+    
+    // Find a user by email
+    @GetMapping("/{email}")
+    User findByEmail(@PathVariable String email) {
+        return userService.findByEmail(email);
+    }
 }
