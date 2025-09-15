@@ -26,15 +26,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEventById(Event event, Long id) {
+    public void updateEvent(Event event, Long id) {
         Event oldEvent = this.findEventById(id);
 
         if (oldEvent != null) {
-//		oldEvent.setDescription(event.getDescription());
-//			oldEvent.setTitle(event.getTitle());
-        }
+	    	oldEvent.setDescription(event.getDescription());
+            oldEvent.setTitle(event.getTitle());
+            oldEvent.setDate(event.getDate());
+            oldEvent.setSport(event.getSport());
+            oldEvent.setCity(event.getCity());
+            oldEvent.setStadium(event.getStadium());
+            oldEvent.setCapacity(event.getCapacity());
+            oldEvent.setPrice(event.getPrice());
 
-        eventRepository.save(oldEvent);
+            eventRepository.save(oldEvent);
+        }
 
     }
 

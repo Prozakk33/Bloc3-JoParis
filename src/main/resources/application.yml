@@ -5,7 +5,7 @@ spring:
     username: pchab_joparis
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     defer-datasource-initialization: true
   sql:

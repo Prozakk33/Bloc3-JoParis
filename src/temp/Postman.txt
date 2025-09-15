@@ -1,10 +1,10 @@
 {
-	"title": "FRANCE - ESPAGNE",
-    "description" : "Quart de Finale",
-    "city" : "BORDEAUX",
-    "stadium" : "Stade Chaban-Delmas",
-    "date" : "2024-07-12T15:00:00",
-    "capacity" : 60000,
+	"title": "SUISSE - ROUMANIE",
+    "description" : "Match de Poule - Groupe E",
+    "city" : "LILLE",
+    "stadium" : "Stade Pierre Mauroy",
+    "date" : "2024-08-19T21:00:00",
+    "capacity" : 40000,
     "sport" : "FOOTBALL",
     "price" : 50
 }

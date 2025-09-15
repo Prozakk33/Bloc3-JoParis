@@ -24,18 +24,22 @@ public class EventViewController {
     @Autowired
     private EventService eventService;
 
+
+    /* Home page */
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("events", eventService.findAllEvent());
         return "index";
     }
 
+    /* List of all events */
     @GetMapping("/allEvents")
     public String allEvents(Model model) {
         model.addAttribute("events", eventService.findAllEvent());
         return "allEvents";  
     }
-        
+     
+    /* Event creation form */
     @GetMapping("/newEvent")
     public String newEvent(Model model) {
         model.addAttribute("event", new Event());
@@ -44,6 +48,7 @@ public class EventViewController {
         return "newEvent";
     }
 
+    /* Event creation */
     @PostMapping("/createEvent")
     public String createEvent(@Valid @ModelAttribute("event") Event event  , BindingResult result) {
         if (result.hasErrors()) {
@@ -53,6 +58,7 @@ public class EventViewController {
         return "redirect:/allEvents";
        }
     
+    /* Event detail */
     @GetMapping("/eventDetail/{id}")
     public String eventDetail(@PathVariable Long id, Model model) {
         model.addAttribute("event", eventService.findEventById(id));

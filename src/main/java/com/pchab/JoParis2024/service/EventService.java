@@ -2,8 +2,11 @@ package com.pchab.JoParis2024.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.pchab.JoParis2024.pojo.Event;
 
+@Service
 public interface EventService {
 
     // Find Event
@@ -13,7 +16,7 @@ public interface EventService {
     List<Event> findAllEvent();
 
     // Update Event
-    void updateEventById(Event event, Long id);
+    void updateEvent(Event event, Long id);
 
     // Delete Event
     void deleteEventById(Long id);

@@ -20,31 +20,31 @@
             <table class="table-auto w-full text-left whitespace-no-wrap">
                 <thead>
                 <tr>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Affiche</th>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Sport</th>
+                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Affiche</th>
+                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Sport</th>
                     <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Date</th>
                     <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Ville</th>
                     <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Stade</th>
-                    <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
+                    <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Détail</th>
                 </tr>
                 </thead>
                 <tbody>
 
                 <tr th:each="event : ${events}">
-                        <td th:text="${event.title}"></td>
-                        <td th:text="${event.sport}"></td>
-                        <td th:text="${event.date}"></td>
-                        <td th:text="${event.city}"></td>
-                        <td th:text="${event.stadium}"></td>
+                        <td class="px-4 py-3" th:text="${event.title}"></td>
+                        <td class="px-4 py-3" th:text="${event.sport}"></td>
+                        <td class="px-4 py-3" th:text="${event.date}"></td>
+                        <td class="px-4 py-3" th:text="${event.city}"></td>
+                        <td class="px-4 py-3" th:text="${event.stadium}"></td>
                         <td>
-                            <button th:href="@{/eventDetail/{id}(id=${event.id})}" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Details</button>
+                            <a th:href="@{/eventDetail/{id}(id=${event.id})}" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Details</a>
                         </td>
                  </tr>          
                 </tbody>
             </table>
             </div>
             <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
-            <button type="button" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Back to Home</button>
+            <a href="/" type="button" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Back to Home</a>
             </div>
         </div>
     </section>
