@@ -7,12 +7,6 @@ public interface UserService {
     // Find User
     User findUserById(Long id);
 
-    // Update User
-    void updateUserById(User user, Long id);
-
-    // Delete User
-    void deleteUserById(Long id);
-
     //Create User
     void createUser(User user);
 

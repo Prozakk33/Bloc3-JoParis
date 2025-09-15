@@ -8,3 +8,11 @@
     "sport" : "FOOTBALL",
     "price" : 50
 }
+
+
+{
+	"firstname": "Léon",
+    "lastname" : "MARCHAND",
+    "email" : "leon@marchand.com",
+    "password" : "123456",
+}
