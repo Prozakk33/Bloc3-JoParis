@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: JoParis2024
   datasource:
     url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
     password: ^N.m*"J2c4j-T!C
@@ -16,7 +18,7 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: DEBUG
     org.hibernate.type.descriptor.java: DEBUG
-paris:
+JoParis2024:
   security:
-    secret: CeciEstUneCleDeSecuriteTresSecretePourJwtPourLeBloc3-JoParis2024
+    secret: mySecretKeyForJWTGeneration
     expiration: 3600000 # 1 heure en millisecondes

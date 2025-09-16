@@ -1,31 +1,34 @@
 package com.pchab.JoParis2024.security.jwt;
-import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Jwts;
 import java.security.Key;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 import com.pchab.JoParis2024.security.service.UserDetailsImpl;
-import java.util.Date;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
-
-
+@EnableConfigurationProperties
 @Component
 public class JwtUtils {
 
     // Génération du Token
-    @Value("${paris.security.jwtSecret}")
+    @Value("${JoParis2024.security.secret}")
     private String jwtSecret;
 
-    @Value("${paris.security.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    @Value("${JoParis2024.security.expiration}")
+    private long jwtExpirationMs;
     // Récupérer l'email dans le token
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
@@ -35,7 +38,7 @@ public class JwtUtils {
     public boolean validateJwtToken(String token) {
         try {
             // Logique de validation du token
-            Jwts.parser().setSigningKey(key()).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
             return true;
         } catch (MalformedJwtException e) {
             // Gérer les exceptions de validation
@@ -73,7 +76,7 @@ public class JwtUtils {
     }
 
     public String getEmailFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(key()).build()
+        return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
 }
