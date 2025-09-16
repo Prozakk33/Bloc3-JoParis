@@ -65,10 +65,9 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/event/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/signUp").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/signIn").permitAll()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/event/*").permitAll()
+                .requestMatchers("/auth/signup", "/auth/signin").permitAll()
                 .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

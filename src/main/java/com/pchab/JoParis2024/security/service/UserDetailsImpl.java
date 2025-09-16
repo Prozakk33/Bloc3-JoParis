@@ -32,6 +32,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
+        System.out.println("UserDetailsImpl - getUsername() called, returning email: " + this.email);
         return this.email;
     }
 

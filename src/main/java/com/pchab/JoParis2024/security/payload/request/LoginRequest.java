@@ -7,11 +7,18 @@ import jakarta.validation.constraints.NotBlank;
 public class LoginRequest {
     
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String password;
-    public String getUsername() {
-        return username;
+    
+    public String getEmail() {
+        System.out.println("LoginRequest Email: " + email);
+        return email;
+    }
+
+    public String getPassword() {
+        System.out.println("LoginRequest Password: " + password);
+        return password;
     }
 }       

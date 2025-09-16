@@ -31,16 +31,17 @@ public class UserController {
     void createUser(@RequestBody User user) {
         userService.createUser(user);
     }
-    
+   /* 
     // Find a user by email
     @GetMapping("/{email}")
     User findByEmail(@PathVariable String email) {
+        System.out.println("USERCONTROLLER - Searching for user with email: " + email);
         try {
             User user = userService.findUserByEmail(email);
             return user;
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
-        
     }
+    */
 }

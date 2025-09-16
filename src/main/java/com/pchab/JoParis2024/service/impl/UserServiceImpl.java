@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
+        System.out.println("USERSERVICE-IMPL - Searching for user with email: " + email);
         try {
             User user = userRepository.findUserByEmail(email);
             return user;

@@ -39,6 +39,26 @@ VALUES (
     );
 
 INSERT INTO
+    user (
+        id,
+        first_name,
+        last_name,
+        email,
+        password,
+        user_key,
+        role
+    )
+VALUES (
+        3,
+        'Léon',
+        'Marchand',
+        'leon@marchand.com',
+        '$2a$10$eBpAzEpykU8KO0wRm7lKZuAhVUjNfggmlqidzY1llFT5XjieSelcC',
+        'key789',
+        'USER'
+    );
+
+INSERT INTO
     event (
         id,
         title,

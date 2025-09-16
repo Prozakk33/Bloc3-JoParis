@@ -39,7 +39,16 @@ public class User {
     private String userKey;
 
 	@NotNull(message = "Role can't be null")
-	private String role = "USER";
+	private String role;
+
+    public User(String firstName, String lastName, String email, String password, String userKey) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.userKey = userKey;
+        this.role = "USER";
+    }
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore

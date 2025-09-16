@@ -11,8 +11,13 @@
 
 
 {
-	"firstname": "Léon",
-    "lastname" : "MARCHAND",
+	"firstName": "Léon",
+    "lastName" : "MARCHAND",
     "email" : "leon@marchand.com",
-    "password" : "123456",
+    "password" : "P@assword123456"
+}
+
+{
+    "email" : "leon@marchand.fr",
+    "password" : "P@assword123456"
 }
