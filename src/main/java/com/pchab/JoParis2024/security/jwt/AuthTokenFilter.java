@@ -37,16 +37,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(email);
 
                 // Create authentication token
-                UsernamePasswordAuthenticationToken authentication =
+                UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 // Set authentication in context
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             } catch (Exception e) {
                 System.err.println("Cannot set user authentication: " + e.getMessage());
             }
+            filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {

@@ -33,14 +33,14 @@ public class EventViewController {
     }
 
     /* List of all events */
-    @GetMapping("/allEvents")
+    @GetMapping("/event/all")
     public String allEvents(Model model) {
         model.addAttribute("events", eventService.findAllEvent());
         return "allEvents";  
     }
      
     /* Event creation form */
-    @GetMapping("/newEvent")
+    @GetMapping("/admin/newEvent")
     public String newEvent(Model model) {
         model.addAttribute("event", new Event());
         model.addAttribute("sport", SportEnum.values());
@@ -49,7 +49,7 @@ public class EventViewController {
     }
 
     /* Event creation */
-    @PostMapping("/createEvent")
+    @PostMapping("/admin/createEvent")
     public String createEvent(@Valid @ModelAttribute("event") Event event  , BindingResult result) {
         if (result.hasErrors()) {
             return "newEvent";
@@ -59,7 +59,7 @@ public class EventViewController {
        }
     
     /* Event detail */
-    @GetMapping("/eventDetail/{id}")
+    @GetMapping("/event/{id}")
     public String eventDetail(@PathVariable Long id, Model model) {
         model.addAttribute("event", eventService.findEventById(id));
         return "eventDetail";

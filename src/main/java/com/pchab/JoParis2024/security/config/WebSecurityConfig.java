@@ -4,6 +4,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -56,18 +57,22 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
+    // Paramétrage des URL en Entrées 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                        .anyRequest().authenticated());
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.GET, "/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/event/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/signUp").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/signIn").permitAll()
+                .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 }
