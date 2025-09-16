@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.pchab.JoParis2024.security.service.UserDetailsServiceImpl;
 import com.pchab.JoParis2024.security.jwt.AuthTokenFilter;
-import com.pchab.JoParis2024.security.jwt.AuthEntryPontJWT;
+import com.pchab.JoParis2024.security.jwt.AuthEntryPointJWT;
 
 
 @Configuration
