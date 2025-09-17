@@ -37,13 +37,6 @@ public class ViewController {
         model.addAttribute("events", eventService.findAllEvent());
         return "index";
     }
-
-    /* List of all events */
-    @GetMapping("/event/all")
-    public String allEvents(Model model) {
-        model.addAttribute("events", eventService.findAllEvent());
-        return "allEvents";  
-    }
      
     /* Event creation form */
     @GetMapping("/admin/newEvent")
@@ -64,34 +57,6 @@ public class ViewController {
         }
         eventService.createEvent(event); 
         return "redirect:/event/all";
-       }
-    
-    /* Event detail */
-    @GetMapping("/event/{id}")
-    public String eventDetail(@PathVariable Long id, Model model) {
-        model.addAttribute("event", eventService.findEventById(id));
-        return "eventDetail";
-    }
-
-    @GetMapping("/signin")
-    public String signIn() {
-        return "signin";
-    }
-
-    @GetMapping("/signup")
-    public String signUp(Model model) {
-        model.addAttribute("user", new User());
-        return "signup";
-    }
-
-    @PostMapping("/user/signup")
-    public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "signup";
-        }
-        userService.createUser(user);
-        return "redirect:/";
     }
     
-
 }

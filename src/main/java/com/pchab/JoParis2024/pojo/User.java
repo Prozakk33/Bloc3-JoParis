@@ -2,6 +2,8 @@ package com.pchab.JoParis2024.pojo;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,23 +27,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Firstname can't be null")
+    @NotBlank(message = "Firstname can't be empty")
     private String firstName;
 
-    @NotNull(message = "Lastname can't be null")
+    @NotBlank(message = "Lastname can't be empty")
     private String lastName;
 
     @Column(unique = true)
-    @NotNull(message = "Email can't be null")
+    @NotBlank(message = "Email can't be empty")
     private String email;
 
     @NotNull(message = "Password can't be null")
     private String password;
 
-    @NotNull(message = "userKey can't be null")
     private String userKey;
 
-	@NotNull(message = "Role can't be null")
 	private String role;
 
     public User() {
