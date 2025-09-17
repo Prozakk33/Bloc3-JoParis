@@ -1,11 +1,18 @@
 package com.pchab.JoParis2024.service.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
+import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.service.UserService;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 
@@ -14,6 +21,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired 
+    private JwtUtils jwtUtils;
+
     @Override
     public User findUserById(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -21,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
+        System.out.println("USERSERVICE-IMPL - Creating user: " + user.getEmail());
+        String userKey = jwtUtils.generateUserKeyToken(user.getEmail());
+        user.setUserKey(userKey);
         userRepository.save(user);
     }
 
@@ -28,10 +41,11 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         System.out.println("USERSERVICE-IMPL - Searching for user with email: " + email);
         try {
-            User user = userRepository.findUserByEmail(email);
+            User user = userRepository.findByEmail(email);
+            System.out.println("USERSERVICE-IMPL - User found: " + user);
             return user;
         } catch (Exception e) {
-            throw new RuntimeException("User Not Found with email : " + email);
+            throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
     }
     

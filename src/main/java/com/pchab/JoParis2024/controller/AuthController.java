@@ -2,9 +2,6 @@ package com.pchab.JoParis2024.controller;
 
 import java.util.UUID;
 
-import org.apache.catalina.security.SecurityUtil;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,17 +11,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.payload.request.LoginRequest;
+import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.security.payload.response.JwtResponse;
 import com.pchab.JoParis2024.security.service.UserDetailsImpl;
 import com.pchab.JoParis2024.service.UserService;
-import com.pchab.JoParis2024.security.payload.request.LoginRequest;
-import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
-
-
 
 import jakarta.validation.Valid;
 
@@ -52,7 +49,7 @@ public class AuthController {
     // Login authentification
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginRequest) {
-
+        try {
         System.err.println("AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -65,12 +62,18 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
      
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername()));
+    }catch (Exception e) {
+        System.err.println("AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
+        return ResponseEntity
+                .badRequest()
+                .body("Error: Invalid email or password");
     }
+}
 
     // User Registration
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.findUserByEmail(signUpRequest.getUserEmail()) != null) {
+        if(userRepository.findByEmail(signUpRequest.getUserEmail()) != null) {
             return ResponseEntity.badRequest().body("Error: Email is already in use !");
         }
         // Create new user's account

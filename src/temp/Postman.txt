@@ -11,9 +11,9 @@
 
 
 {
-	"firstName": "Léon",
-    "lastName" : "MARCHAND",
-    "email" : "leon@marchand.com",
+	"firstName": "Pauline",
+    "lastName" : "CHEVALIER",
+    "email" : "pauline@gmail.com",
     "password" : "P@assword123456"
 }
 

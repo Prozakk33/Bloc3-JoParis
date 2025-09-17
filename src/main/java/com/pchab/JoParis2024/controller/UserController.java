@@ -21,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     // Find a user by ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
@@ -31,7 +31,7 @@ public class UserController {
     void createUser(@RequestBody User user) {
         userService.createUser(user);
     }
-   /* 
+ 
     // Find a user by email
     @GetMapping("/{email}")
     User findByEmail(@PathVariable String email) {
@@ -43,5 +43,5 @@ public class UserController {
             throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
     }
-    */
+
 }

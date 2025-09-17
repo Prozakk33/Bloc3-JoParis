@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class User {
     @NotNull(message = "Lastname can't be null")
     private String lastName;
 
+    @Column(unique = true)
     @NotNull(message = "Email can't be null")
     private String email;
 
@@ -41,6 +43,9 @@ public class User {
 	@NotNull(message = "Role can't be null")
 	private String role;
 
+    public User() {
+    }
+    
     public User(String firstName, String lastName, String email, String password, String userKey) {
         this.firstName = firstName;
         this.lastName = lastName;

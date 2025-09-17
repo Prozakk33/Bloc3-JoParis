@@ -20,8 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println("UserDetailsServiceImpl - loadUserByUsername() called with email: " + email);    
         try {
-            User user = userRepository.findUserByEmail(email);
-            System.out.println("UserDetailsServiceImpl - User found: " + userRepository.findUserByEmail(email));
+            User user = userRepository.findByEmail(email);
+            System.out.println("UserDetailsServiceImpl - User found: " + userRepository.findByEmail(email));
             return UserDetailsImpl.build(user);
         } catch (Exception e) {
                 System.err.println("UserDetailsServiceImpl - User not found with email: " + email);

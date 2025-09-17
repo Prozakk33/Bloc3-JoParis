@@ -1,12 +1,13 @@
 package com.pchab.JoParis2024.security.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pchab.JoParis2024.pojo.User;
-import com.pchab.JoParis2024.security.service.UserDetailsImpl;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -24,10 +25,11 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetails build(User user) {
+        List<GrantedAuthority> authorities = List.of(() -> "ROLE_" + user.getRole());
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getPassword(),
-                null);
+                authorities);
     }
 
     @Override
