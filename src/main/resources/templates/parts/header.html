@@ -6,9 +6,10 @@
             <nav class="md:ml-auto flex flex-wrap items-center text-black justify-center">
             <a href="/event/all" class="mr-5 hover:text-gray-900">Liste Complète</a>
             <a class="mr-5 hover:text-gray-900">Panier</a>
-            <a href="/user/signin" class="mr-5 hover:text-gray-900">S'identifier</a>
-            <a href="/user/signup" class="mr-5 hover:text-gray-900">S'inscrire</a>
-            <a href="/admin/newEvent" class="mr-5 hover:text-gray-900">Ajouter une épreuve</a>
+            <a id="accountButton" href="/user/account" class="mr-5 hover:text-gray-900 hidden">Mon Compte</a>
+            <a id="loginButton" href="/user/signin" class="mr-5 hover:text-gray-900">S'identifier</a>
+            <a id="adminAccount" href="/admin/newEvent" class="mr-5 hover:text-gray-900 hidden">Admin</a>
+            <a id="logoutButton" href="#" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
             </nav>
             <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
@@ -16,4 +17,67 @@
             </svg>
             </button>
         </div>
+
+<script>
+    // Fonction pour décoder un token JWT
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map(function (c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    })
+                    .join('')
+            );
+            console.log("Token décodé :", jsonPayload);
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            console.error("Erreur lors du décodage du token :", e);
+            return null;
+        }
+    }
+
+    // Vérifier si l'utilisateur est connecté et a le rôle USER
+    function updateHeaderButtons() {
+        const token = localStorage.getItem("jwtToken"); // Récupère le token JWT depuis le localStorage
+
+        if (token) {
+            const decodedToken = parseJwt(token); // Décode le token JWT
+            const roles = decodedToken?.roles || []; // Récupère les rôles (assurez-vous que le backend inclut les rôles dans le token)
+
+            // Afficher les boutons pour les utilisateurs connectés
+            document.getElementById("logoutButton").classList.remove("hidden");
+
+            // Afficher le bouton "Mon Compte" uniquement si l'utilisateur a le rôle USER
+            if (roles.includes("ROLE_USER")) {
+                document.getElementById("accountButton").classList.remove("hidden");
+            }
+
+            // Afficher le bouton "Admin" uniquement si l'utilisateur a le rôle ADMIN
+            if (roles.includes("ROLE_ADMIN")) {
+                document.getElementById("adminAccount").classList.remove("hidden");
+            }
+
+            // Masquer le bouton "Connexion"
+            document.getElementById("loginButton").classList.add("hidden");
+        } else {
+            // Si l'utilisateur n'est pas connecté, afficher uniquement le bouton "Connexion"
+            document.getElementById("loginButton").classList.remove("hidden");
+            document.getElementById("logoutButton").classList.add("hidden");
+            document.getElementById("userButton").classList.add("hidden");
+        }
+    }
+
+    // Appeler la fonction pour mettre à jour les boutons du header
+    updateHeaderButtons();
+
+    // Ajouter un gestionnaire pour le bouton de déconnexion
+    document.getElementById("logoutButton").addEventListener("click", function () {
+        localStorage.removeItem("jwtToken"); // Supprime le token JWT du localStorage
+        window.location.href = "/auth/signin"; // Redirige vers la page de connexion
+    });
+</script>
 </header>

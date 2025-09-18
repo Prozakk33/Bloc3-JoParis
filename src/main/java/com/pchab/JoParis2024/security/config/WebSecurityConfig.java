@@ -63,11 +63,12 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/event/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
+                    .requestMatchers("/").permitAll()
+                    .requestMatchers("/event/**").permitAll()
+                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/user/**").permitAll()
                 //.anyRequest().authenticated());
-                .anyRequest().permitAll());
+                    .anyRequest().permitAll());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

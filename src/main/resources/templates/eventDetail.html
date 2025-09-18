@@ -25,21 +25,21 @@
 
             </div>
             <div class="flex">
-                <form th:action="@{/event/addToCart}" method="post">
+                <form>
                     <fieldset class="mb-5">
                         <legend class="title-font font-medium text-2xl text-gray-900 mb-3">Choisir une formule</legend> 
                         <div class="mb-5">
-                        <input type="radio" id="solo" name="ticketType" value="1" checked/>
+                        <input type="radio" id="solo" name="ticketType" value="Solo" checked/>
                             <span th:text="${event.price}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="solo" class="ml-3 title-font font-medium text-2xl text-gray-900">Solo (1 Ticket)</label>
                         </div>
                         <div class="mb-5">
-                        <input type="radio" id="duo" name="ticketType" value="2" />
+                        <input type="radio" id="duo" name="ticketType" value="Duo" />
                             <span th:text="${event.price*2*0.9}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="duo" class="ml-3 title-font font-medium text-2xl text-gray-900">Duo (2 Tickets)</label>
                         </div>
                         <div class="mb-5">
-                        <input type="radio" id="famille" name="ticketType" value="4"/>
+                        <input type="radio" id="famille" name="ticketType" value="Famille"/>
                             <span th:text="${event.price*4*0.8}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="famille" class="ml-3 title-font font-medium text-2xl text-gray-900">Famille (4 Tickets)</label>
                         </div>
@@ -48,7 +48,7 @@
                             <input type="hidden" name="eventId" th:value="${event.id}" />
                         </div>
                         <div class="flex">
-                        <button type="submit"class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Ajouter au Panier</button>
+                        <button onclick="ajouterOptionAuPanier()" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Ajouter au Panier</button>
                         </div>
                 </form>
             </div>
@@ -59,4 +59,5 @@
 </body>
 
 <div th:insert="~{parts/footer}"></div>
+<script src="/js/panier.js"></script>
 </html>

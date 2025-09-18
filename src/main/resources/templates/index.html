@@ -10,6 +10,26 @@
 
     <div th:insert="~{parts/header}"></div>
 
+    <div sec:authorize="isAuthenticated()">
+        <p>Bonjour, <span sec:authentication="name"></span> !</p>
+    </div>
+
+    <!-- Afficher un message si l'utilisateur n'est pas connecté -->
+    <div sec:authorize="isAnonymous()">
+        <p>Vous n'êtes pas connecté. <a href="/auth/signin">Connectez-vous</a>.</p>
+    </div>
+
+    <!-- Afficher un contenu spécifique pour les utilisateurs avec le rôle ADMIN -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <p>Bienvenue, administrateur ! Vous avez accès à des fonctionnalités avancées.</p>
+    </div>
+
+    <!-- Afficher un contenu spécifique pour les utilisateurs avec le rôle USER -->
+    <div sec:authorize="hasRole('USER')">
+        <p>Bienvenue, utilisateur ! Vous avez accès aux fonctionnalités standard.</p>
+    </div>
+
+
     <section class="text-gray-600 body-font">
         <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
             <img class="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded" alt="hero image" th:src="@{../img/banniere_01.jpg}">
