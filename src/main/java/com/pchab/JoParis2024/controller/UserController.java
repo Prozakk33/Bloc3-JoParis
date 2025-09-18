@@ -1,14 +1,10 @@
 package com.pchab.JoParis2024.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pchab.JoParis2024.pojo.User;
+import com.pchab.JoParis2024.security.payload.request.LoginRequest;
+import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
-
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -49,16 +44,17 @@ public class UserController {
     }
 
     @GetMapping("/signin")
-    public String signIn() {
+    public String signIn(Model model) {
+        model.addAttribute("loginRequest", new LoginRequest());
         return "signin";
     }
 
     @GetMapping("/signup")
     public String signUp(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("signUpRequest", new SignUpRequest());
         return "signup";
     }
-
+/*
     @PostMapping("/createUser")
     public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
         
@@ -73,7 +69,7 @@ public class UserController {
             return "signup";
         }
     }
-
+*/
     @PostMapping("/error")
     public String emailError(@RequestParam String email, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("email", email);

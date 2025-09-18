@@ -9,10 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
@@ -27,7 +30,7 @@ import jakarta.validation.Valid;
 
 
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -69,7 +72,31 @@ public class AuthController {
                 .body("Error: Invalid email or password");
     }
 }
+    // User Registration
+    @PostMapping("/signup")
+    public String signUp(@Valid @ModelAttribute("signUpRequest") SignUpRequest signUpRequest, BindingResult result, Model model) {
+        if(result.hasErrors()) {
+            return "signup"; // Return to the signup page with errors
+        }
 
+        if (userRepository.findByEmail(signUpRequest.getUserEmail()) != null) {
+            model.addAttribute("emailError", "Error: Email is already in use !");
+            return "signup"; // Return to the signup page with email error
+        }
+
+        // Create new user's account
+        User user = new User(
+            signUpRequest.getFirstName(),
+            signUpRequest.getLastName(),
+            signUpRequest.getUserEmail(),
+            passwordEncoder.encode(signUpRequest.getUserPassword()), UUID.randomUUID().toString()      
+        );
+        userService.createUser(user);
+
+        return "redirect:/";
+    }  
+
+/*
     // User Registration
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -81,5 +108,6 @@ public class AuthController {
         userService.createUser(user);
 
         return ResponseEntity.ok("User registered successfully!");
-    }   
+    }  
+*/ 
 }

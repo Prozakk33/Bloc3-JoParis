@@ -1,26 +1,26 @@
 package com.pchab.JoParis2024.security.payload.request;
 
 
-import lombok.Data;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class SignUpRequest {
                 
-    @NotBlank
-    @Email
+    @NotBlank(message="Email cannot be blank")
+    @Email(message="Email should be valid")
     private String email;
 
-    @NotBlank
+    @NotBlank(message="First name cannot be blank")
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message="Last name cannot be blank")  
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message="Password cannot be blank")
     @Size(min = 8, max = 40)
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).{10,}", message = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.")
     private String password;
