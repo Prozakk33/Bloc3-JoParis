@@ -76,7 +76,7 @@ VALUES (
         'Exciting football match',
         'PARIS',
         'Stadium A',
-        '2025-09-15',
+        '2025-09-15T15:00:00',
         50000,
         'FOOTBALL',
         50.0
@@ -100,7 +100,7 @@ VALUES (
         'Thrilling football match',
         'BORDEAUX',
         'Stadium B',
-        '2025-09-16',
+        '2025-09-16T20:00:00',
         60000,
         'FOOTBALL',
         60.0
@@ -124,7 +124,7 @@ VALUES (
         'Exciting Rugby match',
         'PARIS',
         'Stadium B',
-        '2025-09-15',
+        '2025-09-15T21:00:00',
         50000,
         'RUGBY',
         50.0
@@ -148,7 +148,7 @@ VALUES (
         '1ere phase des sélections du 100m',
         'PARIS',
         'Stade de France',
-        '2025-09-15',
+        '2025-09-15T10:00:00',
         50000,
         'ATHLETISME',
         50.0

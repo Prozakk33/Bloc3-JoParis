@@ -15,14 +15,16 @@
         <div class="lg:w-4/5 mx-auto flex flex-wrap">
         <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400">
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-            <h2 class="text-sm title-font text-gray-500 tracking-widest" th:text="${event.sport}"></h2>
-            <h1 th:text="${event.title}"class="text-gray-900 text-3xl title-font font-medium mb-1"></h1>
+            <h2 id="eventSport" class="text-sm title-font text-gray-500 tracking-widest" th:text="${event.sport}"></h2>
+            <h1 id="eventTitle" th:text="${event.title}" class="text-gray-900 text-3xl title-font font-medium mb-1"></h1>
+            <div class="flex italic">
+                <span id="eventCity" class="title-font font-medium text-ml text-gray-500" th:text="${event.city}"> - </span>
+                <span id="eventDate" class="ml-3 title-font font-medium text-ml text-gray-500" th:text="${#temporals.format(event.date, 'dd/MM/yyyy HH:mm')}"></span>
+            </div>
             <div class="flex mb-4">
-
             </div>
             <p th:text="${event.description}" class="leading-relaxed"></p>
             <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-
             </div>
             <div class="flex">
                 <form>
@@ -30,17 +32,17 @@
                         <legend class="title-font font-medium text-2xl text-gray-900 mb-3">Choisir une formule</legend> 
                         <div class="mb-5">
                         <input type="radio" id="solo" name="ticketType" value="Solo" checked/>
-                            <span th:text="${event.price}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
+                            <span for="solo" th:text="${event.price}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="solo" class="ml-3 title-font font-medium text-2xl text-gray-900">Solo (1 Ticket)</label>
                         </div>
                         <div class="mb-5">
                         <input type="radio" id="duo" name="ticketType" value="Duo" />
-                            <span th:text="${event.price*2*0.9}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
+                            <span for="duo" th:text="${event.price*2*0.9}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="duo" class="ml-3 title-font font-medium text-2xl text-gray-900">Duo (2 Tickets)</label>
                         </div>
                         <div class="mb-5">
                         <input type="radio" id="famille" name="ticketType" value="Famille"/>
-                            <span th:text="${event.price*4*0.8}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
+                            <span for="famille" th:text="${event.price*4*0.8}+'0 €'" class="title-font font-medium text-2xl text-gray-900">€</span>
                             <label for="famille" class="ml-3 title-font font-medium text-2xl text-gray-900">Famille (4 Tickets)</label>
                         </div>
                         </fieldset>
@@ -48,9 +50,16 @@
                             <input type="hidden" name="eventId" th:value="${event.id}" />
                         </div>
                         <div class="flex">
-                        <button onclick="ajouterOptionAuPanier()" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Ajouter au Panier</button>
+                        <button onclick="ajouterOptionAuPanier(event)" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Ajouter au Panier</button>
                         </div>
+                        <div id="alertMessage" class="mt-10 hidden text-center text-ml" style="background-color: #4caf50; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                        L'article a été ajouté au panier !
+                        </div>
+                        <div id="back" class="mt-10 text-center">
+                            <a href="/event/all" class="text-blue-600 hover:underline">Retour à la liste des événements</a>
+                        </div>  
                 </form>
+                
             </div>
         </div>
         </div>

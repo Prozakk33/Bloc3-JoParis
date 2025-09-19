@@ -1,4 +1,6 @@
-    function ajouterOptionAuPanier() {
+    function ajouterOptionAuPanier(event) {
+
+        event.preventDefault();
         // Récupérer l'option sélectionnée
         const selectedOption = document.querySelector('input[name="ticketType"]:checked');
 
@@ -14,18 +16,44 @@
 
         // Récupérer les informations de l'événement
         const eventId = document.querySelector('input[name="eventId"]').value;
-        const eventTitle = document.querySelector('h1[th\\:text="${event.title}"]').textContent;
+        const eventTitle = document.getElementById("eventTitle").textContent;
 
         // Appeler la fonction ajouterAuPanier avec les données récupérées
         ajouterAuPanier({
             id: eventId,
             nom: eventTitle,
+            type: selectedOption.value,
+            date: document.getElementById("eventDate").textContent,
             prix: prix,
             quantite: quantite
         });
 
+        // Mettre à jour le nombre d'articles dans le bouton Panier
+        const panier = localStorage.getItem("panier");
+        if (panier) {
+            const panierItems = JSON.parse(panier);
+            const totalItems = panierItems.reduce((total, item) => total + item.quantite, 0);
+            document.querySelector("button").textContent = `Panier (${totalItems})`;
+        } else {
+            document.querySelector("button").textContent = "Panier (0)";
+        }
+
         // Afficher un message de confirmation
-        alert("L'article a été ajouté au panier !");
+        afficherAlerte("L'article a été ajouté au panier !");
+
+    }
+
+    function afficherAlerte(message) {
+        const retour = document.getElementById("back");
+        retour.classList.add("hidden"); 
+        const alertBox = document.getElementById("alertMessage");
+        alertBox.textContent = message; // Définit le message de l'alerte
+        alertBox.classList.remove("hidden"); // Affiche l'alerte
+        // Masque l'alerte après 2 secondes (2000 ms)
+        setTimeout(() => {
+            alertBox.classList.add("hidden");
+            retour.classList.remove("hidden");
+        }, 2000);
     }
 
     // Fonction pour ajouter un article au panier (déjà définie dans votre gestionnaire de panier)

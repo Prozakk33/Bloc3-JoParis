@@ -5,17 +5,15 @@
             <span class="ml-3 text-xl">JO Paris 2024</span></a>
             <nav class="md:ml-auto flex flex-wrap items-center text-black justify-center">
             <a href="/event/all" class="mr-5 hover:text-gray-900">Liste Complète</a>
-            <a class="mr-5 hover:text-gray-900">Panier</a>
             <a id="accountButton" href="/user/account" class="mr-5 hover:text-gray-900 hidden">Mon Compte</a>
+            <a id="adminButton" href="/admin/account" class="mr-5 hover:text-red-900 hidden">Administration</a>
             <a id="loginButton" href="/user/signin" class="mr-5 hover:text-gray-900">S'identifier</a>
             <a id="adminAccount" href="/admin/newEvent" class="mr-5 hover:text-gray-900 hidden">Admin</a>
             <a id="logoutButton" href="#" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
             </nav>
-            <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Button
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
+            <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Panier
             </button>
+
         </div>
 
 <script>
@@ -58,7 +56,7 @@
 
             // Afficher le bouton "Admin" uniquement si l'utilisateur a le rôle ADMIN
             if (roles.includes("ROLE_ADMIN")) {
-                document.getElementById("adminAccount").classList.remove("hidden");
+                document.getElementById("adminButton").classList.remove("hidden");
             }
 
             // Masquer le bouton "Connexion"
@@ -67,7 +65,16 @@
             // Si l'utilisateur n'est pas connecté, afficher uniquement le bouton "Connexion"
             document.getElementById("loginButton").classList.remove("hidden");
             document.getElementById("logoutButton").classList.add("hidden");
-            document.getElementById("userButton").classList.add("hidden");
+            document.getElementById("adminButton").classList.add("hidden");
+        }
+
+        const panier = localStorage.getItem("panier");
+        if (panier) {
+            const panierItems = JSON.parse(panier);
+            const totalItems = panierItems.reduce((total, item) => total + item.quantite, 0);
+            document.querySelector("button").textContent = `Panier (${totalItems})`;
+        } else {
+            document.querySelector("button").textContent = "Panier (0)";
         }
     }
 

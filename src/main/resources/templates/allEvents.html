@@ -20,12 +20,12 @@
             <table class="table-auto w-full text-left whitespace-no-wrap">
                 <thead>
                 <tr>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Affiche</th>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Sport</th>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Date</th>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Ville</th>
-                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Stade</th>
-                    <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 ">Détail</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Affiche</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Sport</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Date</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Ville</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Stade</th>
+                    <th class="text-center w-10 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Détail</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                 <tr th:each="event : ${events}">
                         <td class="px-4 py-3" th:text="${event.title}"></td>
                         <td class="px-4 py-3" th:text="${event.sport}"></td>
-                        <td class="px-4 py-3" th:text="${event.date}"></td>
+                        <td class="px-4 py-3" th:text="${#temporals.format(event.date, 'dd/MM/yyyy HH:mm')}"></td>
                         <td class="px-4 py-3" th:text="${event.city}"></td>
                         <td class="px-4 py-3" th:text="${event.stadium}"></td>
                         <td>
