@@ -33,14 +33,13 @@
         if (panier) {
             const panierItems = JSON.parse(panier);
             const totalItems = panierItems.reduce((total, item) => total + item.quantite, 0);
-            document.querySelector("button").textContent = `Panier (${totalItems})`;
+            document.getElementById("cart").textContent = `Panier (${totalItems})`;
         } else {
-            document.querySelector("button").textContent = "Panier (0)";
+            document.getElementById("cart").textContent = "Panier";
         }
 
         // Afficher un message de confirmation
         afficherAlerte("L'article a été ajouté au panier !");
-
     }
 
     function afficherAlerte(message) {
@@ -129,8 +128,8 @@ function calculerTotal() {
 // Fonction pour afficher le panier dans le HTML
 function afficherPanier() {
     const panier = getPanier();
-    const panierListe = document.getElementById("panierListe");
-    const totalPanier = document.getElementById("totalPanier");
+    const panierListe = document.getElementById("panierList");
+    const totalPanier = document.getElementById("totalPrice");
 
     panierListe.innerHTML = ""; // Vide la liste actuelle
 

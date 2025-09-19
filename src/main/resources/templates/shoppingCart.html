@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoParis2024</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <div th:insert="~{parts/header}"></div>
+
+</body>
+
+<div id="panierList" class="container px-5 py-24 mx-auto">Panier</div>
+
+<div id="totalPrice" class="container px-5 py-24 mx-auto text-right text-2xl font-bold"></div>
+
+</body>
+<div th:insert="~{parts/footer}"></div>
+
+<script src="/js/panier.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        afficherPanier();
+    });
+</script>
+</html>

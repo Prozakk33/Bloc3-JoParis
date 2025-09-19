@@ -11,8 +11,8 @@
             <a id="adminAccount" href="/admin/newEvent" class="mr-5 hover:text-gray-900 hidden">Admin</a>
             <a id="logoutButton" href="#" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
             </nav>
-            <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Panier
-            </button>
+            <a href="/user/cart" id="cart" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Panier
+            </a>
 
         </div>
 
@@ -67,14 +67,14 @@
             document.getElementById("logoutButton").classList.add("hidden");
             document.getElementById("adminButton").classList.add("hidden");
         }
-
+        
         const panier = localStorage.getItem("panier");
         if (panier) {
             const panierItems = JSON.parse(panier);
             const totalItems = panierItems.reduce((total, item) => total + item.quantite, 0);
-            document.querySelector("button").textContent = `Panier (${totalItems})`;
+            document.getElementById("cart").textContent = `Panier (${totalItems})`;
         } else {
-            document.querySelector("button").textContent = "Panier (0)";
+            document.getElementById("cart").textContent = "Panier";
         }
     }
 

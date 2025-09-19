@@ -54,6 +54,12 @@ public class UserController {
         model.addAttribute("signUpRequest", new SignUpRequest());
         return "signup";
     }
+
+    @GetMapping("/cart")
+    public String cart(Model model) {
+        return "shoppingCart";
+    }
+    
 /*
     @PostMapping("/createUser")
     public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
