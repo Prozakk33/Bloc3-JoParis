@@ -49,6 +49,22 @@
     <section class="text-gray-600 body-font">
         <div class="container px-5 py-24 mx-auto">
             <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
+            <div th:each="event : ${events}" class="p-4 md:w-1/3 sm:mb-0 mb-6">
+                <div th:data-sport="${event.sport}" class="rounded-lg h-64 overflow-hidden">
+                <img src="" alt="content" class="object-contain object-center h-full w-full">
+                </div>
+                <h2 class="text-xl font-medium title-font text-gray-900 mt-5" th:text="${event.title}">Titre</h2>
+                <h4 class="text-md font-medium title-font text-gray-600 mt-1" th:text="${event.sport}">Sport</h4>
+                <h4 class="text-md font-medium title-font text-gray-600 mt-1" th:text="${#temporals.format(event.date, 'dd/MM/yyyy HH:mm')}">Date</h4>
+                <p class="text-base leading-relaxed mt-2" th:text="${event.description}">Description</p>
+                <a class="text-indigo-500 inline-flex text-blue-600 items-center mt-3" th:href="@{/event/id/{id}(id=${event.id})}">Détails
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+                </a>
+            </div>
+            <!-- Example static entries, can be removed when dynamic content is confirmed -->
+            <!--
             <div class="p-4 md:w-1/3 sm:mb-0 mb-6">
                 <div class="rounded-lg h-64 overflow-hidden">
                 <img alt="content" class="object-cover object-center h-full w-full" src="https://dummyimage.com/1203x503">
@@ -85,6 +101,7 @@
                 </svg>
                 </a>
             </div>
+            -->
             </div>
             <div class="flex items-center justify-center">
             <a href="/event/all" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">View Full List</a>
@@ -94,4 +111,6 @@
     </section>   
 </body>
 <div th:insert="~{parts/footer}"></div>
+
+<script src="/js/img.js"></script>
 </html>

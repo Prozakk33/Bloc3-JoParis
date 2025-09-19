@@ -34,7 +34,7 @@ public class ViewController {
         model.addAttribute("events", eventService.findThreeEvents());
         return "index";
     }
-     
+
     /* Event creation form */
     @GetMapping("/admin/newEvent")
     public String newEvent(Model model) {
