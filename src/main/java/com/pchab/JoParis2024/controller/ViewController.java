@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,10 +14,8 @@ import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.pojo.SportEnum;
 import com.pchab.JoParis2024.service.EventService;
 import com.pchab.JoParis2024.service.UserService;
-import com.pchab.JoParis2024.pojo.User;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -34,7 +31,7 @@ public class ViewController {
     /* Home page */
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("events", eventService.findAllEvent());
+        model.addAttribute("events", eventService.findThreeEvents());
         return "index";
     }
      

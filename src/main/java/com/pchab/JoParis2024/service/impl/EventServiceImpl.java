@@ -54,4 +54,9 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAll();
     }
 
+    @Override
+    public List<Event> findThreeEvents() {
+        return eventRepository.findTop3ByOrderByDateAsc();
+    }
+
 }

@@ -24,4 +24,6 @@ public interface EventService {
     //Create Event
     void createEvent(Event event);
 
+    List<Event> findThreeEvents();
+
 }

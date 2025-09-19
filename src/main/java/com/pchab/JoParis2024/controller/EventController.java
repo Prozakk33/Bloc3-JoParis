@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.service.EventService;
@@ -50,5 +49,11 @@ public class EventController {
     public String allEvents(Model model) {
         model.addAttribute("events", eventService.findAllEvent());
         return "allEvents";  
+    }
+
+    @GetMapping("/three")
+    public List<Event> threeEvents(Model model) {
+        model.addAttribute("events", eventService.findThreeEvents());
+        return eventService.findThreeEvents();
     }
 }
