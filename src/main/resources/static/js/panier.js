@@ -24,6 +24,8 @@
             nom: eventTitle,
             type: selectedOption.value,
             date: document.getElementById("eventDate").textContent,
+            sport: document.getElementById("eventSport").textContent,
+            city: document.getElementById("eventCity").textContent,
             prix: prix,
             quantite: quantite
         });
@@ -55,20 +57,30 @@
         }, 2000);
     }
 
-    // Fonction pour ajouter un article au panier (déjà définie dans votre gestionnaire de panier)
-    function ajouterAuPanier(article) {
-        const panier = JSON.parse(localStorage.getItem("panier")) || [];
-        const index = panier.findIndex(item => item.id === article.id);
+// Fonction pour ajouter un article au panier (déjà définie dans votre gestionnaire de panier)
+function ajouterAuPanier(article) {
+    console.log("Ajout de l'article au panier :", article);
+    const panier = JSON.parse(localStorage.getItem("panier")) || [];
+    const index = panier.findIndex(item => item.id === article.id);
 
-        if (index !== -1) {
+    // Si l'évènement est déjà dans le panier, on met à jour la quantité seulement si le type de billet est le même
+    if (index !== -1) {
+        console.log("Article déjà dans le panier, Check type de billet :", article.type);
+        // Si le type de ticket est le même, on ajoute la quantité
+        if(panier[index].type === article.type){
+            console.log("Même type de billet, mise à jour de la quantité");
             panier[index].quantite += article.quantite;
         } else {
-            panier.push(article);
-        }
-
-        localStorage.setItem("panier", JSON.stringify(panier));
-        console.log("Article ajouté au panier :", article);
+            console.log("Type de billet différent, ajout d'une nouvelle entrée");
+            panier.push(article); // Ajoute une nouvelle entrée pour un type de billet différent
+            }
+    } else {
+        panier.push(article);
     }
+
+    localStorage.setItem("panier", JSON.stringify(panier));
+    console.log("Article ajouté au panier :", article);
+}
 
 
 // Fonction pour récupérer le panier depuis le localStorage
@@ -82,40 +94,25 @@ function savePanier(panier) {
     localStorage.setItem("panier", JSON.stringify(panier));
 }
 
-// Fonction pour ajouter un article au panier
-function ajouterAuPanier(article) {
-    const panier = getPanier();
-    const index = panier.findIndex(item => item.id === article.id);
-
-    if (index !== -1) {
-        // Si l'article existe déjà, augmentez la quantité
-        panier[index].quantite += article.quantite;
-    } else {
-        // Sinon, ajoutez l'article au panier
-        panier.push(article);
-    }
-
-    savePanier(panier);
-    console.log("Article ajouté au panier :", article);
-}
-
 // Fonction pour supprimer un article du panier
-function supprimerDuPanier(id) {
+function supprimerDuPanier(id, type) {
     let panier = getPanier();
-    panier = panier.filter(item => item.id !== id); // Supprime l'article avec l'ID donné
+    panier = panier.filter(item => item.id !== id || item.type !== type); // Supprime l'article avec l'ID et le type donnés
     savePanier(panier);
     console.log("Article supprimé du panier :", id);
 }
 
 // Fonction pour mettre à jour la quantité d'un article
-function mettreAJourQuantite(id, quantite) {
+function mettreAJourQuantite(id, quantite, type) {
     const panier = getPanier();
     const index = panier.findIndex(item => item.id === id);
 
     if (index !== -1) {
+        if(item.type === type){
         panier[index].quantite = quantite;
         savePanier(panier);
         console.log("Quantité mise à jour pour l'article :", id, "Nouvelle quantité :", quantite);
+        }
     }
 }
 
@@ -128,23 +125,99 @@ function calculerTotal() {
 // Fonction pour afficher le panier dans le HTML
 function afficherPanier() {
     const panier = getPanier();
-    const panierListe = document.getElementById("panierList");
+    const panierListe = document.getElementById("tdBody");
+    panierListe.innerHTML = ""; // Vider la liste avant de la remplir
     const totalPanier = document.getElementById("totalPrice");
 
-    panierListe.innerHTML = ""; // Vide la liste actuelle
 
     panier.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.nom} - ${item.prix} € x ${item.quantite}`;
+        // Créer une nouvelle ligne pour chaque article
+        const tr = document.createElement("tr");
+
+        // Colonne : Titre de l'événement
+        const tdTitle = document.createElement("td");
+        tdTitle.classList.add("px-4", "py-3");
+        tdTitle.textContent = item.nom;
+        tr.appendChild(tdTitle);
+
+        // Colonne : Sport (ajoutez cette propriété dans vos données si nécessaire)
+        const tdSport = document.createElement("td");
+        tdSport.classList.add("px-4", "py-3");
+        tdSport.textContent = item.sport || "N/A";
+        tr.appendChild(tdSport);
+
+        // Colonne : Date
+        const tdDate = document.createElement("td");
+        tdDate.classList.add("px-4", "py-3");
+        tdDate.textContent = item.date;
+        tr.appendChild(tdDate);
+
+        // Colonne : Ville
+        const tdCity = document.createElement("td");
+        tdCity.classList.add("px-4", "py-3");
+        tdCity.textContent = item.city || "N/A"; // Remplacez "N/A" par une valeur par défaut si nécessaire
+        tr.appendChild(tdCity);
+
+        //Colonne : Type Billet
+        const tdType = document.createElement("td");
+        tdType.classList.add("px-4", "py-3");
+        tdType.textContent = item.type || "N/A"; // Remplacez "N/A" par une valeur par défaut si nécessaire
+        tr.appendChild(tdType);
+
+        // Colonne : Prix
+        const tdPrice = document.createElement("td");
+        tdPrice.classList.add("px-4", "py-3");
+        tdPrice.textContent = (item.prix.toFixed(2) + " €");
+        tr.appendChild(tdPrice);
+
+        // Colonne : Quantité
+        const tdQuantite = document.createElement("td");
+        tdQuantite.classList.add("px-4", "py-3");
+        tdQuantite.textContent = item.quantite;
+        tr.appendChild(tdQuantite);
+
+        //Colonne : Total Ligne
+        const tdTotalLine = document.createElement("td");
+        tdTotalLine.classList.add("px-4", "py-3");
+        const totalLine = item.prix * item.quantite;
+        tdTotalLine.textContent = totalLine.toFixed(2) + " €";
+        tr.appendChild(tdTotalLine);
+        
+        // Colonne : Bouton "Supprimer"
+        const tdDelete = document.createElement("td");
         const supprimerBtn = document.createElement("button");
         supprimerBtn.textContent = "Supprimer";
+        supprimerBtn.classList.add(
+            "text-white",
+            "bg-red-600",
+            "hover:bg-red-800",
+            "focus:outline-none",
+            "focus:ring-4",
+            "focus:ring-red-300",
+            "font-medium",
+            "rounded-full",
+            "text-sm",
+            "px-5",
+            "py-2.5",
+            "text-center",
+            "me-2",
+            "mb-2",
+            "dark:bg-blue-600",
+            "dark:hover:bg-blue-700",
+            "dark:focus:ring-blue-800"
+        );
         supprimerBtn.onclick = () => {
-            supprimerDuPanier(item.id);
+            supprimerDuPanier(item.id, item.type);
             afficherPanier(); // Met à jour l'affichage après suppression
         };
-        li.appendChild(supprimerBtn);
-        panierListe.appendChild(li);
+        tdDelete.appendChild(supprimerBtn);
+        tr.appendChild(tdDelete);
+
+        // Ajouter la ligne à la table
+        panierListe.appendChild(tr);
+
     });
 
-    totalPanier.textContent = calculerTotal().toFixed(2); // Affiche le total avec 2 décimales
+    // Mettre à jour le total du panier
+    totalPanier.textContent = "Total de la commande : " + calculerTotal().toFixed(2) + " €"; // Affiche le total avec 2 décimales
 }

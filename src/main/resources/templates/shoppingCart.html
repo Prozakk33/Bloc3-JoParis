@@ -14,7 +14,41 @@
 
 <div id="panierList" class="container px-5 py-24 mx-auto">Panier</div>
 
-<div id="totalPrice" class="container px-5 py-24 mx-auto text-right text-2xl font-bold"></div>
+<div class="lg:w-2/3 w-full mx-auto overflow-auto">
+            <table class="table-auto w-full text-left whitespace-no-wrap">
+                <thead>
+                <tr>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Affiche</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Sport</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Date</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Ville</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Type Billet</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Prix</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Quantité</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Total</th>
+                    <th class="text-center w-10 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Supprimer</th>
+                </tr>
+                </thead>
+                <tbody id="tdBody">
+                    <!-- Les détails du panier sont insérés ici par JavaScript -->        
+                </tbody>
+            </table>
+            <div class="flex justify-end mt-4">
+                <!-- Total du panier -->
+                <div id="totalPrice" class="container px-5 py-10 mx-auto text-right text-2xl font-bold"></div>
+            </div>
+            <div class="grid absolute pl-4 w-4/6 justify-items-end text-xl font-bold">
+                <!-- Bouton Payer -->
+                    <a href="/payment" type="button" class="flex ml-auto text-right text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Payer</a>
+            </div>
+            <div class="grid  pl-4 w-1/6 justify-items-end text-xl font-bold">
+                <a href="/" type="button" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Retour Accueil</a>
+            </div>  
+            <div class="mt-10 pl-4 mt-4 lg:w-2/3 w-full mx-auto">
+                
+            </div>
+</div>
+
 
 </body>
 <div th:insert="~{parts/footer}"></div>
