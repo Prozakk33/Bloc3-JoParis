@@ -14,10 +14,6 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
-logging:
-  level:
-    org.hibernate.type.descriptor.sql: DEBUG
-    org.hibernate.type.descriptor.java: DEBUG
 JoParis2024:
   security:
     secret: mBurFGsvfXBeLmyzhLD4syweo0L4j673Zo47ksREMLSP
