@@ -6,11 +6,11 @@
             <span class="ml-3 text-xl">JO Paris 2024</span></a>
             <nav class="md:ml-auto flex flex-wrap items-center text-black justify-center">
             <a href="/event/all" class="mr-5 hover:text-gray-900">Liste Complète</a>
-            <a id="accountButton" href="/user/account" class="mr-5 hover:text-gray-900 hidden">Mon Compte</a>
-            <a id="adminButton" href="/admin/account" class="mr-5 hover:text-red-900 hidden">Administration</a>
-            <a id="loginButton" href="/user/signin" class="mr-5 hover:text-gray-900">S'identifier</a>
-            <a id="adminAccount" href="/admin/newEvent" class="mr-5 hover:text-gray-900 hidden">Admin</a>
-            <a id="logoutButton" href="#" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
+            <a href="/auth/account" id="accountButton" class="mr-5 hover:text-gray-900 hidden">Mon Compte</a>
+            <a href="/admin/account" id="adminButton" class="mr-5 hover:text-red-900 hidden">Administration</a>
+            <a href="/user/signin" id="loginButton" class="mr-5 hover:text-gray-900">S'identifier</a>
+            <a href="/admin/newEvent" id="adminAccount" class="mr-5 hover:text-gray-900 hidden">Admin</a>
+            <a href="#" id="logoutButton" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
             </nav>
             <a href="/user/cart" id="cart" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Panier
             </a>
@@ -45,18 +45,22 @@
 
         if (token) {
             const decodedToken = parseJwt(token); // Décode le token JWT
-            const roles = decodedToken?.roles || []; // Récupère les rôles (assurez-vous que le backend inclut les rôles dans le token)
+            const roles = decodedToken?.role?.map(r => r.authority) || []; // Récupère les rôles (assurez-vous que le backend inclut les rôles dans le token)
 
+            console.log("Rôles de l'utilisateur :", roles);
+            
             // Afficher les boutons pour les utilisateurs connectés
             document.getElementById("logoutButton").classList.remove("hidden");
 
             // Afficher le bouton "Mon Compte" uniquement si l'utilisateur a le rôle USER
             if (roles.includes("ROLE_USER")) {
+                console.log("L'utilisateur a le rôle USER");
                 document.getElementById("accountButton").classList.remove("hidden");
             }
 
             // Afficher le bouton "Admin" uniquement si l'utilisateur a le rôle ADMIN
             if (roles.includes("ROLE_ADMIN")) {
+                console.log("L'utilisateur a le rôle ADMIN");
                 document.getElementById("adminButton").classList.remove("hidden");
             }
 
@@ -85,7 +89,7 @@
     // Ajouter un gestionnaire pour le bouton de déconnexion
     document.getElementById("logoutButton").addEventListener("click", function () {
         localStorage.removeItem("jwtToken"); // Supprime le token JWT du localStorage
-        window.location.href = "/auth/signin"; // Redirige vers la page de connexion
+        window.location.href = "/"; // Redirige vers la page d'accueil
     });
 </script>
 </header>

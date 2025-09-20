@@ -65,7 +65,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/event/**").permitAll()
-                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/auth/signin").permitAll()
+                    .requestMatchers("/auth/signup").permitAll()
+                    .requestMatchers("/user/signin").permitAll()
+                    .requestMatchers("/user/signup").permitAll()
+                    .requestMatchers("/user/account").authenticated()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/css/**").permitAll()
+                    .requestMatchers("/js/**").permitAll()
                     .requestMatchers("/user/**").permitAll()
                 //.anyRequest().authenticated());
                     .anyRequest().permitAll());

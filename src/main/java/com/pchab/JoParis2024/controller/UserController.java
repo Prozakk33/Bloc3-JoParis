@@ -55,12 +55,12 @@ public class UserController {
         return "signup";
     }
 
-    @GetMapping("/cart")
-    public String cart(Model model) {
-        return "shoppingCart";
+    @GetMapping("/account")
+    public String account(Model model) {
+        return "userAccount";
     }
-    
-/*
+
+    /*
     @PostMapping("/createUser")
     public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
         
