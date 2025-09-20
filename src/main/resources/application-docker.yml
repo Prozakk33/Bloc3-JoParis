@@ -3,8 +3,8 @@ spring:
     name: JoParis2024
   datasource:
     url: jdbc:mariadb://mysql-pchab.alwaysdata.net/${DB_NAME}
-    password: ${DB_PASSWORD}
-    username: ${DB_USER}
+    password: ^N.m*"J2c4j-T!C
+    username: pchab_joparis
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -16,5 +16,5 @@ spring:
       data-locations: classpath:data.sql
 JoParis2024:
   security:
-    secret: ${JWT_SECRET}
+    secret: mBurFGsvfXBeLmyzhLD4syweo0L4j673Zo47ksREMLSP
     expiration: 3600000 # 1 heure en millisecondes
