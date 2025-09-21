@@ -1,17 +1,14 @@
 package com.pchab.JoParis2024.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.security.payload.request.LoginRequest;
 import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
@@ -25,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Find a user by ID
+/*     // Find a user by ID
     @GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
@@ -42,7 +39,7 @@ public class UserController {
             throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
     }
-
+*/
     @GetMapping("/signin")
     public String signIn(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
@@ -56,9 +53,9 @@ public class UserController {
     }
 
     @GetMapping("/account")
-    public String account(Model model) {
-        return "userAccount";
-    }
+    public String account() {
+            return "userAccount";
+        }
 
     /*
     @PostMapping("/createUser")

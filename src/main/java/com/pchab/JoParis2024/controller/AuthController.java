@@ -79,8 +79,6 @@ public class AuthController {
         return "userAccount";
     }
 
-
-
     // User Registration
     @PostMapping("/signup")
     public String signUp(@Valid @ModelAttribute("signUpRequest") SignUpRequest signUpRequest, BindingResult result, Model model) {
@@ -90,7 +88,7 @@ public class AuthController {
 
         if (userRepository.findByEmail(signUpRequest.getUserEmail()) != null) {
             model.addAttribute("emailError", "Error: Email is already in use !");
-            return "signup"; // Return to the signup page with email error
+            return "signup"; // Return to the signin page with email error
         }
 
         // Create new user's account
@@ -102,7 +100,7 @@ public class AuthController {
         );
         userService.createUser(user);
 
-        return "redirect:/";
+        return "redirect:/user/signin?success";
     }  
 
 }

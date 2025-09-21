@@ -36,6 +36,7 @@ public class JwtUtils {
     
     // Valider le token
     public boolean validateJwtToken(String token) {
+        System.out.println("Validating JWT token: " + token);
         try {
             // Logique de validation du token
             Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
