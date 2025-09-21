@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.security.payload.request.LoginRequest;
 import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
@@ -22,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-/*     // Find a user by ID
+ /* *   // Find a user by ID
     @GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
@@ -52,11 +54,14 @@ public class UserController {
         return "signup";
     }
 
-    @GetMapping("/account")
-    public String account() {
-            return "userAccount";
-        }
-
+/* 
+    @GetMapping("/account/{email}")
+    public String account(Model model, String email) {
+        User user = userService.findUserByEmail(email);
+        model.addAttribute("user", user);
+        return "userAccount";
+    }
+*/
     /*
     @PostMapping("/createUser")
     public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
@@ -79,8 +84,5 @@ public class UserController {
         redirectAttributes.addFlashAttribute("error", "Email is already in use!");
         return "redirect:/user/signup";
     }
-
-    
-    
 
 }
