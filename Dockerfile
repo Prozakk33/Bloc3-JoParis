@@ -1,4 +1,3 @@
-<<<<<<< HEAD:DockerFile
 # Construct the build environment JDK
 FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
 
@@ -28,7 +27,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.war", "--spring.profiles.active=docker"]
 
 # Construct the build environment JDK
-FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
+FROM maven:3.9.9-eclipse-temurin-21-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -53,4 +52,4 @@ EXPOSE 8080
 
 # Define the entry point to run the application with the 'docker' profile
 ENTRYPOINT ["java", "-jar", "/app/app.war", "--spring.profiles.active=docker"]
->>>>>>> origin/main:Dockerfile
+
