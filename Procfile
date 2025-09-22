@@ -1,1 +1,1 @@
-web: java -jar /app/JoParis2024-0.0.1-SNAPSHOT.war --server.port=$PORT
+web: java -jar /app/target/JoParis2024-0.0.1-SNAPSHOT.war --server.port=$PORT
