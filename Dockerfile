@@ -1,0 +1,56 @@
+<<<<<<< HEAD:DockerFile
+# Construct the build environment JDK
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the project files into the container
+COPY . .
+
+# Download dependencies and package the application, skipping tests
+RUN mvn clean package -DskipTests -Pdocker
+
+# Execute the application
+FROM eclipse-temurin:21-jre-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the packaged application from the build environment
+COPY --from=build /app/target/*.war app.war
+
+# Expose the application port
+ENV PORT 8080
+EXPOSE 8080
+
+# Define the entry point to run the application with the 'docker' profile
+ENTRYPOINT ["java", "-jar", "/app/app.war", "--spring.profiles.active=docker"]
+
+# Construct the build environment JDK
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the project files into the container
+COPY . .
+
+# Download dependencies and package the application, skipping tests
+RUN mvn clean package -DskipTests -Pdocker
+
+# Execute the application
+FROM eclipse-temurin:21-jre-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the packaged application from the build environment
+COPY --from=build /app/target/*.war app.war
+
+# Expose the application port
+EXPOSE 8080
+
+# Define the entry point to run the application with the 'docker' profile
+ENTRYPOINT ["java", "-jar", "/app/app.war", "--spring.profiles.active=docker"]
+>>>>>>> origin/main:Dockerfile
