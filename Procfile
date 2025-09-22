@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/JoParis2024-v2-0.0.1-SNAPSHOT.war
+web: bundle exec rails server -p $PORT
