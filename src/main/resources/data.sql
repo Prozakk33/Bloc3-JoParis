@@ -30,11 +30,11 @@ INSERT INTO
     )
 VALUES (
         2,
-        'Jane',
-        'Smith',
-        'jane.smith@example.com',
-        'password456',
-        'key456',
+        'Admin',
+        'Admin',
+        'admin@admin.com',
+        '$2a$10$QdaJCZEz5JZmXLKea/ZZ4u.m0jcXQ/x8ILM1lNSRsbQWiC9K0GWA.',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnamh1QGhvdG1haWwuY29tIiwiaWF0IjoxNzU4NTMzNzk4fQ.YD7HJ8el6Jx9f4rRXe5SsOMgIsIEbi6njzgsAAb0LY4',
         'ADMIN'
     );
 
