@@ -15,8 +15,11 @@ import com.pchab.JoParis2024.pojo.SportEnum;
 import com.pchab.JoParis2024.service.EventService;
 import com.pchab.JoParis2024.service.UserService;
 
+//import io.swagger.v3.oas.annotations.Operation;
+//import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+//@Tag(name="View", description="Endpoints for rendering views")
 @Controller
 @RequestMapping("/")
 public class ViewController {
@@ -28,6 +31,7 @@ public class ViewController {
     private UserService userService;
 
     /* Home page */
+    //@Operation(summary = "Home page", description = "Display the home page with a selection of events")
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("events", eventService.findThreeEvents());
@@ -35,6 +39,7 @@ public class ViewController {
     }
 
     /* Event creation form */
+    //@Operation(summary = "New event form", description = "Display the form for creating a new event")
     @GetMapping("/admin/newEvent")
     public String newEvent(Model model) {
         model.addAttribute("event", new Event());
@@ -44,6 +49,7 @@ public class ViewController {
     }
 
     /* Event creation */
+    //@Operation(summary = "Create event", description = "Handle the submission of the new event form")
     @PostMapping("/admin/createEvent")
     public String createEvent(@Valid @ModelAttribute("event") Event event  , BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -55,9 +61,10 @@ public class ViewController {
         return "redirect:/event/all";
     }
 
+    /* Shopping cart page */
+    //@Operation(summary = "Shopping cart", description = "Display the shopping cart page")
     @GetMapping("/shoppingCart")
     public String shoppingCart(Model model) {
         return "shoppingCart";
     }
-
 }

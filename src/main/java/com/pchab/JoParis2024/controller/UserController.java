@@ -16,7 +16,10 @@ import com.pchab.JoParis2024.security.payload.request.LoginRequest;
 import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
 
+//import io.swagger.v3.oas.annotations.Operation;
+//import io.swagger.v3.oas.annotations.tags.Tag;
 
+//@Tag(name="User", description="Endpoints for managing users")
 @Controller
 @RequestMapping("/user")
 
@@ -43,12 +46,14 @@ public class UserController {
         }
     }
 
+    //@Operation(summary = "Sign in page", description = "Display the sign-in page")
     @GetMapping("/signin")
     public String signIn(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
         return "signin";
     }
 
+    //@Operation(summary = "Sign up page", description = "Display the sign-up page")
     @GetMapping("/signup")
     public String signUp(Model model) {
         model.addAttribute("signUpRequest", new SignUpRequest());
@@ -79,6 +84,7 @@ public class UserController {
         }
     }
 */
+    //@Operation(summary = "Email error", description = "Handle email already in use error during sign-up")
     @PostMapping("/error")
     public String emailError(@RequestParam String email, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("email", email);
