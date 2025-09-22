@@ -14,6 +14,8 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+server:
+  port: ${PORT:8080}
 JoParis2024:
   security:
     secret: mBurFGsvfXBeLmyzhLD4syweo0L4j673Zo47ksREMLSP

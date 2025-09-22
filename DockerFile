@@ -20,6 +20,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.war app.war
 
 # Expose the application port
+ENV PORT 8080
 EXPOSE 8080
 
 # Define the entry point to run the application with the 'docker' profile
