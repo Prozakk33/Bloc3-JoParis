@@ -1,6 +1,7 @@
 package com.pchab.JoParis2024.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
- /* *   // Find a user by ID
+  // Find a user by ID
     @GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
@@ -41,7 +42,7 @@ public class UserController {
             throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
     }
-*/
+
     @GetMapping("/signin")
     public String signIn(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
