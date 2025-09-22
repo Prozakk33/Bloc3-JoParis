@@ -18,6 +18,7 @@ import com.pchab.JoParis2024.service.UserService;
 import jakarta.validation.Valid;
 
 
+
 @Controller
 @RequestMapping("/")
 public class ViewController {
@@ -55,5 +56,12 @@ public class ViewController {
         eventService.createEvent(event); 
         return "redirect:/event/all";
     }
+
+    @GetMapping("/shoppingCart")
+    public String shoppingCart(Model model) {
+        // Logic to retrieve shopping cart items
+        return "shoppingCart";
+    }
+    
     
 }
