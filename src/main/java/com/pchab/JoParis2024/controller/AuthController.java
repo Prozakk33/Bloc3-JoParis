@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +28,10 @@ import com.pchab.JoParis2024.security.payload.response.JwtResponse;
 import com.pchab.JoParis2024.security.service.UserDetailsImpl;
 import com.pchab.JoParis2024.service.UserService;
 
-//import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-//@Tag(name="Authentication", description="Endpoints for user authentication and registration")
+@Tag(name="Authentication", description="Endpoints for user authentication and registration")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -56,7 +55,7 @@ public class AuthController {
     UserService userService;
 
     // Login authentification
-    //@Operation(summary = "User login", description = "Authenticate user and return JWT token")
+    @Operation(summary = "User login", description = "Authenticate user and return JWT token")
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginRequest) {
         try {
