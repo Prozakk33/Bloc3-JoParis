@@ -29,6 +29,7 @@ import com.pchab.JoParis2024.security.service.UserDetailsImpl;
 import com.pchab.JoParis2024.service.UserService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @Tag(name="Authentication", description="Endpoints for user authentication and registration")
