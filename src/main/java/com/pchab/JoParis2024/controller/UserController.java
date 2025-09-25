@@ -16,10 +16,10 @@ import com.pchab.JoParis2024.security.payload.request.LoginRequest;
 import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
 
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
-//@Tag(name="User", description="Endpoints for managing users")
+@Tag(name="User", description="Endpoints for managing users")
 @Controller
 @RequestMapping("/user")
 
@@ -29,12 +29,14 @@ public class UserController {
     private UserService userService;
 
   // Find a user by ID
+    @   Operation(summary = "Find user by ID", description = "Retrieve user details by their ID")
     @GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
  
     // Find a user by email
+    @Operation(summary = "Find user by email", description = "Retrieve user details by their email address")
     @GetMapping("/email/{email}")
     User findByEmail(@PathVariable String email) {
         System.out.println("USERCONTROLLER - Searching for user with email: " + email);
@@ -46,14 +48,14 @@ public class UserController {
         }
     }
 
-    //@Operation(summary = "Sign in page", description = "Display the sign-in page")
+    @Operation(summary = "Sign in page", description = "Display the sign-in page")
     @GetMapping("/signin")
     public String signIn(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
         return "signin";
     }
 
-    //@Operation(summary = "Sign up page", description = "Display the sign-up page")
+    @Operation(summary = "Sign up page", description = "Display the sign-up page")
     @GetMapping("/signup")
     public String signUp(Model model) {
         model.addAttribute("signUpRequest", new SignUpRequest());
@@ -84,7 +86,7 @@ public class UserController {
         }
     }
 */
-    //@Operation(summary = "Email error", description = "Handle email already in use error during sign-up")
+    @Operation(summary = "Email error", description = "Handle email already in use error during sign-up")
     @PostMapping("/error")
     public String emailError(@RequestParam String email, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("email", email);
