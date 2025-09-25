@@ -104,7 +104,6 @@
             <version>2.8.5</version>
         </dependency>
     </dependencies>
-
     <profiles>
         <profile>
             <id>docker</id>

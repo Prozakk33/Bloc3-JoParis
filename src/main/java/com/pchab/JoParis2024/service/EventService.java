@@ -13,7 +13,7 @@ public interface EventService {
     Event findEventById(Long id);
 
     // All Event
-    List<Event> findAllEvent();
+    List<Event> findAllEvents();
 
     // Update Event
     void updateEvent(Event event, Long id);

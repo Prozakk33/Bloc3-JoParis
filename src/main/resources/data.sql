@@ -175,6 +175,174 @@ VALUES (
     );
 
 INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        5,
+        'Eliminatoires 100m',
+        'Seconde phase des sélections du 100m',
+        'PARIS',
+        'Stade de France',
+        '2025-09-15T12:00:00',
+        50000,
+        'ATHLETISME',
+        50.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        6,
+        'Eliminatoires 200m',
+        '1ere phase des sélections du 200m',
+        'PARIS',
+        'Stade de France',
+        '2025-09-15T14:00:00',
+        50000,
+        'ATHLETISME',
+        50.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        7,
+        'Eliminatoires 200m',
+        'Seconde phase des sélections du 200m',
+        'PARIS',
+        'Stade de France',
+        '2025-09-15T16:00:00',
+        50000,
+        'ATHLETISME',
+        50.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        8,
+        'Concours Complet',
+        '1ere phase des sélections du Concours Complet',
+        'LILLE',
+        'Stade Pierre-Mauroy',
+        '2025-09-18T10:00:00',
+        50000,
+        'CHEVAL',
+        50.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        9,
+        'Finale - France - Argentine',
+        'C\'est l\'heure de la finale !',
+        'PARIS',
+        'Grand Palais',
+        '2025-09-11T21:00:00',
+        10000,
+        'ESCRIME',
+        100.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        10,
+        'Eliminatoire -80kg H.',
+        '1er tour des éliminatoires -80kg Hommes',
+        'LYON',
+        'Stade de Lyon',
+        '2025-10-15T11:30:00',
+        10000,
+        'JUDO',
+        30.0
+    );
+
+INSERT INTO
+    event (
+        id,
+        title,
+        description,
+        city,
+        stadium,
+        date,
+        capacity,
+        sport,
+        price
+    )
+VALUES (
+        11,
+        'Eliminatoire -80kg F.',
+        '1er tour des éliminatoires -80kg Femmes',
+        'LYON',
+        'Stade de Lyon',
+        '2025-10-15T13:30:00',
+        10000,
+        'JUDO',
+        30.0
+    );
+
+INSERT INTO
     ticket (
         id,
         buy_date,

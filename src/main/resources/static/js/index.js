@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    const sportImages = {
+        football: "/img/football.png",
+        rugby: "/img/rugby.png",
+        basketball: "/img/basket.png",
+        judo: "/img/judo.png",
+        athletisme: "/img/athletisme.png",
+        cheval: "/img/cheval.png",
+        escrime: "/img/escrime.png",
+        golf: "/img/golf.png",
+        handball: "/img/handball.png",
+        natation: "/img/natation.png",
+        plongeon: "/img/plongeon.webp",
+        skateboard: "/img/skateboard.jpg",
+        triathlon: "/img/triathlon.jpg",
+        voile: "/img/voile.webp"
+    };
     // Appeler l'API pour récupérer les 3 événements
     fetch("/event/three")
         .then(response => {
@@ -20,8 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 eventDiv.className = "p-4 md:w-1/3 sm:mb-0 mb-6";
 
                 eventDiv.innerHTML = `
-                    <div data-sport="${event.sport}" class="rounded-lg h-64 overflow-hidden">
-                        <img data-sport="${event.sport}" src="${event.imageUrl || ''}" alt="content" class="object-contain object-center h-full w-full">
+                    <div class="rounded-lg h-64 overflow-hidden">
+                        <img src="${sportImages[event.sport.toLowerCase()]}"" alt="content" class="object-contain object-center h-full w-full">
                     </div>
                     <h2 class="text-xl font-medium title-font text-gray-900 mt-5">${event.title}</h2>
                     <h4 class="text-md font-medium title-font text-gray-600 mt-1">${event.sport}</h4>
@@ -41,4 +58,5 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error("Erreur :", error);
         });
+
 });
