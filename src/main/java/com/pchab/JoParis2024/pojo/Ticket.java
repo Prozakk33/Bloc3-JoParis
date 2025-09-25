@@ -1,6 +1,6 @@
 package com.pchab.JoParis2024.pojo;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,9 +23,13 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date buyDate;
+    private Timestamp buyDate;
 
     private String ticketKey;
+
+    //private Long userId;
+
+    //private Long eventId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

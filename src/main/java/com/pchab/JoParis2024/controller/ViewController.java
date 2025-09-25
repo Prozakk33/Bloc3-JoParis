@@ -67,4 +67,9 @@ public class ViewController {
     public String shoppingCart(Model model) {
         return "shoppingCart";
     }
+
+    @GetMapping("/payment")
+    public String payment(Model model) {
+        return "payment";
+    }
 }

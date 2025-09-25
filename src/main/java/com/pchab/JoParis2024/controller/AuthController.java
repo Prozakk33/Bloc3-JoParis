@@ -28,8 +28,8 @@ import com.pchab.JoParis2024.security.payload.response.JwtResponse;
 import com.pchab.JoParis2024.security.service.UserDetailsImpl;
 import com.pchab.JoParis2024.service.UserService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Tag(name="Authentication", description="Endpoints for user authentication and registration")
@@ -97,7 +97,7 @@ public class AuthController {
         
         if (!jwtUtils.validateJwtToken(token)) {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
-            return "redirect:/user/signin"; // Redirige si le token est invalide
+            return "redirect:/signin"; // Redirige si le token est invalide
         }
 
         // Si le token est valide, vous pouvez continuer à traiter la requête
@@ -111,7 +111,7 @@ public class AuthController {
             return "userAccount";
         } else {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
-            return "redirect:/user/signin"; // Redirige si aucun utilisateur n'est trouvé
+            return "redirect:/signin"; // Redirige si aucun utilisateur n'est trouvé
         }
     }
 

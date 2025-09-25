@@ -25,7 +25,7 @@
 
         if (token) {
             const decodedToken = parseJwt(token); // Décode le token JWT
-            const roles = decodedToken?.role?.map(r => r.authority) || []; // Récupère les rôles (assurez-vous que le backend inclut les rôles dans le token)
+            const roles = decodedToken?.role?.map(r => r.authority) || []; // Récupère les rôles
 
             console.log("Rôles de l'utilisateur :", roles);
             
@@ -107,7 +107,7 @@ function fetchUserAccount() {
                 return response.text(); // Récupère la page HTML renvoyée par le serveur
             } else if (response.status === 401) {
                 console.error("Accès refusé. Redirection vers la page de connexion.");
-                window.location.href = "/user/signin"; // Redirige si le token est invalide
+                window.location.href = "/signin"; // Redirige si le token est invalide
             } else {
                 console.error("Erreur lors de la requête :", response.status);
             }

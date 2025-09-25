@@ -1,6 +1,7 @@
 package com.pchab.JoParis2024.security.jwt;
 import java.security.Key;
 import java.util.Date;
+import java.sql.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,11 +83,34 @@ public class JwtUtils {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String generateUserKeyToken(String email) {
+    public String getFirstNameFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().get("firstName", String.class);
+    }
+
+    public String getLastNameFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().get("lastName", String.class);
+    }
+
+    public String generateUserKeyToken(String email, String firstName, String lastName) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("firstName", firstName)
+                .claim("lastName", lastName)
                 .setIssuedAt(new Date())
-                //.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateTicketKeyToken(Long userId, Long eventId, String firstName, String lastName,  Timestamp buyDate) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(userId))
+                .claim("firstName", firstName)
+                .claim("lastName", lastName)
+                .claim("eventId", eventId)
+                .claim("buyDate", buyDate)
+                .setIssuedAt(new Date())
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }

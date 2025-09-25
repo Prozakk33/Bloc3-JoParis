@@ -1,7 +1,5 @@
 package com.pchab.JoParis2024.service.impl;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,9 +8,6 @@ import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.service.UserService;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 
@@ -32,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(User user) {
         System.out.println("USERSERVICE-IMPL - Creating user: " + user.getEmail());
-        String userKey = jwtUtils.generateUserKeyToken(user.getEmail());
+        String userKey = jwtUtils.generateUserKeyToken(user.getEmail(), user.getFirstName(), user.getLastName());
         user.setUserKey(userKey);
         userRepository.save(user);
     }
