@@ -56,15 +56,13 @@ public class EventController {
     /* List of all events */
     @Operation(summary = "List all events", description = "Retrieve a list of all events")
     @GetMapping("/all")
-    public String allEvents(Model model) {
-        model.addAttribute("events", eventService.findAllEvent());
+    public String allEvents() {
         return "allEvents";  
     }
 
     @Operation(summary = "List three events", description = "Retrieve a list of three events")
     @GetMapping("/three")
-    public List<Event> threeEvents(Model model) {
-        model.addAttribute("events", eventService.findThreeEvents());
+    public List<Event> threeEvents() {
         return eventService.findThreeEvents();
     }
 }

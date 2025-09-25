@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>JoParis2024</title>
+</head>
+
 <div class="h-full">
 <header class="text-gray-600 body-font bg-blue-600">
         <div class="container mx-auto flex flex-wrap p-1 flex-col md:flex-row items-center">
@@ -6,11 +15,11 @@
             <span class="ml-3 text-xl">JO Paris 2024</span></a>
             <nav class="md:ml-auto flex flex-wrap items-center text-black justify-center">
             <a href="/event/all" class="mr-5 hover:text-gray-900">Liste Complète</a>
-            <a href="#" onclick="fetchUserAccount()" id="accountButton" class="mr-5 hover:text-gray-900 hidden">Mon Compte</a>
-            <a href="/admin/account" id="adminButton" class="mr-5 hover:text-red-900 hidden">Administration</a>
+            <a sec:authorize="isAuthenticated()" href="#" onclick="fetchUserAccount()" id="accountButton" class="mr-5 hover:text-gray-900 ">Mon Compte</a>
             <a href="/user/signin" id="loginButton" class="mr-5 hover:text-gray-900">S'identifier</a>
-            <a href="/admin/newEvent" id="adminAccount" class="mr-5 hover:text-gray-900 hidden">Admin</a>
-            <a href="#" id="logoutButton" onclick="logout()" class="mr-5 hover:text-gray-900 hidden">Déconnexion</a>
+            <a sec:authorize="hasRole('ADMIN')" href="/admin/account" id="adminButton" class="mr-5 hover:text-red-900 ">Administration</a>
+            <a sec:authorize="hasRole('ADMIN')" href="/admin/newEvent" id="adminAccount" class="mr-5 hover:text-gray-900 ">Admin</a>
+            <a sec:authorize="isAuthenticated()" href="#" id="logoutButton" onclick="logout()" class="mr-5 hover:text-gray-900 ">Déconnexion</a>
             </nav>
             <a href="/shoppingCart" id="cart" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Panier
             </a>
@@ -20,7 +29,7 @@
 <script>
     // Appeler la fonction pour mettre à jour les boutons du header
     document.addEventListener("DOMContentLoaded", function() {
-        updateHeaderButtons();
+        //updateHeaderButtons();
     });
 
     // Ajouter un gestionnaire pour le bouton de déconnexion
@@ -30,5 +39,5 @@
     });
 
 </script>
-<script src="../js/header.js"></script>
+
 </header>
