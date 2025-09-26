@@ -47,4 +47,26 @@ document.getElementById("signUpForm").addEventListener("submit", async function(
                 }
     }
 
+    try {
+        const response = await fetch("/auth/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ firstName, lastName, email, password })
+        });
+
+        if (response.ok) {
+            console.log("Inscription réussie !");
+            const data = await response.text();
+            console.log("Données reçues :", data);
+            window.location.href = `/signin.html?message=${data}`; // Redirige vers la page de connexion
+        } else {
+            document.getElementById("errorMessage").innerText = await response.text();
+        }
+    } catch (error) {
+        //console.error("Erreur :", error);
+        document.getElementById("errorMessage").innerText = error.message;
+    }
+
         });
