@@ -17,7 +17,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
             } else {
                 document.getElementById("errorPassword").innerText = "";
             }
-
+                
             try {
                 const response = await fetch("/auth/signin", {
                     method: "POST",
