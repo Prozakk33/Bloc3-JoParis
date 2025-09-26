@@ -303,4 +303,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#Node Modules
+/src/main/frontend
+
 # End of https://www.toptal.com/developers/gitignore/api/java,windows,macos,maven,visualstudiocode,eclipse,intellij
