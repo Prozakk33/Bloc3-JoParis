@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JoParis2024</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<div th:insert="~{parts/header}"></div>
 
 <body>
 
@@ -17,28 +15,28 @@
       <h1 class="title-font font-medium text-3xl text-gray-900">Inscrivez-vous</h1>
       <p class="leading-relaxed mt-4">Vous pourrez ainsi vous connecter, et accéder à votre compte ou régler votre commande.</p>
     </div>
-    <form th:action="${'/auth/signup'}" th:object="${signUpRequest}"  method="post" >
+    <form id="signUpForm" method="post" >
         <div class="lg:w-2/3 md:w-2/3 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
         <h2 class="text-gray-900 text-lg font-medium title-font mb-5">S'inscrire</h2>
         <div class="relative mb-4">
             <label for="firstName" class="leading-7 text-sm text-gray-600">Prénom</label>
             <input type="text" id="firstName" th:field="*{firstName}" name="firstName" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-red-500 text-sm"></div>
+            <div id="firstNameError" class="text-red-500 text-sm hidden">Merci de saisir votre prénom</div>
         </div>
         <div class="relative mb-4">
             <label for="lastName" class="leading-7 text-sm text-gray-600">Nom</label>
             <input type="text" id="lastName" th:field="*{lastName}" name="lastName" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-red-500 text-sm"></div>
+            <div id="lastNameError" class="text-red-500 text-sm hidden">Merci de saisir votre nom</div>
         </div>
         <div class="relative mb-4">
             <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
             <input type="email" id="email" th:field="*{email}" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm"></div>
+            <div id="emailError" class="text-red-500 text-sm hidden">Merci de saisir votre email</div>
         </div>
             <div class="relative mb-4">
                 <label for="password" class="leading-7 text-sm text-gray-600">Mot de passe</label>
                 <input type="password" id="password" th:field="*{password}" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500 text-sm"></div>
+                <div id="passwordError" class="text-red-500 text-sm hidden">Merci de saisir votre mot de passe</div>
                 <p class="text-xs text-gray-500 mt-3">Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
             </div>
         <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">S'enregistrer</button>
@@ -49,6 +47,6 @@
 
 </body>
 
-<div th:insert="~{parts/footer}"></div> 
+<scipt src="/js/headerFooter.js"></script>
 
 </html>

@@ -15,8 +15,6 @@ import com.pchab.JoParis2024.pojo.SportEnum;
 import com.pchab.JoParis2024.service.EventService;
 import com.pchab.JoParis2024.service.UserService;
 
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 //@Tag(name="View", description="Endpoints for rendering views")
@@ -32,12 +30,13 @@ public class ViewController {
 
     /* Home page */
     //@Operation(summary = "Home page", description = "Display the home page with a selection of events")
+    /* 
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("events", eventService.findThreeEvents());
         return "index";
     }
-
+*/
     /* Event creation form */
     //@Operation(summary = "New event form", description = "Display the form for creating a new event")
     @GetMapping("/admin/newEvent")

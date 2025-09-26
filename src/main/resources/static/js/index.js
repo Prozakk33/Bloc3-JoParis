@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h4 class="text-md font-medium title-font text-gray-600 mt-1">${event.sport}</h4>
                     <h4 class="text-md font-medium title-font text-gray-600 mt-1">${event.date}</h4>
                     <p class="text-base leading-relaxed mt-2">${event.description}</p>
-                    <a class="text-indigo-500 inline-flex text-blue-600 items-center mt-3">Détails
+                    <a href="/eventDetail.html?id=${event.id}" class="text-indigo-500 inline-flex text-blue-600 items-center mt-3">Détails
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                             <path d="M5 12h14M12 5l7 7-7 7"></path>
                         </svg>

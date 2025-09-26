@@ -1,8 +1,16 @@
     function ajouterOptionAuPanier(event) {
 
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         // Récupérer l'option sélectionnée
         const selectedOption = document.querySelector('input[name="ticketType"]:checked');
+
+        const spanElement = document.querySelector('span[for="' + selectedOption.id + '"]');
+        if (!spanElement) {
+            console.error(`Aucun élément <span> trouvé pour l'ID : ${selectedOption.id}`);
+            return;
+        }
 
         // Déterminer les paramètres associés à l'option sélectionnée
         let quantite = 1;
@@ -15,8 +23,19 @@
         }
 
         // Récupérer les informations de l'événement
-        const eventId = document.querySelector('input[name="eventId"]').value;
+        const eventId = document.getElementById("eventId").value;
         const eventTitle = document.getElementById("eventTitle").textContent;
+
+        console.log("Ajout au panier :", {
+            id: eventId,
+            nom: eventTitle,
+            type: selectedOption.value,
+            date: document.getElementById("eventDate").textContent,
+            sport: document.getElementById("eventSport").textContent,
+            city: document.getElementById("eventCity").textContent,
+            prix: prix,
+            quantite: quantite
+        });
 
         // Appeler la fonction ajouterAuPanier avec les données récupérées
         ajouterAuPanier({
@@ -45,15 +64,15 @@
     }
 
     function afficherAlerte(message) {
-        const retour = document.getElementById("back");
-        retour.classList.add("hidden"); 
+        const add = document.getElementById("addToCart");
+        add.classList.add("hidden");
         const alertBox = document.getElementById("alertMessage");
         alertBox.textContent = message; // Définit le message de l'alerte
         alertBox.classList.remove("hidden"); // Affiche l'alerte
         // Masque l'alerte après 2 secondes (2000 ms)
         setTimeout(() => {
             alertBox.classList.add("hidden");
-            retour.classList.remove("hidden");
+            add.classList.remove("hidden");
         }, 2000);
     }
 

@@ -28,7 +28,7 @@ public class EventController {
 
     /* Event detail */
     @Operation(summary = "Get event details", description = "Retrieve detailed information about a specific event by its ID")
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Event eventDetail(@PathVariable Long id) {
         return eventService.findEventById(id);
     }

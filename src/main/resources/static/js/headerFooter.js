@@ -1,3 +1,34 @@
+document.addEventListener("DOMContentLoaded", () => {
+    // Charger le header
+    fetch("../templates/header.html")
+        .then(response => response.text())
+        .then(data => {
+            document.body.insertAdjacentHTML("afterbegin", data);
+            updateHeaderButtons(); // Met à jour les boutons du header après le chargement
+        });
+
+    // Charger le footer
+    fetch("../templates/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.body.insertAdjacentHTML("beforeend", data);
+        });
+
+    // Initialiser le MutationObserver après le chargement du header
+            const adminButton = document.getElementById("adminButton");
+            if (adminButton) {
+                const observer = new MutationObserver(mutations => {
+                    mutations.forEach(mutation => {
+                        console.log("Modification détectée sur adminButton :", mutation);
+                    });
+                });
+                observer.observe(adminButton, { attributes: true });
+            } else {
+                console.error("adminButton n'existe pas dans le DOM.");
+            }
+    
+});
+
 // Fonction pour décoder un token JWT
     function parseJwt(token) {
         try {
@@ -21,6 +52,9 @@
 
     // Vérifier si l'utilisateur est connecté et a le rôle USER
     function updateHeaderButtons() {
+
+        console.log("Appel de updateHeaderButtons()");
+
         const token = localStorage.getItem("jwtToken"); // Récupère le token JWT depuis le localStorage
 
         if (token) {
@@ -48,6 +82,7 @@
             document.getElementById("loginButton").classList.add("hidden");
         } else {
             // Si l'utilisateur n'est pas connecté, afficher uniquement le bouton "Connexion"
+            console.log("Aucun token trouvé, utilisateur non connecté");
             document.getElementById("loginButton").classList.remove("hidden");
             document.getElementById("logoutButton").classList.add("hidden");
             document.getElementById("adminButton").classList.add("hidden");
@@ -121,4 +156,12 @@ function fetchUserAccount() {
         .catch(error => {
             console.error("Erreur lors de la requête :", error);
         });
+
+        
 }
+
+function logout() {
+            console.log("Déconnexion");
+            localStorage.removeItem("jwtToken");
+            updateHeaderButtons();
+        }
