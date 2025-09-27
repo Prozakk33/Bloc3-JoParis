@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JoParis2024</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<div th:insert="~{parts/header}"></div>
-<body class="bg-gray-100 text-gray-800">
+
+
+
+
+<body>
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-bold text-center mb-20">
         Page de Règlement   
@@ -41,9 +44,13 @@
                         class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Payer Maintenant
                 </button>
-                <a href="/shoppingCart" class="text-blue-600 hover:underline">Retour au Panier</a>
+                <a href="/shoppingCart.html" class="text-blue-600 hover:underline">Retour au Panier</a>
             </div>
         </form>
     </div>
-    <div th:insert="~{parts/footer}"></div>
+</body>
+
+<script src="/js/headerFooter.js"></script>
+<script src="/js/payment.js"></script>
+
 </html>

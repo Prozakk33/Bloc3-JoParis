@@ -13,12 +13,14 @@
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
     <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0 mb-10">
-        <p id="successMessage" class="text-green-500 mb-5 mt5 hidden">
-        Inscription réussie ! Vous pouvez maintenant vous connecter.
+      <div id="messages" class="flex mb-5">
+        <p id="signupMessage" class="text-green-500 mb-5 mt5">
+        <!-- Le message sera inséré ici par le script -->
         </p>
-        <p id="errorMessage" class="text-red-500 mb-5 mt5 hidden">
-        Email ou Mot de passe invalide.
+        <p id="errorMessage" class="text-red-500 mb-5 mt5">
+        <!-- Le message d'erreur sera inséré ici par le script -->
         </p>
+      </div>
       <h1 class="title-font font-medium text-3xl text-gray-900">Connectez-vous</h1>
       <p class="leading-relaxed mt-4">Vous pourrez ainsi accéder à votre compte ou régler votre commande.</p>
       <p class="leading-relaxed mt-4">Pas encore de compte ?
@@ -48,6 +50,7 @@
 </body>
 
 <script src="/js/headerFooter.js"></script>
+<script src="/js/signin.js"></script>
 
 
 </html>

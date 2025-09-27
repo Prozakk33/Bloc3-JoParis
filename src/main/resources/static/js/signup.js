@@ -60,7 +60,7 @@ document.getElementById("signUpForm").addEventListener("submit", async function(
             console.log("Inscription réussie !");
             const data = await response.text();
             console.log("Données reçues :", data);
-            window.location.href = `/signin.html?message=${data}`; // Redirige vers la page de connexion
+            window.location.href = `/signin.html?signup=${data}`; // Redirige vers la page de connexion
         } else {
             document.getElementById("errorMessage").innerText = await response.text();
         }

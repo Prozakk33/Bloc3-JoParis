@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("cart").textContent = "Panier";
         }
     }
-
+/*
 function fetchUserAccount() {
     // Récupérer le token JWT depuis le localStorage
     const token = localStorage.getItem("jwtToken");
@@ -159,7 +159,7 @@ function fetchUserAccount() {
 
         
 }
-
+*/
 function logout() {
             console.log("Déconnexion");
             localStorage.removeItem("jwtToken");

@@ -2,18 +2,12 @@ package com.pchab.JoParis2024.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pchab.JoParis2024.pojo.User;
-import com.pchab.JoParis2024.security.payload.request.LoginRequest;
-import com.pchab.JoParis2024.security.payload.request.SignUpRequest;
 import com.pchab.JoParis2024.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,51 +41,6 @@ public class UserController {
             throw new UsernameNotFoundException("User Not Found with email : " + email);
         }
     }
-
-    @Operation(summary = "Sign in page", description = "Display the sign-in page")
-    @GetMapping("/signin")
-    public String signIn(Model model) {
-        model.addAttribute("loginRequest", new LoginRequest());
-        return "signin";
-    }
-
-    @Operation(summary = "Sign up page", description = "Display the sign-up page")
-    @GetMapping("/signup")
-    public String signUp(Model model) {
-        model.addAttribute("signUpRequest", new SignUpRequest());
-        return "signup";
-    }
-
-/* 
-    @GetMapping("/account/{email}")
-    public String account(Model model, String email) {
-        User user = userService.findUserByEmail(email);
-        model.addAttribute("user", user);
-        return "userAccount";
-    }
-*/
-    /*
-    @PostMapping("/createUser")
-    public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-        
-        if (result.hasErrors()) {
-            return "signup";
-        }
-        try {
-            userService.createUser(user);
-            return "redirect:/";
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute("errorMessage", "L'email est déjà utilisé. Veuillez en choisir un autre.");
-            return "signup";
-        }
-    }
-*/
-    @Operation(summary = "Email error", description = "Handle email already in use error during sign-up")
-    @PostMapping("/error")
-    public String emailError(@RequestParam String email, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("email", email);
-        redirectAttributes.addFlashAttribute("error", "Email is already in use!");
-        return "redirect:/user/signup";
-    }
+    
 
 }

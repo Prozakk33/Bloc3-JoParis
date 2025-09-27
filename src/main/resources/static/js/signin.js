@@ -1,5 +1,28 @@
+
+// Chargement du message d'erreur depuis l'URL
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("SIGNUP - DOM fully loaded and parsed");
+    const urlParams = new URLSearchParams(window.location.search);
+    const signupMessage = urlParams.get("signup"); // Récupère la variable "signup"
+    console.log("Message signup :", signupMessage);
+
+    if (signupMessage) {
+        document.getElementById("signupMessage").innerText = signupMessage;
+    }
+
+    const errorMessage = urlParams.get("errorMessage"); // Récupère la variable "error"
+    console.log("Message error :", errorMessage);
+
+    if (errorMessage) {
+        document.getElementById("errorMessage").innerText = errorMessage;
+    }
+});
+
+// Validation et soumission du formulaire de connexion
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
             event.preventDefault(); // Empêche le rechargement de la page
+
+            document.getElementById("signupMessage").innerText = "";
 
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
@@ -31,12 +54,22 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     const token = await response.text(); // Récupère le token JWT
                     console.log("Token JWT :", token);
                     localStorage.setItem("jwtToken", token); // Enregistre le token dans le localStorage
-                    window.location.href = "/"; // Redirige vers la page d'accueil
+                    
+                    /* Redirection vers la page de paiement si l'utilisateur vient de là */
+                    const referrer = document.referrer;
+                    console.log("Page source :", referrer);
+                    // Vérifier si une page source est disponible
+                    if (referrer) {
+                        window.location.href = referrer;
+                    } else {
+                        window.location.href = "/"; // Redirige vers la page d'accueil
+                    }
+                    
                 } else {
-                    document.getElementById("errorEmail").innerText = "Email ou mot de passe invalide.";
+                    document.getElementById("errorMessage").innerText = "Email ou mot de passe invalide.";
                 }
             } catch (error) {
                 console.error("Erreur :", error);
-                document.getElementById("errorPassword").innerText = "Une erreur s'est produite. Veuillez réessayer.";
+                document.getElementById("errorMessage").innerText = "Une erreur s'est produite. Veuillez réessayer.";
             }
         });

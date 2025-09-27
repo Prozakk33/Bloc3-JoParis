@@ -138,4 +138,38 @@ public class AuthController {
         return ResponseEntity.ok().body("Inscription réussie !");
     }
 
+    @PostMapping("/checkAccount")
+    @Operation(summary = "Check user account", description = "Check if user account is valid using JWT token")
+    public ResponseEntity<?> checkAccount(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+        System.out.println("CHECK ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
+
+        // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            System.err.println("CHECK ACCOUNT AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
+        }
+
+        // Extraire le token JWT de l'en-tête Authorization
+        String token = authorizationHeader.substring(7); // Supprime "Bearer " pour obtenir le token
+        System.out.println("CHECK ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
+
+        if (!jwtUtils.validateJwtToken(token)) {
+            System.err.println("CHECK ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Token invalide");
+        }
+
+        // Si le token est valide, vous pouvez continuer à traiter la requête
+        String email = jwtUtils.getEmailFromJwtToken(token); // Récupérer l'email depuis le token
+        System.out.println("CHECK ACCOUNT AUTH-CONTROLLER - Email extrait du token : " + email);
+
+        System.out.println("CHECK ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
+        User user = userService.findUserByEmail(email);
+        if(user != null) {
+            return ResponseEntity.ok().body("Utilisateur Reconnu avec Role = " + user.getRole());
+        } else {
+            System.err.println("CHECK ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
+        }
+    }
+
 }
