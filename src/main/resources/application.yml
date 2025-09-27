@@ -30,3 +30,6 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /v3/swagger-ui.html
+stripe:
+  secretKey: sk_test_51SBl62Dtl7ori9Lm9tfgr9pc6nWT8ArZkAz6iadDAio23olrfprcjIitg9VAQlNINLW17uULGqBOlSA9OlrkRzN600gJD3Vblz
+  publicKey: pk_test_51SBl62Dtl7ori9LmcnR4q49K8IHZaQmIOFmh4coatwXuKqiU2DqGo66P3X5YKWcTJYPT4GVPjXjI8IislCaWk3Ud00XC076Ed2
