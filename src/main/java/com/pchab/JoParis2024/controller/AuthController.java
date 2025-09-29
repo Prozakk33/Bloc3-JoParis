@@ -78,7 +78,6 @@ public class AuthController {
         }
     }
 
-    //@Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
     @PostMapping("/account")
     @Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
     public ResponseEntity<?> account(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
@@ -114,11 +113,10 @@ public class AuthController {
     }
 
     // User Registration
-    //@Operation(summary = "User registration", description = "Register a new user account")
     @PostMapping("/signup")
     @Operation(summary = "User registration", description = "Register a new user account")  
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest, BindingResult result) {
-        System.out.println("AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
+        //System.out.println("AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
         if(result.hasErrors()) {
             return ResponseEntity.badRequest().body("Erreur: Saisie incorrecte ou incomplète !");
         }

@@ -258,7 +258,7 @@ function afficherPanier() {
 
 }
 
-function fetchUserAccountforPayment() {
+async function fetchUserAccountforPayment() {
     // Récupérer le token JWT depuis le localStorage
     const token = localStorage.getItem("jwtToken");
 
@@ -291,38 +291,63 @@ function fetchUserAccountforPayment() {
 
     console.log("AccessToken extrait :", accessToken);
     // Récupérer l'ID de l'utilisateur
-    
+    let userId = null;
+    try { 
+        const response = await fetch("/user/userId", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`, // Ajoute le token dans l'en-tête Authorization
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Erreur lors de la récupération de l'ID utilisateur :", response.status);
+            throw new Error("Erreur lors de la récupération de l'ID utilisateur.");
+        }
+
+        userId = await response.json();
+        console.log("ID utilisateur récupéré :", userId);
+
+    } catch (error) {
+        console.error("Erreur lors de la requête :", error);
+        if (error.message.includes("401")) {
+            console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
+            window.location.href = "/signin.html?errorMessage=token_invalide";
+        }
+    }
 
     // Calculer le montant total à payer
     const totalAmount = calculerTotal();
-    console.log("Montant total à payer :", totalAmount);
-    // Effectuer une requête GET avec l'en-tête Authorization
-    console.log("Envoi de la requête de paiement avec le token :", accessToken);
-    console.log("Données envoyées :", {
-        priceId: "price_1SCbFXDtl7ori9LmCx62oVOI",
-        quantity: totalAmount,
-        tickets: getPanier()
-    });
-
+    
     panier = getPanier();
     console.log("Tickets envoyés pour le paiement :", panier);
 
-    fetch("/payment", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${accessToken}`, // Ajoute le token dans l'en-tête Authorization
-            "Content-Type": "application/json"
+    const cartData = {
+        userId: userId,
+        panier: panier
+    };
+
+    console.log("Données complètes envoyées pour le paiement :", cartData);
+    setTimeout(() => {
+           console.log("Délai écoulé, envoi de la requête de paiement."); 
+        }, 30000); // 30 secondes
+
+    // Envoyer la requête de paiement au serveur
+    try {
+        const response = await fetch("/payment", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`, // Ajoute le token dans l'en-tête Authorization
+                "Content-Type": "application/json"
         },
         body: JSON.stringify({
                         priceId: "price_1SCbFXDtl7ori9LmCx62oVOI",
                         quantity: totalAmount,
-                        tickets: panier
+                        cart: cartData
                     })
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
+    });
+        if (!response.ok) {
             //throw new Error("Erreur lors de la création de la session de paiement.");
             if (response.status === 401) {
                 console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
@@ -341,17 +366,14 @@ function fetchUserAccountforPayment() {
                 alert("Erreur : Une erreur inattendue s'est produite.");
             }
         }
-    })
-    .then(data => {
+    const data = await response.json();
         // Ici, on traite les données JSON retournées par le serveur
         console.log("Données reçues :", data);
-        window.location.href = data.url; // Redirection vers l'URL retournée
-    })
-    .catch(error => {
-        console.error("Erreur lors de la requête :", error);
-        if (error.message.includes("401")) {
-            console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
-            window.location.href = "/signin.html?errorMessage=token_invalide";
-        }
-    });
+        setTimeout(() => {
+            window.location.href = data.url;
+        }, 30000); // 30 secondes
+    } catch (error) {
+        console.error("Erreur lors de la requête de paiement :", error);
+        alert("Erreur lors de la requête de paiement. Veuillez réessayer.");
+    }
 }

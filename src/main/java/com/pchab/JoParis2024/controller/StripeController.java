@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +35,13 @@ public class StripeController {
         System.out.println("PaymentRequest received: " + paymentRequest);
         try {
             System.out.println("Received payment request: " + paymentRequest);
-            // Domaine de votre application
+            // Domaine de l'application
             String YOUR_DOMAIN = "http://localhost:8080";
 
-            // Récupérer les informations du produit depuis la requête (si nécessaire)
+            // Récupérer les informations du produit depuis la requête
             String priceId = paymentRequest.getPriceId();
             Long quantity = paymentRequest.getQuantity();
-            Object tickets = paymentRequest.getTickets();
+            Object cart = paymentRequest.getCart();
 
             System.out.println("Creating checkout session with priceId: " + priceId + " and quantity: " + quantity);
 
@@ -60,7 +61,7 @@ public class StripeController {
                                     .setPrice(priceId)
                                     .build()
                     )
-                    .putMetadata("tickets", tickets.toString())
+                    .putMetadata("cart", cart.toString())
                     .build();
 
             // Créer la session Stripe
@@ -78,7 +79,7 @@ public class StripeController {
         }
     }
 
-    @PostMapping("/payment-success")
+    @GetMapping("/payment-success")
     public String handlePaymentSuccess(@RequestParam("session_id") String sessionId) {
 
         System.out.println("Handling payment success for session ID: " + sessionId);
@@ -92,9 +93,9 @@ public class StripeController {
 
             // Récupérer les métadonnées
             Map<String, String> metadata = session.getMetadata();
-            String ticketsJson = metadata.get("tickets");
+            String cartJson = metadata.get("cart");
 
-            System.out.println("Tickets achetés (JSON) : " + ticketsJson);
+            System.out.println("Panier (JSON) : " + cartJson);
 
             // Exemple : enregistrer les informations dans la base de données
             // savePaymentDetails(session);

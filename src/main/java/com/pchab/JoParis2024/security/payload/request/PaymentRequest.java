@@ -5,7 +5,7 @@ public class PaymentRequest {
     private String priceId;
     private Long quantity;
     
-    private Object tickets;
+    private Object cart;
 
     // Getters and Setters
     public String getPriceId() {
@@ -14,7 +14,7 @@ public class PaymentRequest {
     public Long getQuantity() {
         return quantity;
     }
-    public Object getTickets() {
-        return tickets;
+    public Object getCart() {
+        return cart;
     }
 }
