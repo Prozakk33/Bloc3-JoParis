@@ -28,11 +28,11 @@
 
         console.log("Ajout au panier :", {
             id: eventId,
-            nom: eventTitle,
+            //nom: eventTitle,
             type: selectedOption.value,
-            date: document.getElementById("eventDate").textContent,
-            sport: document.getElementById("eventSport").textContent,
-            city: document.getElementById("eventCity").textContent,
+            //date: document.getElementById("eventDate").textContent,
+            //sport: document.getElementById("eventSport").textContent,
+            //city: document.getElementById("eventCity").textContent,
             prix: prix,
             quantite: quantite
         });
@@ -40,11 +40,11 @@
         // Appeler la fonction ajouterAuPanier avec les données récupérées
         ajouterAuPanier({
             id: eventId,
-            nom: eventTitle,
+            //nom: eventTitle,
             type: selectedOption.value,
-            date: document.getElementById("eventDate").textContent,
-            sport: document.getElementById("eventSport").textContent,
-            city: document.getElementById("eventCity").textContent,
+            //date: document.getElementById("eventDate").textContent,
+            //sport: document.getElementById("eventSport").textContent,
+            //city: document.getElementById("eventCity").textContent,
             prix: prix,
             quantite: quantite
         });
@@ -144,6 +144,7 @@ function calculerTotal() {
 // Fonction pour afficher le panier dans le HTML
 function afficherPanier() {
     const panier = getPanier();
+    console.log("Affichage du panier :", panier);
     const panierListe = document.getElementById("tdBody");
     panierListe.innerHTML = ""; // Vider la liste avant de la remplir
     const totalPanier = document.getElementById("totalPrice");
@@ -153,88 +154,103 @@ function afficherPanier() {
         // Créer une nouvelle ligne pour chaque article
         const tr = document.createElement("tr");
 
-        // Colonne : Titre de l'événement
-        const tdTitle = document.createElement("td");
-        tdTitle.classList.add("px-4", "py-3");
-        tdTitle.textContent = item.nom;
-        tr.appendChild(tdTitle);
+        console.log("Récupération des détails de l'événement pour l'ID :", item.id);
+        fetch ("/event/" + item.id, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                console.log("Réponse brute de l'événement :", response);
+                return response.json();
+            })
+            .then(data => {
+                // Colonne : Titre de l'événement
+                const tdTitle = document.createElement("td");
+                tdTitle.classList.add("px-4", "py-3");
+                tdTitle.textContent = data.title; // Remplacez "N/A" par une valeur par défaut si nécessaire
+                tr.appendChild(tdTitle);
 
-        // Colonne : Sport (ajoutez cette propriété dans vos données si nécessaire)
-        const tdSport = document.createElement("td");
-        tdSport.classList.add("px-4", "py-3");
-        tdSport.textContent = item.sport || "N/A";
-        tr.appendChild(tdSport);
+                // Colonne : Sport (ajoutez cette propriété dans vos données si nécessaire)
+                const tdSport = document.createElement("td");
+                tdSport.classList.add("px-4", "py-3");
+                tdSport.textContent = data.sport;
+                tr.appendChild(tdSport);
 
-        // Colonne : Date
-        const tdDate = document.createElement("td");
-        tdDate.classList.add("px-4", "py-3");
-        tdDate.textContent = item.date;
-        tr.appendChild(tdDate);
+                // Colonne : Date
+                const tdDate = document.createElement("td");
+                tdDate.classList.add("px-4", "py-3");
+                tdDate.textContent = data.date;
+                tr.appendChild(tdDate);
 
-        // Colonne : Ville
-        const tdCity = document.createElement("td");
-        tdCity.classList.add("px-4", "py-3");
-        tdCity.textContent = item.city || "N/A"; // Remplacez "N/A" par une valeur par défaut si nécessaire
-        tr.appendChild(tdCity);
+                // Colonne : Ville
+                const tdCity = document.createElement("td");
+                tdCity.classList.add("px-4", "py-3");
+                tdCity.textContent = data.city; // Remplacez "N/A" par une valeur par défaut si nécessaire
+                tr.appendChild(tdCity);
 
-        //Colonne : Type Billet
-        const tdType = document.createElement("td");
-        tdType.classList.add("px-4", "py-3");
-        tdType.textContent = item.type || "N/A"; // Remplacez "N/A" par une valeur par défaut si nécessaire
-        tr.appendChild(tdType);
+                //Colonne : Type Billet
+                const tdType = document.createElement("td");
+                tdType.classList.add("px-4", "py-3");
+                tdType.textContent = item.type; // Remplacez "N/A" par une valeur par défaut si nécessaire
+                tr.appendChild(tdType);
 
-        // Colonne : Prix
-        const tdPrice = document.createElement("td");
-        tdPrice.classList.add("px-4", "py-3");
-        tdPrice.textContent = (item.prix.toFixed(2) + " €");
-        tr.appendChild(tdPrice);
+                // Colonne : Prix
+                const tdPrice = document.createElement("td");
+                tdPrice.classList.add("px-4", "py-3");
+                tdPrice.textContent = (item.prix.toFixed(2) + " €");
+                tr.appendChild(tdPrice);
 
-        // Colonne : Quantité
-        const tdQuantite = document.createElement("td");
-        tdQuantite.classList.add("px-4", "py-3");
-        tdQuantite.textContent = item.quantite;
-        tr.appendChild(tdQuantite);
+                // Colonne : Quantité
+                const tdQuantite = document.createElement("td");
+                tdQuantite.classList.add("px-4", "py-3");
+                tdQuantite.textContent = item.quantite;
+                tr.appendChild(tdQuantite);
 
-        //Colonne : Total Ligne
-        const tdTotalLine = document.createElement("td");
-        tdTotalLine.classList.add("px-4", "py-3");
-        const totalLine = item.prix * item.quantite;
-        tdTotalLine.textContent = totalLine.toFixed(2) + " €";
-        tr.appendChild(tdTotalLine);
-        
-        // Colonne : Bouton "Supprimer"
-        const tdDelete = document.createElement("td");
-        const supprimerBtn = document.createElement("button");
-        supprimerBtn.textContent = "Supprimer";
-        supprimerBtn.classList.add(
-            "text-white",
-            "bg-red-600",
-            "hover:bg-red-800",
-            "focus:outline-none",
-            "focus:ring-4",
-            "focus:ring-red-300",
-            "font-medium",
-            "rounded-full",
-            "text-sm",
-            "px-5",
-            "py-2.5",
-            "text-center",
-            "me-2",
-            "mb-2",
-            "dark:bg-blue-600",
-            "dark:hover:bg-blue-700",
-            "dark:focus:ring-blue-800"
-        );
-        supprimerBtn.onclick = () => {
-            supprimerDuPanier(item.id, item.type);
-            afficherPanier(); // Met à jour l'affichage après suppression
-        };
-        tdDelete.appendChild(supprimerBtn);
-        tr.appendChild(tdDelete);
+                //Colonne : Total Ligne
+                const tdTotalLine = document.createElement("td");
+                tdTotalLine.classList.add("px-4", "py-3");
+                const totalLine = item.prix * item.quantite;
+                tdTotalLine.textContent = totalLine.toFixed(2) + " €";
+                tr.appendChild(tdTotalLine);
+                
+                // Colonne : Bouton "Supprimer"
+                const tdDelete = document.createElement("td");
+                const supprimerBtn = document.createElement("button");
+                supprimerBtn.textContent = "Supprimer";
+                supprimerBtn.classList.add(
+                    "text-white",
+                    "bg-red-600",
+                    "hover:bg-red-800",
+                    "focus:outline-none",
+                    "focus:ring-4",
+                    "focus:ring-red-300",
+                    "font-medium",
+                    "rounded-full",
+                    "text-sm",
+                    "px-5",
+                    "py-2.5",
+                    "text-center",
+                    "me-2",
+                    "mb-2",
+                    "dark:bg-blue-600",
+                    "dark:hover:bg-blue-700",
+                    "dark:focus:ring-blue-800"
+                );
+                supprimerBtn.onclick = () => {
+                    supprimerDuPanier(item.id, item.type);
+                    afficherPanier(); // Met à jour l'affichage après suppression
+                };
+                tdDelete.appendChild(supprimerBtn);
+                tr.appendChild(tdDelete);
 
-        // Ajouter la ligne à la table
-        panierListe.appendChild(tr);
-
+                // Ajouter la ligne à la table
+                panierListe.appendChild(tr);
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération de l'événement :", error);
+            });
     });
 
     // Mettre à jour le total du panier
@@ -272,32 +288,70 @@ function fetchUserAccountforPayment() {
         window.location.href = "/user/signin"; // Redirige si accessToken est absent
         return;
     } 
+
+    console.log("AccessToken extrait :", accessToken);
+    // Récupérer l'ID de l'utilisateur
+    
+
+    // Calculer le montant total à payer
+    const totalAmount = calculerTotal();
+    console.log("Montant total à payer :", totalAmount);
     // Effectuer une requête GET avec l'en-tête Authorization
-    fetch("/auth/account", {
-        method: "GET",
+    console.log("Envoi de la requête de paiement avec le token :", accessToken);
+    console.log("Données envoyées :", {
+        priceId: "price_1SCbFXDtl7ori9LmCx62oVOI",
+        quantity: totalAmount,
+        tickets: getPanier()
+    });
+
+    panier = getPanier();
+    console.log("Tickets envoyés pour le paiement :", panier);
+
+    fetch("/payment", {
+        method: "POST",
         headers: {
             "Authorization": `Bearer ${accessToken}`, // Ajoute le token dans l'en-tête Authorization
             "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+                        priceId: "price_1SCbFXDtl7ori9LmCx62oVOI",
+                        quantity: totalAmount,
+                        tickets: panier
+                    })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            //throw new Error("Erreur lors de la création de la session de paiement.");
+            if (response.status === 401) {
+                console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
+                const message = "Token invalide ou expiré. Veuillez vous reconnecter.";
+                //Supprimer le token invalide
+                localStorage.removeItem("jwtToken");
+                window.location.href = "/signin.html?errorMessage=" + message;
+            } else if (response.status === 400) {
+                console.error("Requête invalide. Vérifiez les données envoyées.");
+                alert("Erreur : Requête invalide. Veuillez vérifier les informations.");
+            } else if (response.status === 500) {
+                console.error("Erreur interne du serveur.");
+                alert("Erreur : Une erreur interne s'est produite. Veuillez réessayer plus tard.");
+            } else {
+                console.error("Erreur inattendue :", response.status);
+                alert("Erreur : Une erreur inattendue s'est produite.");
+            }
         }
     })
-        .then(response => {
-            if (response.ok) {
-                console.log("Accès autorisé à /auth/account.");
-                return response.text(); // Récupère la page HTML renvoyée par le serveur
-            } else if (response.status === 401) {
-                console.error("Accès refusé. Redirection vers la page de connexion.");
-                window.location.href = "/signin"; // Redirige si le token est invalide
-            } else {
-                console.error("Erreur lors de la requête :", response.status);
-            }
-        })
-        .then(html => {
-            // Affiche la page HTML renvoyée par le serveur
-            document.open();
-            document.write(html);
-            document.close();
-        })
-        .catch(error => {
-            console.error("Erreur lors de la requête :", error);
-        });
+    .then(data => {
+        // Ici, on traite les données JSON retournées par le serveur
+        console.log("Données reçues :", data);
+        window.location.href = data.url; // Redirection vers l'URL retournée
+    })
+    .catch(error => {
+        console.error("Erreur lors de la requête :", error);
+        if (error.message.includes("401")) {
+            console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
+            window.location.href = "/signin.html?errorMessage=token_invalide";
+        }
+    });
 }
