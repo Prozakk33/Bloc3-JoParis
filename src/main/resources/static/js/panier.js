@@ -369,9 +369,9 @@ async function fetchUserAccountforPayment() {
     const data = await response.json();
         // Ici, on traite les données JSON retournées par le serveur
         console.log("Données reçues :", data);
-        setTimeout(() => {
-            window.location.href = data.url;
-        }, 30000); // 30 secondes
+        // Rediriger l'utilisateur vers l'URL de paiement
+        window.location.href = data.url;
+
     } catch (error) {
         console.error("Erreur lors de la requête de paiement :", error);
         alert("Erreur lors de la requête de paiement. Veuillez réessayer.");
