@@ -10,14 +10,41 @@
 
 <body class="bg-gray-100 text-gray-800">
 
-    <h1>Bienvenue sur votre compte</h1>
-    <p>Email : <span th:text="${user.email}"></span></p>
+
+    <div class="container mx-auto px-4">
+        <h1 class="text-center text-3xl font-bold mt-10 mb-10">Compte Personnel</h1>
+        <h3 class="text-center text-xl">Retrouvez ici tous vos achats.</h3>
+        <h3 class="text-center text-xl">Cliquer sur "Afficher" pour générer le QR code de votre ticket et le faire contrôler.</h3>
+    </div>
+
+    <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+        <table class="table-auto w-full text-left whitespace-no-wrap">
+            <thead>
+            <tr>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Affiche</th>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Sport</th>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Date</th>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Ville</th>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Stade</th>
+                <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Type</th>
+                <th class="text-center w-10 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Afficher</th>
+            </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+                <!-- Les lignes de tickets seront insérées ici par JavaScript -->
+            </tbody>
+            </table>
+            <div id="pagination" class="flex justify-center mt-4">
+            <!-- Les boutons de pagination seront insérés ici par JavaScript -->
+            </div>
+            </div>
+            <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
+            <a id="backToHome" href="/" type="button" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded mb-20">Retour Accueil</a>
+            </div>
+
+
 
 </body>
-
-<h1 class="text-center text-3xl font-bold mt-10 mb-10">WORK IN PROGRESS</h1>
-
-
 
 <script src="/js/headerFooter.js"></script>
 <script src="/js/userAccount.js"></script>

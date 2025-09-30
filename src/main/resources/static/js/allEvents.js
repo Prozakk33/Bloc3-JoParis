@@ -6,17 +6,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fonction pour récupérer les événements depuis l'API
     function fetchEvents() {
         fetch(apiUrl)
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Erreur lors de la récupération des événements");
+                    throw new Error(
+                        "Erreur lors de la récupération des événements"
+                    );
                 }
                 return response.json(); // Convertir la réponse en JSON
             })
-            .then(events => {
+            .then((events) => {
                 displayEvents(events, currentPage); // Afficher les événements pour la page actuelle
                 setupPagination(events); // Configurer la pagination
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error("Erreur :", error);
             });
     }
@@ -29,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             month: "long",
             year: "numeric",
             hour: "2-digit",
-            minute: "2-digit"
+            minute: "2-digit",
         }).format(date); // Retourner la date formatée
     }
 
@@ -53,7 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td class="px-4 py-3">${event.city}</td>
                 <td class="px-4 py-3">${event.stadium}</td>
                 <td>
-                    <a id="eventDetailButton" href="/eventDetail.html?id=${event.id}" class="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Détails</a>
+                    <a id="eventDetailButton" href="/eventDetail.html?id=${
+                        event.id
+                    }" class="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Détails</a>
                 </td>
             `;
             tbody.appendChild(row);
@@ -71,7 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 1; i <= totalPages; i++) {
             const button = document.createElement("button");
             button.textContent = i;
-            button.className = "px-4 py-2 mx-1 bg-blue-600 text-white rounded hover:bg-blue-800";
+            button.className =
+                "px-4 py-2 mx-1 bg-blue-600 text-white rounded hover:bg-blue-800";
             if (i === currentPage) {
                 button.classList.add("bg-blue-800"); // Mettre en surbrillance la page actuelle
             }

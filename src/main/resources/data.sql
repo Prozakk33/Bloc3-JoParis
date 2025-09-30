@@ -357,3 +357,57 @@ VALUES (
         1,
         1
     );
+
+INSERT INTO
+    ticket (
+        id,
+        buy_date,
+        ticket_key,
+        user_id,
+        event_id,
+        ticket_type
+    )
+VALUES (
+        2,
+        '2025-09-30 15:53:47.557000',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaWNrZXQiLCJmaXJzdE5hbWUiOiJQaGlsaXBwZSIsImxhc3ROYW1lIjoiQ0hBQkVSVCIsImJ1eURhdGUiOjE3NTkyNDA0Mjc1NTcsImV2ZW50SWQiOjksInRpY2tldFR5cGUiOiJTb2xvIiwiaWF0IjoxNzU5MjQwNDI3fQ.9WPzYoV9dDZd9jTwsl0DEisSrxRP9dLTidE6TYLjeOQ',
+        4,
+        9,
+        'Solo'
+    );
+
+INSERT INTO
+    ticket (
+        id,
+        buy_date,
+        ticket_key,
+        user_id,
+        event_id,
+        ticket_type
+    )
+VALUES (
+        3,
+        '2025-09-30 15:53:47.758000',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaWNrZXQiLCJmaXJzdE5hbWUiOiJQaGlsaXBwZSIsImxhc3ROYW1lIjoiQ0hBQkVSVCIsImJ1eURhdGUiOjE3NTkyNDA0Mjc3NTgsImV2ZW50SWQiOjExLCJ0aWNrZXRUeXBlIjoiRmFtaWxsZSIsImlhdCI6MTc1OTI0MDQyN30.CC6NC9RFU9S_qVojqbDU0U-sfDPM2rwrsWhoBpXxAzw',
+        4,
+        3,
+        'Famille'
+    );
+
+INSERT INTO
+    ticket (
+        id,
+        buy_date,
+        ticket_key,
+        user_id,
+        event_id,
+        ticket_type
+    )
+VALUES (
+        4,
+        '2025-09-30 15:53:47.958000',
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaWNrZXQiLCJmaXJzdE5hbWUiOiJQaGlsaXBwZSIsImxhc3ROYW1lIjoiQ0hBQkVSVCIsImJ1eURhdGUiOjE3NTkyNDA0Mjc5MTAsImV2ZW50SWQiOjExLCJ0aWNrZXRUeXBlIjoiU29sbyIsImlhdCI6MTc1OTI0MDQyN30.X6Augb5amfKMwnQiT_jO9XWDWGevOKsc-Sz2Z65fsdM',
+        4,
+        4,
+        'Duo'
+    );

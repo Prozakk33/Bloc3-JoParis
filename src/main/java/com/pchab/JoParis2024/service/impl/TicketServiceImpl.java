@@ -30,6 +30,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getTicketsByUserId(Long userId) {
+        System.out.println("TicketServiceImpl - Fetching tickets for userId: " + userId);
         return ticketRepository.findByUserId(userId);
     }
 

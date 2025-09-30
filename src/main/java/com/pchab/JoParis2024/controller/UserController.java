@@ -31,15 +31,15 @@ public class UserController {
     private JwtUtils jwtUtils;
 
   // Find a user by ID
-    @Operation(summary = "Find user by ID", description = "Retrieve user details by their ID")
-    @GetMapping("/id/{id}")
+    //@Operation(summary = "Find user by ID", description = "Retrieve user details by their ID")
+    //@GetMapping("/id/{id}")
     User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
  
     // Find a user by email
-    @Operation(summary = "Find user by email", description = "Retrieve user details by their email address")
-    @GetMapping("/email/{email}")
+    //@Operation(summary = "Find user by email", description = "Retrieve user details by their email address")
+    //@GetMapping("/email/{email}")
     User findByEmail(@PathVariable String email) {
         System.out.println("USERCONTROLLER - Searching for user with email: " + email);
         try {
@@ -50,9 +50,9 @@ public class UserController {
         }
     }
 
-    @PostMapping("/userId")
-    @Operation(summary = "Get user Id", description = "Retrieve user Id using JWT token")
-    public ResponseEntity<?> getUserIdFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+    //@PostMapping("/userId")
+    //@Operation(summary = "Get user Id", description = "Retrieve user Id using JWT token")
+    public ResponseEntity<?> getUserFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
         System.out.println("USERID AUTH-CONTROLLER - Accessing userId with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
@@ -78,7 +78,7 @@ public class UserController {
         User user = userService.findUserByEmail(email);
         if(user != null) {
             System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
-            return ResponseEntity.ok().body(user.getId());
+            return ResponseEntity.ok().body(user);
         } else {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");

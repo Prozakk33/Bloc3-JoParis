@@ -78,9 +78,9 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/account")
-    @Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
-    public ResponseEntity<?> account(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+    //@PostMapping("/account")
+    //@Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
+    public ResponseEntity<?> account(String authorizationHeader) {
         System.out.println("ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
@@ -105,6 +105,7 @@ public class AuthController {
         System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
         User user = userService.findUserByEmail(email);
         if(user != null) {
+            System.out.println("ACCOUNT AUTH-CONTROLLER - Returning user details : " + ResponseEntity.ok().body(user).toString());
             return ResponseEntity.ok().body(user);
         } else {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);

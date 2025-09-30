@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.pchab.JoParis2024.pojo.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pchab.JoParis2024.security.payload.request.PaymentRequest;
@@ -47,8 +48,9 @@ public class StripeController {
         System.out.println("PaymentRequest received: " + paymentRequest);
 
         // Récupération de l'ID du client (userId)
-        ResponseEntity<?> userIdResponse = userController.getUserIdFromToken(authorizationHeader);
-        Long userId = (Long) userIdResponse.getBody();
+        ResponseEntity<?> userResponse = userController.getUserFromToken(authorizationHeader);
+        User user = (User) userResponse.getBody();
+        Long userId = user.getId();
         if (userId == null) {
             throw new RuntimeException("Utilisateur non authentifié. Veuillez vous connecter.");
         } else {
@@ -71,10 +73,7 @@ public class StripeController {
 
             // Encoder le message d'erreur pour l'URL
             String errorMessage = "Paiement échoué, veuillez réessayer.";
-            String encodedErrorMessage = URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
-            //String ticketsString = URLEncoder.encode(tickets.toString(), StandardCharsets.UTF_8);
-
-            
+            String encodedErrorMessage = URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);           
 
             // Préparer les données du panier à inclure dans les métadonnées
             Map<String, Object> cartData = Map.of(
@@ -87,8 +86,6 @@ public class StripeController {
             ObjectMapper objectMapper = new ObjectMapper();
             String cartJsonString = objectMapper.writeValueAsString(cartData);
             System.out.println("Cart Data (JSON) : " + cartJsonString);
-
-
 
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -119,7 +116,7 @@ public class StripeController {
     }
 
     @GetMapping("/payment-success")
-    public String handlePaymentSuccess(@RequestParam("session_id") String sessionId) {
+    public ResponseEntity<Void> handlePaymentSuccess(@RequestParam("session_id") String sessionId) {
 
         System.out.println("Handling payment success for session ID: " + sessionId);
         try {
@@ -167,7 +164,8 @@ public class StripeController {
                     ticketController.createTicket(userId, eventId, ticketType, currentTimestamp);
                 }
             }
-            return "Paiement traité avec succès !";
+            // Rediriger vers la page HTML dans le dossier static
+        return ResponseEntity.status(302).header("Location", "/success.html").build();
 
         } catch (Exception e) {
             e.printStackTrace();
