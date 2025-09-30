@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.pchab.JoParis2024.security.jwt.JwtUtils;
 
 import com.pchab.JoParis2024.pojo.User;
+import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +52,7 @@ public class UserController {
 
     @PostMapping("/userId")
     @Operation(summary = "Get user Id", description = "Retrieve user Id using JWT token")
-    public ResponseEntity<?> userId(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+    public ResponseEntity<?> getUserIdFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
         System.out.println("USERID AUTH-CONTROLLER - Accessing userId with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "

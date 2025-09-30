@@ -27,6 +27,8 @@ public class Ticket {
 
     private String ticketKey;
 
+    private String ticketType;
+
     //private Long userId;
 
     //private Long eventId;

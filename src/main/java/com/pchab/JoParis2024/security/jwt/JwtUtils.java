@@ -103,13 +103,15 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String generateTicketKeyToken(Long userId, Long eventId, String firstName, String lastName,  Timestamp buyDate) {
+
+    public String generateTicketKeyToken(String firstName, String lastName,  Timestamp buyDate, Long eventId, String ticketType) {
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject("Ticket")
                 .claim("firstName", firstName)
                 .claim("lastName", lastName)
-                .claim("eventId", eventId)
                 .claim("buyDate", buyDate)
+                .claim("eventId", eventId)
+                .claim("ticketType", ticketType)
                 .setIssuedAt(new Date())
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();

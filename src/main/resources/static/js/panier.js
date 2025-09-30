@@ -261,11 +261,15 @@ function afficherPanier() {
 async function fetchUserAccountforPayment() {
     // Récupérer le token JWT depuis le localStorage
     const token = localStorage.getItem("jwtToken");
-
+    const message = "Merci de vous connecter pour accéder au paiement";
+    if (!token) {
+        window.location.href = "/user/signin.html?errorMessage=" + message; // Redirige vers la page de connexion si aucun token n'est trouvé
+        return;
+    }
     // Vérifier si le token existe
     const jwtToken = localStorage.getItem("jwtToken");
     if (!jwtToken) {
-        window.location.href = "/user/signin"; // Redirige vers la page de connexion si aucun token n'est trouvé
+        window.location.href = "/user/signin.html?errorMessage=" + message; // Redirige vers la page de connexion si aucun token n'est trouvé
         return;
     } 
 
@@ -278,45 +282,19 @@ async function fetchUserAccountforPayment() {
         accessToken = parsedToken.accessToken; // Récupère le champ accessToken
     } catch (e) {
         console.error("Erreur lors du parsing du jwtToken :", e);
-        window.location.href = "/user/signin"; // Redirige si le parsing échoue
+        window.location.href = "/user/signin.html?errorMessage=" + message; // Redirige si le parsing échoue
         return;
     }
 
     // Vérifier si l'accessToken est présent
     if (!accessToken) {
         console.error("Aucun accessToken trouvé dans jwtToken. Redirection vers la page de connexion.");
-        window.location.href = "/user/signin"; // Redirige si accessToken est absent
+        window.location.href = "/user/signin.html?errorMessage=" + message; // Redirige si accessToken est absent
         return;
     } 
 
     console.log("AccessToken extrait :", accessToken);
-    // Récupérer l'ID de l'utilisateur
-    let userId = null;
-    try { 
-        const response = await fetch("/user/userId", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${accessToken}`, // Ajoute le token dans l'en-tête Authorization
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) {
-            console.error("Erreur lors de la récupération de l'ID utilisateur :", response.status);
-            throw new Error("Erreur lors de la récupération de l'ID utilisateur.");
-        }
-
-        userId = await response.json();
-        console.log("ID utilisateur récupéré :", userId);
-
-    } catch (error) {
-        console.error("Erreur lors de la requête :", error);
-        if (error.message.includes("401")) {
-            console.error("Token invalide ou expiré. Redirection vers la page de connexion.");
-            window.location.href = "/signin.html?errorMessage=token_invalide";
-        }
-    }
-
+    
     // Calculer le montant total à payer
     const totalAmount = calculerTotal();
     
@@ -324,7 +302,6 @@ async function fetchUserAccountforPayment() {
     console.log("Tickets envoyés pour le paiement :", panier);
 
     const cartData = {
-        userId: userId,
         panier: panier
     };
 

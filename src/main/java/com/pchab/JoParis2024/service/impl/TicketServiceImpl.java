@@ -46,17 +46,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void createTicket(Ticket ticket) {
         //ticket.setUser(userRepository.findById(ticket.getUser().getId()).orElse(null));
-        //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));
-        ticket.setBuyDate(Timestamp.valueOf(java.time.LocalDateTime.now()));
-
-        // Récupération de la clé Utilisateur
-        String userKey = ticket.getUser().getUserKey();
-        // Décodage de la clé pour récupérer les informations nécessaires
-        String userFirstName = jwtUtils.getFirstNameFromJwtToken(userKey);
-        String userLastName = jwtUtils.getLastNameFromJwtToken(userKey);
-        // Génération de la clé unique pour le ticket
-        String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getId(), ticket.getEvent().getId(), userFirstName, userLastName, ticket.getBuyDate());
-        // Affectation de la clé au ticket
+        //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));*
+        System.out.println("Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
+        System.out.println("Event: " + ticket.getEvent().getTitle());
+        String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getFirstName(), ticket.getUser().getLastName(), ticket.getBuyDate(), ticket.getEvent().getId(), ticket.getTicketType());
         ticket.setTicketKey(ticketKey);
 
         ticketRepository.save(ticket);
