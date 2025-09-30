@@ -143,27 +143,29 @@ public class StripeController {
             List<Map<String, Object>> panier = (List<Map<String, Object>>) cart.get("panier");
             Long userId = Long.valueOf((Integer) cartJson.get("userId") );
 
-            // Récupérer la date et l'heure actuelles
-            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-            System.out.println("Current Timestamp: " + currentTimestamp);
-
             // Afficher les données extraites
             System.out.println("Panier : " + panier);
             System.out.println("User ID : " + userId);
 
             // Enregistrement des tickets en base de données
             for (Map<String, Object> item : panier) {
+                /*/
                 System.out.println("Processing item: " + item);
                 System.out.println("Item ID: " + item.get("id"));
                 System.out.println("Item Type: " + item.get("type"));
                 System.out.println("Item Quantity: " + item.get("quantite"));
-
+                */
                 Long eventId = Long.parseLong((String) item.get("id"));
                 String ticketType = (String) item.get("type");
                 Integer quantite = ((Number) item.get("quantite")).intValue();
 
                 // Créer un ticket pour chaque élément du panier
-                ticketController.createTicket(userId, eventId, ticketType, currentTimestamp);
+                for (int i = 0; i < quantite; i++) {
+                    // Récupérer la date et l'heure actuelles
+                    Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                    //System.out.println("Current Timestamp: " + currentTimestamp);
+                    ticketController.createTicket(userId, eventId, ticketType, currentTimestamp);
+                }
             }
             return "Paiement traité avec succès !";
 
