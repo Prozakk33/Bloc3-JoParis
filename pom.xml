@@ -109,6 +109,17 @@
             <artifactId>stripe-java</artifactId>
             <version>25.6.0</version>
         </dependency>
+        <!-- QR CODE -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.5.2</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

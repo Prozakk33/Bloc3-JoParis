@@ -97,7 +97,7 @@ public class TicketController {
         if (ticket == null) {
             throw new IllegalArgumentException("Invalid ticket ID");
         }
-        QRCodeResponse qrCodeResponse = QRCodeResponse.fromTicket(ticket, "generated-qr-code-url");
+        QRCodeResponse qrCodeResponse = QRCodeResponse.fromTicket("generated-qr-code-url");
 
         return qrCodeResponse;
     }
