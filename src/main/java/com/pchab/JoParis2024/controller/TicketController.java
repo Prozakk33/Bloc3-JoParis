@@ -1,22 +1,29 @@
 package com.pchab.JoParis2024.controller;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.pchab.JoParis2024.service.TicketService;
-import com.pchab.JoParis2024.service.UserService;
-import com.pchab.JoParis2024.service.EventService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.http.ResponseEntity;
+
+import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.pojo.Ticket;
 import com.pchab.JoParis2024.pojo.User;
-import com.pchab.JoParis2024.pojo.Event;
-import java.util.List;
-import java.sql.Timestamp;
+import com.pchab.JoParis2024.security.payload.response.QRCodeResponse;
 import com.pchab.JoParis2024.security.payload.response.TicketListResponse;
+import com.pchab.JoParis2024.service.EventService;
+import com.pchab.JoParis2024.service.TicketService;
+import com.pchab.JoParis2024.security.payload.request.QRCodeRequest;
+
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation; 
+
 
 
 @Tag(name="Ticket", description="Endpoints for managing tickets")
@@ -54,6 +61,7 @@ public class TicketController {
     }
 
     @PostMapping("/list")
+    @Operation(summary = "List tickets for the authenticated user", description = "Returns a list of tickets associated with the authenticated user.")
     public List<TicketListResponse> listTickets(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
 
         System.out.println("TICKET CONTROLLER - Listing tickets with token: " + authorizationHeader);  
@@ -78,4 +86,20 @@ public class TicketController {
         System.out.println("TICKET CONTROLLER - List of tickets for user ID: " + userId + " - " + ticketList.toString());
         return ticketList;
     }
+
+    @PostMapping("/QRCode")
+    @Operation(summary = "Generate QR code for a ticket", description = "Generates a QR code for the specified ticket ID.")
+    public QRCodeResponse generateQRCode(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody QRCodeRequest qrCodeRequest) {
+        //TODO: process POST request
+        System.out.println("TICKET CONTROLLER - Generating QR code for ticket ID: " + qrCodeRequest.getTicketId() + " with token: " + authorizationHeader);
+        Ticket ticket = ticketService.getTicketById(qrCodeRequest.getTicketId());
+
+        if (ticket == null) {
+            throw new IllegalArgumentException("Invalid ticket ID");
+        }
+        QRCodeResponse qrCodeResponse = QRCodeResponse.fromTicket(ticket, "generated-qr-code-url");
+
+        return qrCodeResponse;
+    }
+    
 }

@@ -6,51 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Fonction pour récupérer les tickets depuis l'API
 async function getTickets() {
-    // Récupérer le token JWT depuis le localStorage
-    const token = localStorage.getItem("jwtToken");
-
-    // Vérifier si le token existe
-    const jwtToken = localStorage.getItem("jwtToken");
-    if (!jwtToken) {
-        window.location.href =
-            "/signin.html?errorMessage=Connectez-vous pour accéder au paiement"; // Redirige vers la page de connexion si aucun token n'est trouvé
-        return;
-    }
-
-    console.log(
-        "CheckUserAccount - jwtToken récupéré depuis le localStorage :",
-        jwtToken
-    );
-
-    // Extraire l'accessToken du jwtToken
-    let accessToken;
     try {
-        const parsedToken = JSON.parse(jwtToken); // Convertit la chaîne JSON en objet
-        accessToken = parsedToken.accessToken; // Récupère le champ accessToken
-    } catch (e) {
-        console.error(
-            "CheckUserAccount - Erreur lors du parsing du jwtToken :",
-            e
-        );
+        accessToken = getAccessToken();
+    } catch (error) {
+        console.error("Erreur lors de la récupération du token :", error);
         window.location.href =
-            "/signin.html?errorMessage=Erreur lors de la lecture du Token - Reconnectez-vous"; // Redirige si le parsing échoue
+            "/signin.html?errorMessage=Erreur lors de la récupération de votre compte - Reconnectez-vous";
         return;
     }
-
-    // Vérifier si l'accessToken est présent
-    if (!accessToken) {
-        console.error(
-            "CheckUserAccount - Aucun accessToken trouvé dans jwtToken. Redirection vers la page de connexion."
-        );
-        window.location.href =
-            "/signin.html?errorMessage=Aucun accessToken trouvé - Reconnectez-vous"; // Redirige si accessToken est absent
-        return;
-    }
-    // Effectuer une requête POST avec l'en-tête Authorization
-    console.log(
-        "CheckUserAccount - Envoi de la requête POST à /tickets/list avec l'accessToken :",
-        accessToken
-    );
     try {
         const response = await fetch("/tickets/list", {
             method: "POST",
@@ -92,14 +55,118 @@ function displayTickets(tickets) {
         row.innerHTML = `
             <td class="px-4 py-3">${ticket.eventTitle}</td>
             <td class="px-4 py-3">${ticket.eventSport}</td>
-            <td class="px-4 py-3">${ticket.eventDate}</td>
+            <td class="px-4 py-3">${formatLocalDateTime(ticket.eventDate)}</td>
             <td class="px-4 py-3">${ticket.eventCity}</td>
             <td class="px-4 py-3">${ticket.eventStadium}</td>
             <td class="px-4 py-3">${ticket.ticketType}</td>
             <td>
-                <a id="eventDetailButton" href="/ticketQRCode.html?id=${ticket.id}" class="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Afficher</a>
+                <button id="eventDetailButton" onclick="showQRCode(${
+                    ticket.ticketId
+                })" class="button text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">Afficher</button>
             </td>
         `;
         tableBody.appendChild(row);
+
+        // Créer une ligne pour l'accordéon (initialement masquée)
+        const accordionRow = document.createElement("tr");
+        accordionRow.classList.add("accordion-row", "hidden");
+        accordionRow.innerHTML = `
+            <td colspan="7">
+                <div class="accordion-content" id="accordion-${ticket.ticketId}">
+                    <!-- Le contenu du QR code sera inséré ici -->
+                </div>
+            </td>
+        `;
+        tableBody.appendChild(accordionRow);
     });
+}
+
+// Fonction pour formater une date LocalDateTime
+function formatLocalDateTime(localDateTime) {
+    const date = new Date(localDateTime); // Convertir la chaîne en objet Date
+    return new Intl.DateTimeFormat("fr-FR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    }).format(date); // Retourner la date formatée
+}
+
+async function showQRCode(ticketId) {
+    console.log("Show QR Code for ticket ID:", ticketId);
+    // Rediriger vers la page de détail du ticket avec l'ID du ticket
+    try {
+        const response = await fetch(`/tickets/QRCode`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + accessToken,
+            },
+            body: JSON.stringify({ ticketId }),
+        });
+        if (!response.ok) {
+            throw new Error("Erreur lors de la récupération du QR Code");
+            window.location.href =
+                "/signin.html?errorMessage=Erreur lors de la récupération du QR Code - Reconnectez-vous";
+        }
+        const qrCodeData = await response.json();
+        // Afficher le QR Code sur la page
+        console.log("QR Code data received:", qrCodeData);
+        displayQRCode(qrCodeData, ticketId);
+    } catch (error) {
+        console.error("Erreur :", error);
+    }
+}
+
+function displayQRCode(qrCodeData, ticketId) {
+    // Créer un accordéon pour afficher le QR Code
+    // Insérer le QR code dans l'accordéon correspondant
+    const accordionContent = document.getElementById(`accordion-${ticketId}`);
+    accordionContent.innerHTML = `
+            <div class="accordion-body p-4 text-center">
+                <img src="data:image/png;base64,${qrCodeData.qrCodeImage}" alt="QR Code" class="mb-4"/>
+                <p class="text-gray-700">Présentez ce QR code à l'entrée de l'événement.</p>
+            </div>
+        `;
+
+    // Afficher l'accordéon
+    const accordionRow = accordionContent.closest(".accordion-row");
+    accordionRow.classList.toggle("hidden");
+
+    // Modifier le bouton associé
+    const button = document.querySelector(
+        `button[onclick="showQRCode(${ticketId})"]`
+    );
+    if (!accordionRow.classList.contains("hidden")) {
+        // Accordéon affiché
+        button.textContent = "Masquer";
+        button.classList.remove(
+            "bg-blue-600",
+            "hover:bg-blue-800",
+            "dark:bg-blue-600",
+            "dark:hover:bg-blue-700"
+        );
+        button.classList.add(
+            "bg-red-600",
+            "hover:bg-red-800",
+            "dark:bg-red-600",
+            "dark:hover:bg-red-700"
+        );
+    } else {
+        // Accordéon masqué
+        button.textContent = "Afficher";
+        button.classList.remove(
+            "bg-red-600",
+            "hover:bg-red-800",
+            "dark:bg-red-600",
+            "dark:hover:bg-red-700"
+        );
+        button.classList.add(
+            "bg-blue-600",
+            "hover:bg-blue-800",
+            "dark:bg-blue-600",
+            "dark:hover:bg-blue-700"
+        );
+    }
 }
