@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +73,7 @@ public class TicketServiceImpl implements TicketService {
         String topText = ticket.getEvent().getTitle();
         String bottomText = ticket.getTicketType();
         QRCodeWriter barcodeWriter = new QRCodeWriter();
-        BitMatrix matrix = barcodeWriter.encode(ticketToken, BarcodeFormat.QR_CODE, 200, 200);
+        BitMatrix matrix = barcodeWriter.encode(ticketToken, BarcodeFormat.QR_CODE, 300, 300);
         return modifiedQRCode(matrix, topText, bottomText);
     }
 

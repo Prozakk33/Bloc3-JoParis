@@ -18,15 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.pojo.Ticket;
 import com.pchab.JoParis2024.pojo.User;
+import com.pchab.JoParis2024.security.payload.request.QRCodeRequest;
 import com.pchab.JoParis2024.security.payload.response.QRCodeResponse;
 import com.pchab.JoParis2024.security.payload.response.TicketListResponse;
 import com.pchab.JoParis2024.service.EventService;
 import com.pchab.JoParis2024.service.TicketService;
-import com.pchab.JoParis2024.security.payload.request.QRCodeRequest;
 
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation; 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag; 
 
 
 
@@ -93,7 +92,7 @@ public class TicketController {
 
     @PostMapping("/QRCode")
     @Operation(summary = "Generate QR code for a ticket", description = "Generates a QR code for the specified ticket ID.")
-    public QRCodeResponse generateQRCode(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody QRCodeRequest qrCodeRequest) {
+    public ResponseEntity<QRCodeResponse> generateQRCode(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody QRCodeRequest qrCodeRequest) {
         //TODO: process POST request
         System.out.println("TICKET CONTROLLER - Generating QR code for ticket ID: " + qrCodeRequest.getTicketId() + " with token: " + authorizationHeader);
         Ticket ticket = ticketService.getTicketById(qrCodeRequest.getTicketId());
@@ -106,16 +105,19 @@ public class TicketController {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(qrCodeImage, "png", baos);
         byte[] qrCodeBytes = baos.toByteArray();
+        String qrCodeBase64 = java.util.Base64.getEncoder().encodeToString(qrCodeBytes);
 
-        return QRCodeResponse()
-            .header("Content-Type", "image/png")
-            .header("Content-Disposition", "inline; filename=\"qrcode.png\"")
-            .body(qrCodeBytes);
+        QRCodeResponse qrCodeResponse = QRCodeResponse.fromTicket(qrCodeBase64);
+        return ResponseEntity.ok(qrCodeResponse);
         } catch (Exception e) {
             System.err.println("TICKET CONTROLLER - Error generating QR code for ticket ID: " + qrCodeRequest.getTicketId() + " - " + e.getMessage());
-            return QRCodeResponse   
-                    .body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
-    
+
+    @PostMapping("/decodeQRCode")
+    @Operation(summary = "Decode QR code", description = "Decodes the provided QR code string data.")
+    public ResponseEntity<String> decodeQRCode(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody String qrCode) {
+        
+    }
 }

@@ -28,7 +28,7 @@ async function getTickets() {
             throw new Error("Erreur lors de la récupération des tickets");
         }
         const data = await response.json();
-        console.log("Tickets récupérés :", data);
+        //console.log("Tickets récupérés :", data);
         displayTickets(data);
     } catch (error) {
         console.error("Erreur :", error);
@@ -72,7 +72,7 @@ function displayTickets(tickets) {
         accordionRow.classList.add("accordion-row", "hidden");
         accordionRow.innerHTML = `
             <td colspan="7">
-                <div class="accordion-content" id="accordion-${ticket.ticketId}">
+                <div class="grid accordion-content justify-items-center" id="accordion-${ticket.ticketId}">
                     <!-- Le contenu du QR code sera inséré ici -->
                 </div>
             </td>
@@ -110,9 +110,9 @@ async function showQRCode(ticketId) {
             window.location.href =
                 "/signin.html?errorMessage=Erreur lors de la récupération du QR Code - Reconnectez-vous";
         }
-        const qrCodeData = await response.text();
+        const qrCodeData = await response.json();
         // Afficher le QR Code sur la page
-        console.log("QR Code data received:", qrCodeData);
+        //console.log("QR Code data received:", qrCodeData);
         displayQRCode(qrCodeData, ticketId);
     } catch (error) {
         console.error("Erreur :", error);
@@ -124,8 +124,8 @@ function displayQRCode(qrCodeData, ticketId) {
     // Insérer le QR code dans l'accordéon correspondant
     const accordionContent = document.getElementById(`accordion-${ticketId}`);
     accordionContent.innerHTML = `
-            <div class="accordion-body p-4 text-center">
-                <img src="data:image/png;base64,${qrCodeData.qrCodeImage}" alt="QR Code" class="mb-4"/>
+            <div class="accordion-body p-4 text-center justify-items-center h-full">
+                <img src="data:image/png;base64,${qrCodeData.qrCodeImageBytes}" alt="QR Code" class="mb-4 justify-items-center"/>
                 <p class="text-gray-700">Présentez ce QR code à l'entrée de l'événement.</p>
             </div>
         `;
