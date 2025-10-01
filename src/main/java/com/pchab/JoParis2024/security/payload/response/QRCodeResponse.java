@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class QRCodeResponse {
-    private String qrCodeImageUrl;
+    private String qrCodeImageBytes;
 
 
     // You can add a static method to create a QRCodeResponse from relevant entities if needed
-    public static QRCodeResponse fromTicket(String qrCodeImageUrl) {
-        return new QRCodeResponse(qrCodeImageUrl);
+    public static QRCodeResponse fromTicket(String qrCodeImageBytes) {
+        return new QRCodeResponse(qrCodeImageBytes);
     }
 }

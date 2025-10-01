@@ -110,7 +110,7 @@ async function showQRCode(ticketId) {
             window.location.href =
                 "/signin.html?errorMessage=Erreur lors de la récupération du QR Code - Reconnectez-vous";
         }
-        const qrCodeData = await response.json();
+        const qrCodeData = await response.text();
         // Afficher le QR Code sur la page
         console.log("QR Code data received:", qrCodeData);
         displayQRCode(qrCodeData, ticketId);

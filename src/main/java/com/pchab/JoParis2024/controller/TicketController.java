@@ -1,7 +1,11 @@
 package com.pchab.JoParis2024.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -97,9 +101,21 @@ public class TicketController {
         if (ticket == null) {
             throw new IllegalArgumentException("Invalid ticket ID");
         }
-        QRCodeResponse qrCodeResponse = QRCodeResponse.fromTicket("generated-qr-code-url");
+        try {
+        BufferedImage qrCodeImage = ticketService.generateQRCodeImage(qrCodeRequest.getTicketId());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(qrCodeImage, "png", baos);
+        byte[] qrCodeBytes = baos.toByteArray();
 
-        return qrCodeResponse;
+        return QRCodeResponse()
+            .header("Content-Type", "image/png")
+            .header("Content-Disposition", "inline; filename=\"qrcode.png\"")
+            .body(qrCodeBytes);
+        } catch (Exception e) {
+            System.err.println("TICKET CONTROLLER - Error generating QR code for ticket ID: " + qrCodeRequest.getTicketId() + " - " + e.getMessage());
+            return QRCodeResponse   
+                    .body(null);
+        }
     }
     
 }

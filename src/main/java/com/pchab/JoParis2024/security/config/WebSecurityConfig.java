@@ -1,8 +1,12 @@
 package com.pchab.JoParis2024.security.config;
 
+import java.awt.image.BufferedImage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.BufferedImageHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -85,5 +89,10 @@ public class WebSecurityConfig {
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public HttpMessageConverter<BufferedImage> createImageHttpMessageConverter() {
+        return new BufferedImageHttpMessageConverter();
     }
 }
