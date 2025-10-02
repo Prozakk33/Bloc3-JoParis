@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoParis2024</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-col text-center w-full mb-20">
+            <h1 class="text-center text-3xl font-bold mt-10 mb-10">Compte Admin</h1>
+            <h3 class="text-center text-xl text-font-bold">Retrouvez ici tous les achats effectués par les utilisateurs.</h3>
+            <h3 class="text-center text-l text-font-bold">Cliquer sur "Modifier" pour changer les détails d'un événement.</h3>
+            </div>
+            <div class="flex justify-center mb-8">
+                <button id="showNewEventFormButton" onclick="showNewEventForm();" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Créer un Nouvel Événement
+                </button>
+            </div>
+            <div id="NewEventFormContainer" class="hidden">
+            <h2 class="text-2xl font-bold mb-5 text-center">Créer un Nouvel Événement</h2>
+                <form id="newEventForm" class="flex flex-col">
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+                    <!-- Champ Title -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newTitle" class="leading-7 text-sm text-gray-600">Title</label>
+                        <input type="text" id="newTitle" maxlength="80" name="title" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div id="titleError" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Description -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newDescription" class="leading-7 text-sm text-gray-600">Description</label>
+                        <input type="text" id="newDescription" maxlength="255" name="description" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div id="descriptionError" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Date -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newDate" class="leading-7 text-sm text-gray-600">Date</label>
+                        <input type="datetime-local" id="newDate" name="date" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <div id="dateError" class="text-red-500 text-sm"></div>
+                    </div>
+                </div>
+
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+
+                    <!-- Champ City -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newCity" class="leading-7 text-sm text-gray-600">City</label>
+                            <select id="newCity" name="City" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                <option value="" disabled selected>Choisissez une ville</option>
+                            </select>
+                            <div id="cityError" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Sport -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newSport" class="leading-7 text-sm text-gray-600">Sport</label>
+                        <select id="newSport" name="sport" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                            <option value="" disabled selected>Choisissez un sport</option>
+                        </select>
+                        <div id="sportError" class="text-red-500 text-sm"></div>
+                    </div>
+                </div>
+                
+                <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+
+                    <!-- Champ Stadium -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newStadium" class="leading-7 text-sm text-gray-600">Stadium</label>
+                            <input type="text" id="newStadium" maxlength="80" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <div id="stadiumError" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Capacity -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newCapacity" class="leading-7 text-sm text-gray-600">Capacity</label>
+                        <input type="number" min="1" max="200000" id="newCapacity" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                        <div id="capacityError" class="text-red-500 text-sm"></div>
+                    </div>
+
+                    <!-- Champ Price -->
+                    <div class="relative flex-grow w-full">
+                        <label for="newPrice" class="leading-7 text-sm text-gray-600">Price</label>
+                        <input type="number" id="newPrice" min="1" max="10000" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                        <div id="priceError" class="text-red-500 text-sm"></div>
+                    </div>
+                </div>
+                <!-- Boutons -->
+                 <div class="lg:w-2/3 w-full mx-auto px-8 sm:px-0 mt-4">   
+                    <button onclick="createEvent()" class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Save</button>
+                    <a onclick="hideNewEventForm()" class="ml-4 text-red-500 text-font-bold">Annuler</a>
+                </div>
+            </form>
+            </div>
+
+            <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+            <table class="table-auto w-full text-left whitespace-no-wrap">
+                <thead>
+                <tr>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Affiche</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Sport</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Date</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Ville</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Stade</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Places Vendues</th>
+                    <th class="text-center px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Total Recettes</th>
+                    <th class="text-center w-10 title-font tracking-wider font-medium text-gray-900 text-m bg-gray-100 font-bold">Modifier</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Content will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <div id="pagination" class="flex justify-center mt-4">
+            <!-- Les boutons de pagination seront insérés ici par JavaScript -->
+            </div>
+            </div>
+            <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
+            <a id="backToHome" href="/" type="button" class="flex ml-auto text-white bg-blue-600 border-0 py-2 px-6 focus:outline-none hover:bg-blue-800 rounded">Retour Accueil</a>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</body>
+
+<script src="/js/headerFooter.js"></script>
+<script src="/js/adminAccount.js"></script>
+<script src="/js/getAccessToken.js"></script>
+</html>

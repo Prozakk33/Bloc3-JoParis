@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.zxing.common.BitMatrix;
 import com.pchab.JoParis2024.pojo.Ticket;
+import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
 
 
 public interface TicketService {
@@ -21,4 +22,6 @@ public interface TicketService {
 
     BufferedImage modifiedQRCode(BitMatrix matrix, String topText, String bottomText);
 
-    }
+    DecodeQRCodeResponse verifyTicket (String ticketToken);
+
+}

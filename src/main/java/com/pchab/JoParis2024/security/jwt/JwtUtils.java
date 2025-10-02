@@ -1,7 +1,9 @@
 package com.pchab.JoParis2024.security.jwt;
 import java.security.Key;
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,26 +39,26 @@ public class JwtUtils {
     
     // Valider le token
     public boolean validateJwtToken(String token) {
-        System.out.println("Validating JWT token: " + token);
+        System.out.println("-- JWTUtils - Validating JWT token: " + token);
         try {
             // Logique de validation du token
             Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
             return true;
         } catch (MalformedJwtException e) {
             // Gérer les exceptions de validation
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            logger.error("-- JWTUtils - Invalid JWT token: {}", e.getMessage());
             return false;
         } catch (ExpiredJwtException e) {
             // Token expiré
-            logger.error("JWT token is expired: {}", e.getMessage());
+            logger.error("-- JWTUtils - JWT token is expired: {}", e.getMessage());
             return false;
         } catch (UnsupportedJwtException e) {
             // Token non supporté
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            logger.error("-- JWTUtils - JWT token is unsupported: {}", e.getMessage());
             return false;
         } catch (IllegalArgumentException e) {
             // Token vide ou null
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            logger.error("-- JWTUtils - JWT claims string is empty: {}", e.getMessage());
             return false;
         }
     }
@@ -115,6 +117,26 @@ public class JwtUtils {
                 .setIssuedAt(new Date())
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Map<String, Object> decodeTicketToken(String token) {
+
+        System.out.println("-- JWTUtils - Decoding ticket token");
+        try {
+            var claims = Jwts.parserBuilder().setSigningKey(key()).build()
+                    .parseClaimsJws(token).getBody();
+            Map<String, Object> ticketData = new HashMap<>();
+            ticketData.put("firstName", claims.get("firstName"));
+            ticketData.put("lastName", claims.get("lastName"));
+            ticketData.put("buyDate", claims.get("buyDate"));
+            ticketData.put("ticketType", claims.get("ticketType"));
+            ticketData.put("eventId", claims.get("eventId"));
+           
+            return ticketData;
+        } catch (Exception e) {
+            logger.error("-- JWTUtils - Error decoding ticket token: {}", e.getMessage());
+            return null;
+        }
     }
 
 }

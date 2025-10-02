@@ -57,4 +57,16 @@ public class EventController {
     public List<Event> threeEvents() {
         return eventService.findThreeEvents();
     }
+
+    @GetMapping("/sportList")
+    @Operation(summary = "List all sports", description = "Retrieve a list of all sports for the events")   
+    public List<String> sportList() {
+        return eventService.getAllEventSports();
+    }
+
+    @GetMapping("/cityList")
+    @Operation(summary = "List all cities", description = "Retrieve a list of all cities where events are held")
+    public List<String> cityList() {
+        return eventService.getAllEventsCities();
+    }  
 }

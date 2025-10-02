@@ -28,7 +28,7 @@ async function getTickets() {
             throw new Error("Erreur lors de la récupération des tickets");
         }
         const data = await response.json();
-        //console.log("Tickets récupérés :", data);
+        console.log("Tickets récupérés :", data);
         displayTickets(data);
     } catch (error) {
         console.error("Erreur :", error);
@@ -126,7 +126,7 @@ function displayQRCode(qrCodeData, ticketId) {
     accordionContent.innerHTML = `
             <div class="accordion-body p-4 text-center justify-items-center h-full">
                 <img src="data:image/png;base64,${qrCodeData.qrCodeImageBytes}" alt="QR Code" class="mb-4 justify-items-center"/>
-                <p class="text-gray-700">Présentez ce QR code à l'entrée de l'événement.</p>
+                <p class="text-gray-700 text-font-bold">Présentez ce QR code à l'entrée de l'événement.</p>
             </div>
         `;
 
@@ -135,38 +135,16 @@ function displayQRCode(qrCodeData, ticketId) {
     accordionRow.classList.toggle("hidden");
 
     // Modifier le bouton associé
-    const button = document.querySelector(
-        `button[onclick="showQRCode(${ticketId})"]`
-    );
+    const button = document.querySelector(`button[onclick="showQRCode(${ticketId})"]`);
     if (!accordionRow.classList.contains("hidden")) {
         // Accordéon affiché
         button.textContent = "Masquer";
-        button.classList.remove(
-            "bg-blue-600",
-            "hover:bg-blue-800",
-            "dark:bg-blue-600",
-            "dark:hover:bg-blue-700"
-        );
-        button.classList.add(
-            "bg-red-600",
-            "hover:bg-red-800",
-            "dark:bg-red-600",
-            "dark:hover:bg-red-700"
-        );
+        button.classList.remove("bg-blue-600", "hover:bg-blue-800", "dark:bg-blue-600", "dark:hover:bg-blue-700");
+        button.classList.add("bg-red-600", "hover:bg-red-800", "dark:bg-red-600", "dark:hover:bg-red-700");
     } else {
         // Accordéon masqué
         button.textContent = "Afficher";
-        button.classList.remove(
-            "bg-red-600",
-            "hover:bg-red-800",
-            "dark:bg-red-600",
-            "dark:hover:bg-red-700"
-        );
-        button.classList.add(
-            "bg-blue-600",
-            "hover:bg-blue-800",
-            "dark:bg-blue-600",
-            "dark:hover:bg-blue-700"
-        );
+        button.classList.remove("bg-red-600", "hover:bg-red-800", "dark:bg-red-600", "dark:hover:bg-red-700");
+        button.classList.add("bg-blue-600", "hover:bg-blue-800", "dark:bg-blue-600", "dark:hover:bg-blue-700");
     }
 }

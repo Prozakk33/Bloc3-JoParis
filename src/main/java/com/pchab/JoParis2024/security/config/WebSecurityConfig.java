@@ -72,18 +72,13 @@ public class WebSecurityConfig {
                     .requestMatchers("/auth/signin").permitAll()
                     .requestMatchers("/auth/signup").permitAll()
                     .requestMatchers("/auth/account").authenticated()
-                    .requestMatchers("/user/signin").permitAll()
-                    .requestMatchers("/user/signup").permitAll()
-                    .requestMatchers("/user/account").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/css/**").permitAll()
                     .requestMatchers("/js/**").permitAll()
-                    .requestMatchers("/user/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/payment").authenticated()
                     .requestMatchers("/tickets/**").authenticated()
-                //.anyRequest().authenticated());"
                     .anyRequest().permitAll());
 
         http.authenticationProvider(authenticationProvider());

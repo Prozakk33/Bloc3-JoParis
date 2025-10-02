@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.pchab.JoParis2024.pojo.Event;
+import com.pchab.JoParis2024.security.payload.response.EventAdminResponse;
 
 @Service
 public interface EventService {
@@ -25,5 +26,11 @@ public interface EventService {
     void createEvent(Event event);
 
     List<Event> findThreeEvents();
+
+    List<EventAdminResponse> getAllEventsAdmin();
+
+    List<String> getAllEventSports();
+
+    List<String> getAllEventsCities();
 
 }

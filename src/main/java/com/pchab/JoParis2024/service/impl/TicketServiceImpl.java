@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,13 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.pojo.Ticket;
 import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
 import com.pchab.JoParis2024.service.TicketService;
 
 @Service
@@ -112,5 +116,65 @@ public class TicketServiceImpl implements TicketService {
         finalGraphics.drawString(bottomText, (finalWidth - bottomTextWidth) / 2, finalHeight - fontMetrics.getDescent() - 5);
 
         return finalImage;
+    }
+
+    @Override
+    public DecodeQRCodeResponse verifyTicket (String ticketToken) {
+
+        System.out.println("-- TicketServiceImpl - Verifying ticket");
+
+        // Check if the token is valid
+        if (ticketToken == null || ticketToken.isEmpty()) {
+            throw new IllegalArgumentException("-- TicketServiceImpl - Ticket token is null or empty");
+        } else {
+            System.out.println("-- TicketServiceImpl - Verifying ticket token");
+            if (!jwtUtils.validateJwtToken(ticketToken)) {
+                throw new IllegalArgumentException("-- TicketServiceImpl - Invalid ticket token");
+            }
+        }
+
+        // Check of token exist in database
+        Ticket ticket = ticketRepository.findTicketByTicketKey(ticketToken);
+        if (ticket == null) {
+            throw new IllegalArgumentException("-- TicketServiceImpl - Ticket not found");
+        }
+
+        
+
+        // Decode the ticket token
+        Map<String, Object> tokenParts = jwtUtils.decodeTicketToken(ticketToken);
+        if (tokenParts == null) {
+            throw new IllegalArgumentException("-- TicketServiceImpl - Parser - Invalid ticket token");
+        }
+        
+        System.out.println("-- TicketServiceImpl - Decoded ticket token parts: " + tokenParts.toString());
+
+        Long eventId = ((Number) tokenParts.get("eventId")).longValue();
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event == null) {
+            throw new IllegalArgumentException("-- TicketServiceImpl - Event not found for the ticket");
+        }
+/* 
+        System.out.println("-- TicketServiceImpl - Event found for the ticket: " + event.getTitle());
+        System.out.println("-- TicketServiceImpl - Ticket belongs to: " + tokenParts.get("firstName") + " " + tokenParts.get("lastName"));
+        System.out.println("-- TicketServiceImpl - Ticket type: " + tokenParts.get("ticketType"));
+        System.out.println("-- TicketServiceImpl - Ticket buy date: " + tokenParts.get("buyDate"));
+        System.out.println("-- TicketServiceImpl - Event date: " + event.getDate());
+        System.out.println("-- TicketServiceImpl - Event city: " + event.getCity().toString());
+        System.out.println("-- TicketServiceImpl - Ticket verification completed successfully");
+*/
+        // Map the token parts to the response fields
+        DecodeQRCodeResponse response = new DecodeQRCodeResponse();
+        response.setUserFirstName((String) tokenParts.get("firstName"));
+        response.setUserLastName((String) tokenParts.get("lastName"));
+        response.setTicketBuyDate(new Timestamp(((Long) tokenParts.get("buyDate"))));
+        response.setEventTitle(event.getTitle());
+        response.setEventCity((String) event.getCity().toString());
+        response.setEventDate(event.getDate());
+        response.setTicketType((String) tokenParts.get("ticketType"));
+
+        //System.out.println("Ticket verification successful: " + response.toString());
+
+        return response;
     }
 }

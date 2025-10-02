@@ -1,14 +1,12 @@
 package com.pchab.JoParis2024.security.payload.response;
 
+import java.time.LocalDateTime;
+
 import com.pchab.JoParis2024.pojo.Ticket;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import java.util.List;
 
 @Getter
 @Setter

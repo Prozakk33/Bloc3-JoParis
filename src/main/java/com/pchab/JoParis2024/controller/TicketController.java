@@ -19,6 +19,8 @@ import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.pojo.Ticket;
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.security.payload.request.QRCodeRequest;
+import com.pchab.JoParis2024.security.payload.request.VerifyTicketKeyRequest;
+import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
 import com.pchab.JoParis2024.security.payload.response.QRCodeResponse;
 import com.pchab.JoParis2024.security.payload.response.TicketListResponse;
 import com.pchab.JoParis2024.service.EventService;
@@ -115,9 +117,16 @@ public class TicketController {
         }
     }
 
-    @PostMapping("/decodeQRCode")
-    @Operation(summary = "Decode QR code", description = "Decodes the provided QR code string data.")
-    public ResponseEntity<String> decodeQRCode(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody String qrCode) {
-        
+    @PostMapping("/verify")
+    @Operation(summary = "Verify ticket", description = "Verifies the provided ticket key.")
+    public ResponseEntity<DecodeQRCodeResponse> verifyTicket(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody VerifyTicketKeyRequest ticketKeyRequest) {
+
+        String ticketKey = ticketKeyRequest.getTicketKey();
+        System.out.println("TICKET CONTROLLER - Decoding QR code for ticket key: " + ticketKey);
+        DecodeQRCodeResponse response = ticketService.verifyTicket(ticketKey);
+        if (response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }

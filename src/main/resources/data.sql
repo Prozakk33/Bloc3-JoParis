@@ -75,7 +75,7 @@ VALUES (
         'ooodieu@hotmail.com',
         '$2a$10$hN8bpMMHRkgoeuIbpRYS8.S2DXY711PPrMQdLxfyReKOiZy0DeIWS',
         'key789',
-        'USER'
+        'ADMIN'
     );
 
 INSERT INTO
@@ -348,14 +348,16 @@ INSERT INTO
         buy_date,
         ticket_key,
         user_id,
-        event_id
+        event_id,
+        ticket_type
     )
 VALUES (
         1,
         '2025-09-10',
         'ticket123',
         1,
-        1
+        1,
+        'Solo'
     );
 
 INSERT INTO
