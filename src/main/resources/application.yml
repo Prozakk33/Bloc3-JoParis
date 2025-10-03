@@ -1,35 +1,35 @@
 spring:
-  application:
-    name: JoParis2024
-  datasource:
-    url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
-    password: ^N.m*"J2c4j-T!C
-    username: pchab_joparis
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
-  mvc:
-    pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
+    application:
+        name: JoParis2024
+    datasource:
+        url: jdbc:mariadb://mysql-pchab.alwaysdata.net/pchab_joparis
+        password: ${DB_PASSWORD}
+        username: ${DB_USER}
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: true
+        defer-datasource-initialization: true
+    sql:
+        init:
+            mode: always
+            data-locations: classpath:data.sql
+    mvc:
+        pathmatch:
+            matching-strategy: ANT_PATH_MATCHER
 logging:
-  level:
-    org.hibernate.type.descriptor.sql: DEBUG
-    org.hibernate.type.descriptor.java: DEBUG
+    level:
+        org.hibernate.type.descriptor.sql: DEBUG
+        org.hibernate.type.descriptor.java: DEBUG
 JoParis2024:
-  security:
-    secret: mBurFGsvfXBeLmyzhLD4syweo0L4j673Zo47ksREMLSP
-    expiration: 3600000 # 1 heure en millisecondes
+    security:
+        secret: ${JWT_SECRET}
+        expiration: 3600000 # 1 heure en millisecondes
 springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /v3/swagger-ui.html
+    api-docs:
+        path: /v3/api-docs
+    swagger-ui:
+        path: /v3/swagger-ui.html
 stripe:
-  secretKey: sk_test_51SBl62Dtl7ori9Lm9tfgr9pc6nWT8ArZkAz6iadDAio23olrfprcjIitg9VAQlNINLW17uULGqBOlSA9OlrkRzN600gJD3Vblz
-  publicKey: pk_test_51SBl62Dtl7ori9LmcnR4q49K8IHZaQmIOFmh4coatwXuKqiU2DqGo66P3X5YKWcTJYPT4GVPjXjI8IislCaWk3Ud00XC076Ed2
+    secretKey: ${STRIPE_SECRET_KEY}
+    publicKey: ${STRIPE_PUBLIC_KEY}

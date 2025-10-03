@@ -1,5 +1,4 @@
-document.getElementById("signUpForm").addEventListener("submit", async function(event) {
-            
+document.getElementById("signUpForm").addEventListener("submit", async function (event) {
     event.preventDefault(); // Empêche le rechargement de la page
 
     const email = document.getElementById("email").value;
@@ -12,48 +11,48 @@ document.getElementById("signUpForm").addEventListener("submit", async function(
     console.log("First Name saisi :", firstName);
     console.log("Last Name saisi :", lastName);
 
-    if (firstName == ""){
+    if (firstName == "") {
         document.getElementById("errorFirstName").innerText = "Le prénom doit être saisi.";
         return;
     } else {
         document.getElementById("errorFirstName").innerText = "";
     }
 
-    if (lastName == ""){
+    if (lastName == "") {
         document.getElementById("errorLastName").innerText = "Le nom doit être saisi.";
         return;
     } else {
         document.getElementById("errorLastName").innerText = "";
     }
 
-    if (email == ""){
+    if (email == "") {
         document.getElementById("errorEmail").innerText = "L'Email doit être saisi.";
         return;
     } else {
         document.getElementById("errorEmail").innerText = "";
     }
 
-    if (password == ""){
+    if (password == "") {
         document.getElementById("errorPassword").innerText = "Le mot de passe doit être saisi.";
         return;
     } else {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!passwordRegex.test(password)) {
-                    document.getElementById("errorPassword").innerText = 
-                        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
-                    return;
-                } else {
-                    document.getElementById("errorPassword").innerText = "";
-                }
+            document.getElementById("errorPassword").innerText =
+                "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+            return;
+        } else {
+            document.getElementById("errorPassword").innerText = "";
+        }
     }
 
     try {
         const response = await fetch("/auth/signup", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ firstName, lastName, email, password })
+            body: JSON.stringify({ firstName, lastName, email, password }),
         });
 
         if (response.ok) {
@@ -68,5 +67,4 @@ document.getElementById("signUpForm").addEventListener("submit", async function(
         //console.error("Erreur :", error);
         document.getElementById("errorMessage").innerText = error.message;
     }
-
-        });
+});
