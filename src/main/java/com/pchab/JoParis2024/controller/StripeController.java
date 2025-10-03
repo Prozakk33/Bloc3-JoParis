@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,11 +35,12 @@ public class StripeController {
     private UserController userController;
 
     // Clé secrète Stripe (test)
-    private static final String STRIPE_SECRET_KEY = "sk_test_51SBl62Dtl7ori9Lm9tfgr9pc6nWT8ArZkAz6iadDAio23olrfprcjIitg9VAQlNINLW17uULGqBOlSA9OlrkRzN600gJD3Vblz";
+    @Value("${stripe.secretKey}")
+    private String stripeSecretKey;
 
     public StripeController() {
         // Initialiser Stripe avec la clé secrète
-        Stripe.apiKey = STRIPE_SECRET_KEY;
+        Stripe.apiKey = stripeSecretKey;
     }
 
     @PostMapping("/payment")
