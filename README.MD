@@ -38,14 +38,14 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 3 - Créer un compte sur [Stripe](https://stripe.com)
 
 4 - Modifiez les variables dans le fichier src/main/ressources/application.yml
-`database:`
-`url: jdbc:your_db_adress`
-`password: your_password`
-`username: your_username`
+`database:`\
+`url: jdbc:your_db_adress`\
+`password: your_password`\
+`username: your_username`\
 
-`Sripe:`
-`secretKey: your_stripe_secret_key`
-`publicKey: your_stripe_public_key`
+`Sripe:`\
+`secretKey: your_stripe_secret_key`\
+`publicKey: your_stripe_public_key`\
 
 5 - Construisez le projet avec Maven
 `mvn clean install`
@@ -78,8 +78,8 @@ _Frameworks Utilisés :_
 
 -   [tailwind.css](https://tailwindcss.com) - Framework CSS (front-end)
 -   [SpringBoot](https://spring.io/projects/spring-boot)
--   [SpringBoot Security]
--   [JPA Repository] -
+-   [SpringBoot Security](https://spring.io/projects/spring-security) - Framework de sécurité
+-   [Spring Data JPA](https://docs.spring.io/spring-data/jpa/reference/index.html) - Framework de gestion de base de données
 
 _Déploiement :_
 
@@ -89,7 +89,7 @@ _Déploiement :_
 
 Liste des versions :
 
-**Dernière version stable :** 1.0
+**Dernière version stable :** 1.0\
 **Dernière version :** 1.0
 
 ## Auteurs
