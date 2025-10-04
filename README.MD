@@ -3,9 +3,9 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/build-with-spring-boot.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-html_css.svg)](https://forthebadge.com)
 
-Cette application est destinée à la vente de tickets pour assister à des évènements sportifs pendant les Jeux Olympiques d'été de Paris 2024.
+**Cette application est destinée à la vente de tickets pour assister à des évènements sportifs pendant les Jeux Olympiques d'été de Paris 2024.**
 
-\_Code réalisé dans le cadre d'un Bachelor Développeur d'application JAVA, avec [STUDI](https://www.studi.com/fr)
+_Code réalisé dans le cadre d'un Bachelor Développeur d'application JAVA, avec [STUDI](https://www.studi.com/fr)_
 
 ## Fonctionnalités :
 
@@ -23,65 +23,67 @@ Entrez ici les instructions pour bien débuter avec votre projet...
 
 ### Pré-requis
 
-Ce qu'il est requis pour commencer avec votre projet...
+Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 
--   Programme 1
--   Programme 2
--   etc...
+-   Java 17 ou plus
+-   Maven
+
+### Installation
+
+1 - Cloner le dépot GitHub
+`git clone https://github.com/Prozakk33/Bloc3-JoParis.git`
+
+2 - Créer une base de données MariaDB sur [AlwaysData](https://www.alwaysdata.com/fr/)
+
+3 - Créer un compte sur [Stripe](https://stripe.com)
+
+4 - Modifiez les variables dans le fichier src/main/ressources/application.yml
+`database:`
+`url: jdbc:your_db_adress`
+`password: your_password`
+`username: your_username`
+
+`Sripe:`
+`secretKey: your_stripe_secret_key`
+`publicKey: your_stripe_public_key`
+
+5 - Construisez le projet avec Maven
+`mvn clean install`
+
+6 - Ouvrez votre navigateur internet et allez à l'adresse : [http://localhost:8080](http://localhost:8080)
 
 ## Fabriqué avec
 
-Programmes, logiciels et ressources utilisés pour développer le projet :
+**Langages, programmes, logiciels et ressources utilisés pour développer le projet :**
+
+### Outils
+
+_Langages utilisés :_
+
+-   [JAVA](https://www.java.com/fr/)
+-   [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
+-   [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+-   [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 _Outils de Développement :_
 
 -   [Visual Studio Code](https://code.visualstudio.com/) - Editeur de textes
--   [tailwind.css](https://tailwindcss.com) - Framework CSS (front-end)
+
+_Outils externes :_
+
 -   [AlwaysData](https://www.alwaysdata.com/fr/) - Base de donnée de développement
 -   [Stripe](https://stripe.com) - Plateforme de paiement en ligne
 
 _Frameworks Utilisés :_
 
--   [SpringBoot]
+-   [tailwind.css](https://tailwindcss.com) - Framework CSS (front-end)
+-   [SpringBoot](https://spring.io/projects/spring-boot)
 -   [SpringBoot Security]
 -   [JPA Repository] -
 
 _Déploiement :_
 
 -   [Heroku](https://www.heroku.com/)
-
-## Base de données :
-
-MySQL ou MariaDB peuvent être utilisés pour ce projet.
-The database connection can be configured in the application.properties file, with the appropriate values for the following properties: <br>
-
-spring.datasource.name=[Your Database Name] <br>
-spring.datasource.url=jdbc:mysql://localhost:3306/[Your Database Name] <br>
-spring.datasource.password=[Your password] <br>
-spring.datasource.username=[Your username] <br>
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver <br>
-spring.jpa.hibernate.ddl-auto=update <br>
-server.port=2330[Optional] <br>
-
-## Installation :
-
-1. Clone the repository : $ git clone https://github.com/SuhasKamate/Business_Management_Project.git <br>
-
-2. Import the project inside STS/Eclipse : <br>
-    - Open STS/Eclipse > file > import > maven > existing project > browse > finish . <br>
-3. Make sure you are in the Business_Management_Project directory. <br>
-
-![packageExplorer](https://github.com/SuhasKamate/Business_Management_Project/assets/126138738/3ea1eb7f-8e49-4b76-96e4-798b6b8e8715)
-
-4.Configure the database connection is application.properties (check the Database section for more information). <br>
-
-5.Run the project (by running main method is BusinessProjectApplication.java) OR right clink on the project > Run As > Spring Boot App. <br>
-
-6.Open http://localhost:2330/home in any browser. <br>
-
-7.Now your tables will be created in the databse. <br>
-
--   You have to add one admin data manually to login as admin, So add one admin data. <br>
 
 ## Versions
 
@@ -98,4 +100,4 @@ Listez le(s) auteur(s) du projet ici !
 
 ## License
 
-Ce projet est sous licence `exemple: WTFTPL` - voir le fichier [LICENSE.md](LICENSE.md) pour plus d'informations
+Ce projet est sous [Licence de libre diffusion](https://creativecommons.org/licenses/by-nc/4.0/)
