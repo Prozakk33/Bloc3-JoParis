@@ -41,13 +41,13 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 `database:`\
 `url: jdbc:your_db_adress`\
 `password: your_password`\
-`username: your_username`\
+`username: your_username`
 
 `Sripe:`\
 `secretKey: your_stripe_secret_key`\
-`publicKey: your_stripe_public_key`\
+`publicKey: your_stripe_public_key`
 
-5 - Construisez le projet avec Maven
+5 - Construisez le projet avec Maven\
 `mvn clean install`
 
 6 - Ouvrez votre navigateur internet et allez à l'adresse : [http://localhost:8080](http://localhost:8080)
