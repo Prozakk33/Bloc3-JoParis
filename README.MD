@@ -7,7 +7,7 @@
 
 _Code réalisé dans le cadre d'un Bachelor Développeur d'application JAVA, avec [STUDI](https://www.studi.com/fr)_
 
-## Fonctionnalités :
+## Fonctionnalités
 
 -   **Gestion Utilisateurs**: Inscription des visiteurs, création de compte, connexion.
 -   **Gestion des Evènements**: Création, modification et affichage détaillé de tous les évènements sportifs.
@@ -25,7 +25,7 @@ Entrez ici les instructions pour bien débuter avec votre projet...
 
 Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 
--   Java 23 ou plus
+-   Java 21 ou plus
 -   Maven
 
 ### Installation
@@ -53,7 +53,7 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 6 - Ouvrez votre navigateur internet et allez à l'adresse : [http://localhost:8080](http://localhost:8080)
 
 > [!CAUTION]
-> En production, utilisez des variables d'environnement pour toutes les données sensibles (clé secrètes, mots de passe, etc...)
+> En production, utilisez des variables d'environnement pour toutes les données sensibles (clés secrètes, mots de passe, etc...)
 
 ## Fabriqué avec
 
