@@ -37,7 +37,7 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 
 3 - Créer un compte sur [Stripe](https://stripe.com)
 
-4 - Modifiez les variables dans le fichier src/main/ressources/application.yml
+4 - Modifiez les variables dans le fichier src/main/ressources/application.yml\
 `database:`\
 `url: jdbc:your_db_adress`\
 `password: your_password`\
