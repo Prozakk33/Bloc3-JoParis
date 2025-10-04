@@ -30,7 +30,7 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 
 ### Installation
 
-1 - Cloner le dépot GitHub
+1 - Cloner le dépot GitHub\
 `git clone https://github.com/Prozakk33/Bloc3-JoParis.git`
 
 2 - Créer une base de données MariaDB sur [AlwaysData](https://www.alwaysdata.com/fr/)
@@ -51,6 +51,9 @@ Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 `mvn clean install`
 
 6 - Ouvrez votre navigateur internet et allez à l'adresse : [http://localhost:8080](http://localhost:8080)
+
+> [!CAUTION]
+> En production, utilisez des variables d'environnement pour toutes les données sensibles (clé secrètes, mots de passe, etc...)
 
 ## Fabriqué avec
 
