@@ -25,7 +25,7 @@ Entrez ici les instructions pour bien débuter avec votre projet...
 
 Pour faire fonctionner ce projet sur votre machine, vous aurez besoin de :
 
--   Java 17 ou plus
+-   Java 23 ou plus
 -   Maven
 
 ### Installation
@@ -77,7 +77,7 @@ _Outils externes :_
 _Frameworks Utilisés :_
 
 -   [tailwind.css](https://tailwindcss.com) - Framework CSS (front-end)
--   [SpringBoot](https://spring.io/projects/spring-boot)
+-   [SpringBoot](https://spring.io/projects/spring-boot) - Framework web
 -   [SpringBoot Security](https://spring.io/projects/spring-security) - Framework de sécurité
 -   [Spring Data JPA](https://docs.spring.io/spring-data/jpa/reference/index.html) - Framework de gestion de base de données
 
