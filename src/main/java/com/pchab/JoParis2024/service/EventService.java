@@ -17,13 +17,13 @@ public interface EventService {
     List<Event> findAllEvents();
 
     // Update Event
-    void updateEvent(Event event, Long id);
+    Event updateEvent(Event event, Long id);
 
     // Delete Event
     void deleteEventById(Long id);
 
     //Create Event
-    void createEvent(Event event);
+    Event createEvent(Event event);
 
     List<Event> findThreeEvents();
 

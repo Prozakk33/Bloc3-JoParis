@@ -33,3 +33,4 @@ springdoc:
 stripe:
     secretKey: ${STRIPE_SECRET_KEY}
     publicKey: ${STRIPE_PUBLIC_KEY}
+    domain: ${STRIPE_DOMAIN}

@@ -38,6 +38,9 @@ public class StripeController {
     @Value("${stripe.secretKey}")
     private String stripeSecretKey;
 
+    @Value("${stripe.domain}")
+    private String myDomain;
+
     public StripeController() {
         // Initialiser Stripe avec la clé secrète
         Stripe.apiKey = stripeSecretKey;
@@ -64,7 +67,7 @@ public class StripeController {
         try {
             System.out.println("Received payment request: " + paymentRequest);
             // Domaine de l'application
-            String YOUR_DOMAIN = "http://localhost:8080";
+            String YOUR_DOMAIN = myDomain;
 
             // Récupérer les informations du produit depuis la requête
             String priceId = paymentRequest.getPriceId();
@@ -72,6 +75,8 @@ public class StripeController {
             Object cart = paymentRequest.getCart();
 
             System.out.println("Creating checkout session with priceId: " + priceId + " and quantity: " + quantity);
+            Stripe.apiKey = stripeSecretKey;
+            System.out.println("Secret Key: " + Stripe.apiKey);
 
             // Encoder le message d'erreur pour l'URL
             String errorMessage = "Paiement échoué, veuillez réessayer.";

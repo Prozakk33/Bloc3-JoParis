@@ -25,10 +25,10 @@ import com.pchab.JoParis2024.security.payload.response.QRCodeResponse;
 import com.pchab.JoParis2024.security.payload.response.TicketListResponse;
 import com.pchab.JoParis2024.service.EventService;
 import com.pchab.JoParis2024.service.TicketService;
+import com.pchab.JoParis2024.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag; 
-
 
 
 @Tag(name="Ticket", description="Endpoints for managing tickets")
@@ -40,6 +40,9 @@ public class TicketController {
     private TicketService ticketService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserController userController;
 
     @Autowired
@@ -48,9 +51,9 @@ public class TicketController {
     @Autowired
     private EventService eventService;
 
-    public void createTicket(Long userId, Long eventId, String ticketType, Timestamp timestamp) {
+    public Ticket createTicket(Long userId, Long eventId, String ticketType, Timestamp timestamp) {
         // Implementation for creating a ticket
-        User user = userController.findUserById(userId);
+        User user = userService.findUserById(userId);
         Event event = eventService.findEventById(eventId);
 
         if (user == null || event == null) {
@@ -62,7 +65,12 @@ public class TicketController {
         ticket.setUser(user);
         ticket.setEvent(event);
         ticket.setTicketType(ticketType);
-        ticketService.createTicket(ticket);
+
+        Ticket createdTicket = ticketService.createTicket(ticket);
+
+        System.out.println("Ticket created with ID: " + createdTicket.getId() + " for user: " + user.getFirstName() + " " + user.getLastName() + " for event: " + event.getTitle());    
+
+        return createdTicket;
     }
 
     @PostMapping("/list")

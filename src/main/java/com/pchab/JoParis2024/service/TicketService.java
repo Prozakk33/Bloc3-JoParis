@@ -16,12 +16,12 @@ public interface TicketService {
 
     Ticket getTicketById(Long id);
 
-    void createTicket(Ticket ticket);
-
     BufferedImage generateQRCodeImage(Long ticketId) throws Exception;
 
     BufferedImage modifiedQRCode(BitMatrix matrix, String topText, String bottomText);
 
     DecodeQRCodeResponse verifyTicket (String ticketToken);
+
+    Ticket createTicket(Ticket ticket);
 
 }

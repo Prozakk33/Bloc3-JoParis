@@ -36,7 +36,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEvent(Event event, Long id) {
+    public Event updateEvent(Event event, Long id) {
         Event oldEvent = this.findEventById(id);
 
         if (oldEvent != null) {
@@ -49,14 +49,15 @@ public class EventServiceImpl implements EventService {
             oldEvent.setCapacity(event.getCapacity());
             oldEvent.setPrice(event.getPrice());
 
-            eventRepository.save(oldEvent);
+            return eventRepository.save(oldEvent);
+        } else {
+            return null;
         }
-
     }
 
     @Override
-    public void createEvent(Event event) {
-        eventRepository.save(event);
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
     }
 
     @Override

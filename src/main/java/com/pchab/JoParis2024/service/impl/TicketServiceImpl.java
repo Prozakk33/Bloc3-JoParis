@@ -56,7 +56,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void createTicket(Ticket ticket) {
+    public Ticket createTicket(Ticket ticket) {
         //ticket.setUser(userRepository.findById(ticket.getUser().getId()).orElse(null));
         //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));*
         System.out.println("Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
@@ -64,7 +64,7 @@ public class TicketServiceImpl implements TicketService {
         String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getFirstName(), ticket.getUser().getLastName(), ticket.getBuyDate(), ticket.getEvent().getId(), ticket.getTicketType());
         ticket.setTicketKey(ticketKey);
 
-        ticketRepository.save(ticket);
+        return ticketRepository.save(ticket);
     }
 
     @Override

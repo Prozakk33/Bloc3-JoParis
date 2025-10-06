@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 
 import com.pchab.JoParis2024.pojo.Event;
 import com.pchab.JoParis2024.service.EventService;
@@ -35,14 +37,15 @@ public class EventController {
 
     @Operation(summary = "Create event", description = "Create a new event")
     @PostMapping
-    void createEvent(@RequestBody Event event) {
-        eventService.createEvent(event);
+    public Event createEvent(@Valid @RequestBody Event event) {
+        return eventService.createEvent(event);
     }
 
     @Operation(summary = "Update event", description = "Update an existing event by its ID")
     @PutMapping("/admin/update/{id}")
-    void updateEvent(@RequestBody Event newEvent, @PathVariable Long id) {
-        eventService.updateEvent(newEvent, id);
+    public ResponseEntity<Event> updateEvent(@Valid @RequestBody Event newEvent, @PathVariable Long id) {
+        Event updatedEvent = eventService.updateEvent(newEvent, id);
+        return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
     }
 
     /* List of all events */
