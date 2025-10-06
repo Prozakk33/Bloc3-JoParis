@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +13,6 @@ import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.service.UserService;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name="User", description="Endpoints for managing users")
@@ -33,14 +30,14 @@ public class UserController {
   // Find a user by ID
     //@Operation(summary = "Find user by ID", description = "Retrieve user details by their ID")
     //@GetMapping("/id/{id}")
-    User findUserById(@PathVariable Long id) {
+    public User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
  
     // Find a user by email
     //@Operation(summary = "Find user by email", description = "Retrieve user details by their email address")
     //@GetMapping("/email/{email}")
-    User findByEmail(@PathVariable String email) {
+    public User findByEmail(@PathVariable String email) {
         System.out.println("USERCONTROLLER - Searching for user with email: " + email);
         try {
             User user = userService.findUserByEmail(email);
