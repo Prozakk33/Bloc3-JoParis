@@ -86,7 +86,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             // Créer une ligne pour l'accordéon (initialement masquée)
             const accordionRow = document.createElement("tr");
-            accordionRow.classList.add("accordion-row", "hidden");
+            accordionRow.classList.add(`accordion-row-${event.eventId}`, "hidden");
+            accordionRow.id = `accordion-row-${event.eventId}`;
             accordionRow.innerHTML = `
             <td colspan="8">
                 <div class="grid accordion-content justify-items-center" id="accordion-${event.eventId}">
@@ -376,7 +377,7 @@ async function showModifyEventForm(eventId) {
         `;
 
     // Afficher l'accordéon
-    const accordionRow = accordionContent.closest(".accordion-row");
+    const accordionRow = accordionContent.closest(`.accordion-row-${eventId}`);
     accordionRow.classList.toggle("hidden");
 
     const sportOptions = document.getElementById("modifiedSport-" + eventId);
@@ -590,7 +591,10 @@ async function modifyEvent(eventId) {
 
 function hideModifyEventForm(eventId) {
     // Masquer le formulaire de modification
-    const accordionRow = document.getElementById(`accordion-${eventId}`).closest(".accordion-row");
+    //const accordionRow = document.getElementById(`accordion-${eventId}`).closest(`.accordion-row-${eventId}`);
+    const accordionRow = document.getElementById(`accordion-row-${eventId}`);
+    const accordionContent = document.getElementById(`accordion-${eventId}`);
+    accordionContent.innerHTML = "";
     accordionRow.classList.add("hidden");
-    accordionRow.innerHTML = "";
+    //accordionRow.innerHTML = "";
 }
