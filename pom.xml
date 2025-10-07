@@ -187,6 +187,7 @@
                 <version>0.8.13</version>
                 <configuration>
                     <excludes>
+                        <exclude>com/pchab/JoParis2024/controller/StripeController*</exclude>
                         <exclude>java/*</exclude>
                         <exclude>javax/*</exclude>
                         <exclude>*\$*</exclude>
