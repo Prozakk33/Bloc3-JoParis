@@ -23,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -207,8 +206,8 @@ public class TicketControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].ticketId").value(1L))
-                .andExpect(jsonPath("$[0].ticketType").value("Solo"))
-                .andDo(print());
+                .andExpect(jsonPath("$[0].ticketType").value("Solo"));
+                //.andDo(print());
 }
     
     @Test
@@ -222,8 +221,8 @@ public class TicketControllerUnitTest {
         mockMvc.perform(post("/tickets/list")
                 .header("Authorization", authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized())
-                .andDo(print());
+                .andExpect(status().isUnauthorized());
+                //.andDo(print());
 }
 
 // ----------------------------------------------------------------
@@ -264,8 +263,8 @@ public class TicketControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON) // Type de contenu JSON
                 .content(requestBody)) // Corps de la requête
                 .andExpect(status().isOk()) // Vérifie que le statut HTTP est 200
-                .andExpect(jsonPath("$.qrCodeImageBytes").value(qrCodeBase64)) // Vérifie le contenu de la réponse
-                .andDo(print()); // Affiche la requête et la réponse dans la console
+                .andExpect(jsonPath("$.qrCodeImageBytes").value(qrCodeBase64)); // Vérifie le contenu de la réponse
+                //.andDo(print()); // Affiche la requête et la réponse dans la console
     }
 
 // ----------------------------------------------------------------
