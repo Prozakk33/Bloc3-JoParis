@@ -56,6 +56,10 @@ public class TicketController {
         User user = userService.findUserById(userId);
         Event event = eventService.findEventById(eventId);
 
+       // System.out.println("**** CONTROLLER - Creating ticket for user ID: " + userId + " and event ID: " + eventId + " on " + timestamp + " of type: " + ticketType);
+        //System.out.println("**** CONTROLLER - Retrieved user: " + (user != null ? user.getFirstName() + " " + user.getLastName() : "null"));
+        //System.out.println("**** CONTROLLER - Retrieved event: " + (event != null ? event.getTitle() : "null"));
+
         if (user == null || event == null) {
             throw new IllegalArgumentException("Invalid user or event ID");
         }
@@ -66,26 +70,31 @@ public class TicketController {
         ticket.setEvent(event);
         ticket.setTicketType(ticketType);
 
+        //System.out.println("**** CONTROLLER - Creating ticket for user: " + user.getFirstName() + " " + user.getLastName() + " for event: " + event.getTitle() + " on " + timestamp + " of type: " + ticketType);
         Ticket createdTicket = ticketService.createTicket(ticket);
 
-        System.out.println("Ticket created with ID: " + createdTicket.getId() + " for user: " + user.getFirstName() + " " + user.getLastName() + " for event: " + event.getTitle());    
+        //System.out.println("**** CONTROLLER - Ticket created with ID: " + createdTicket.getId() + " for user: " + user.getFirstName() + " " + user.getLastName() + " for event: " + event.getTitle() + " on " + timestamp + " of type: " + ticketType + " Ticket Key: " + createdTicket.getTicketKey());
 
         return createdTicket;
     }
 
     @PostMapping("/list")
     @Operation(summary = "List tickets for the authenticated user", description = "Returns a list of tickets associated with the authenticated user.")
-    public List<TicketListResponse> listTickets(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+    public ResponseEntity<?> listTickets(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
 
         System.out.println("TICKET CONTROLLER - Listing tickets with token: " + authorizationHeader);  
         ResponseEntity<?> responseUser = userController.getUserFromToken(authorizationHeader);
+        if (!responseUser.getStatusCode().is2xxSuccessful() || responseUser.getBody() == null) {
+            return ResponseEntity.status(401).body("Invalid user or unauthorized access");
+        }
+
         User user = (User) responseUser.getBody();
-        System.out.println("TICKET CONTROLLER - Retrieved user from token");
+        //System.out.println("TICKET CONTROLLER - Retrieved user from token");
 
         // Implementation for listing tickets
         if (user == null) {
-            System.err.println("TICKET CONTROLLER - No user found from token: " + authorizationHeader);
-            throw new IllegalArgumentException("Invalid user");
+            //System.err.println("TICKET CONTROLLER - No user found from token: " + authorizationHeader);
+            return ResponseEntity.status(401).body("Invalid user or unauthorized access");
         }
         Long userId = user.getId();
         System.out.println("TICKET CONTROLLER - Listing tickets for user ID: " + userId);
@@ -97,7 +106,7 @@ public class TicketController {
             ticketList.add(responseTicket);
         }
         System.out.println("TICKET CONTROLLER - List of tickets for user ID: " + userId + " - " + ticketList.toString());
-        return ticketList;
+        return ResponseEntity.ok(ticketList);
     }
 
     @PostMapping("/QRCode")

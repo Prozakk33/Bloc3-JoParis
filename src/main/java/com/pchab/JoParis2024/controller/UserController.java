@@ -49,13 +49,13 @@ public class UserController {
 
     //@PostMapping("/userId")
     //@Operation(summary = "Get user Id", description = "Retrieve user Id using JWT token")
-    public ResponseEntity<?> getUserFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
+    public ResponseEntity<User> getUserFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
         System.out.println("USERID AUTH-CONTROLLER - Accessing userId with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             System.err.println("USERID AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         // Extraire le token JWT de l'en-tête Authorization
@@ -64,7 +64,7 @@ public class UserController {
         
         if (!jwtUtils.validateJwtToken(token)) {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Token invalide");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         // Si le token est valide, vous pouvez continuer à traiter la requête
@@ -78,7 +78,7 @@ public class UserController {
             return ResponseEntity.ok().body(user);
         } else {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }

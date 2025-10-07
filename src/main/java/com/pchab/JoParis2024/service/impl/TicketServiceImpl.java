@@ -59,8 +59,8 @@ public class TicketServiceImpl implements TicketService {
     public Ticket createTicket(Ticket ticket) {
         //ticket.setUser(userRepository.findById(ticket.getUser().getId()).orElse(null));
         //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));*
-        System.out.println("Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
-        System.out.println("Event: " + ticket.getEvent().getTitle());
+        System.out.println("**** SRVIMPL **** Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
+        System.out.println("**** SRVIMPL **** Event: " + ticket.getEvent().getTitle() + " Id: " + ticket.getEvent().getId() + " Buy date: " + ticket.getBuyDate() + " Ticket type: " + ticket.getTicketType());
         String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getFirstName(), ticket.getUser().getLastName(), ticket.getBuyDate(), ticket.getEvent().getId(), ticket.getTicketType());
         ticket.setTicketKey(ticketKey);
 
@@ -138,9 +138,7 @@ public class TicketServiceImpl implements TicketService {
         if (ticket == null) {
             throw new IllegalArgumentException("-- TicketServiceImpl - Ticket not found");
         }
-
         
-
         // Decode the ticket token
         Map<String, Object> tokenParts = jwtUtils.decodeTicketToken(ticketToken);
         if (tokenParts == null) {
