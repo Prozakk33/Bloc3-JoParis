@@ -59,8 +59,8 @@ public class TicketServiceImpl implements TicketService {
     public Ticket createTicket(Ticket ticket) {
         //ticket.setUser(userRepository.findById(ticket.getUser().getId()).orElse(null));
         //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));*
-        System.out.println("**** SRVIMPL **** Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
-        System.out.println("**** SRVIMPL **** Event: " + ticket.getEvent().getTitle() + " Id: " + ticket.getEvent().getId() + " Buy date: " + ticket.getBuyDate() + " Ticket type: " + ticket.getTicketType());
+        //System.out.println("**** SRVIMPL **** Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
+        //System.out.println("**** SRVIMPL **** Event: " + ticket.getEvent().getTitle() + " Id: " + ticket.getEvent().getId() + " Buy date: " + ticket.getBuyDate() + " Ticket type: " + ticket.getTicketType());
         String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getFirstName(), ticket.getUser().getLastName(), ticket.getBuyDate(), ticket.getEvent().getId(), ticket.getTicketType());
         ticket.setTicketKey(ticketKey);
 
@@ -76,6 +76,11 @@ public class TicketServiceImpl implements TicketService {
         String ticketToken = ticket.getTicketKey();
         String topText = ticket.getEvent().getTitle();
         String bottomText = ticket.getTicketType();
+
+        System.out.println("**** Generating QR Code for Ticket ID: " + ticketId);
+        System.out.println("**** Top Text: " + topText);
+        System.out.println("**** Bottom Text: " + bottomText);
+
         QRCodeWriter barcodeWriter = new QRCodeWriter();
         BitMatrix matrix = barcodeWriter.encode(ticketToken, BarcodeFormat.QR_CODE, 300, 300);
         return modifiedQRCode(matrix, topText, bottomText);
@@ -152,7 +157,7 @@ public class TicketServiceImpl implements TicketService {
         if (event == null) {
             throw new IllegalArgumentException("-- TicketServiceImpl - Event not found for the ticket");
         }
-/* 
+ 
         System.out.println("-- TicketServiceImpl - Event found for the ticket: " + event.getTitle());
         System.out.println("-- TicketServiceImpl - Ticket belongs to: " + tokenParts.get("firstName") + " " + tokenParts.get("lastName"));
         System.out.println("-- TicketServiceImpl - Ticket type: " + tokenParts.get("ticketType"));
@@ -160,7 +165,7 @@ public class TicketServiceImpl implements TicketService {
         System.out.println("-- TicketServiceImpl - Event date: " + event.getDate());
         System.out.println("-- TicketServiceImpl - Event city: " + event.getCity().toString());
         System.out.println("-- TicketServiceImpl - Ticket verification completed successfully");
-*/
+
         // Map the token parts to the response fields
         DecodeQRCodeResponse response = new DecodeQRCodeResponse();
         response.setUserFirstName((String) tokenParts.get("firstName"));

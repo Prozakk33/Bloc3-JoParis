@@ -19,9 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,8 +31,7 @@ import com.pchab.JoParis2024.pojo.SportEnum;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.EventAdminResponse;
 import com.pchab.JoParis2024.service.EventService;
-import com.pchab.JoParis2024.service.TicketService;
-import com.pchab.JoParis2024.service.UserService;
+
 import com.pchab.JoParis2024.pojo.Event;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,16 +42,10 @@ public class AdminControllerUnitTest {
     private MockMvc mockMvc;
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private EventService eventService;
 
     @Mock
     private JwtUtils jwtUtils;
-
-    @Mock
-    private TicketService ticketService;
 
     @InjectMocks
     private AdminController adminController;
