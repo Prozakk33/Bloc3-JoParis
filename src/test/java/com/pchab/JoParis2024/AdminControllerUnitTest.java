@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.pchab.JoParis2024.controller.UserController;
+import com.pchab.JoParis2024.controller.AdminController;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.service.UserService;
 
@@ -25,7 +25,7 @@ public class AdminControllerUnitTest {
     private JwtUtils jwtUtils;
 
     @InjectMocks
-    private UserController userController;
+    private AdminController adminController;
 
     @BeforeEach
     public void setUp() {

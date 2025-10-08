@@ -152,4 +152,66 @@ public class UserControllerUnitTest {
         }
 
     }
+
+    @Test
+    public void testGetUserByToken_NoToken() throws Exception {
+        // Data preparation
+        
+        String AuthorizationHeader = "";
+
+        // Call the controller method
+        ResponseEntity<User> response = userController.getUserFromToken(AuthorizationHeader);
+        //Asserts
+        if (response != null) {
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody()); 
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+            assertThat(response.getBody()).isNull();
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testGetUserByToken_InvalidToken() throws Exception {
+        String jwtToken = "invalidJwtToken";
+        String AuthorizationHeader = "Bearer " + jwtToken;
+
+        // Mocking service layer
+        when(jwtUtils.validateJwtToken(jwtToken)).thenReturn(false);
+        // Data preparation
+        ResponseEntity<User> response = userController.getUserFromToken(AuthorizationHeader);
+        //Asserts
+        if (response != null) {
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+            assertThat(response.getBody()).isNull();
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testGetUserByToken_UserNotFound() throws Exception {
+        // Data preparation
+        String jwtToken = "someJwtToken";
+        String AuthorizationHeader = "Bearer " + jwtToken;
+        String email = "test@example.com";
+        // Mocking service layer
+        when(jwtUtils.getEmailFromJwtToken(jwtToken)).thenReturn(email);
+        when(jwtUtils.validateJwtToken(jwtToken)).thenReturn(true);
+        when(userService.findUserByEmail(email)).thenReturn(null);
+        // Call the controller method
+        ResponseEntity<User> response = userController.getUserFromToken(AuthorizationHeader);
+        //Asserts
+        if (response != null) {
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+            assertThat(response.getBody()).isNull();
+        } else {
+            fail();
+        }
+    }
 }
