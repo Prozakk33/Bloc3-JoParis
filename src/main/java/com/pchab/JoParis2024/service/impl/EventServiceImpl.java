@@ -30,6 +30,7 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findById(id).orElse(null);
     }
 
+     
     @Override
     public void deleteEventById(Long id) {
         eventRepository.deleteById(id);
@@ -89,6 +90,13 @@ public class EventServiceImpl implements EventService {
             response.setEventCity(event.getCity().toString());
             response.setEventDate(event.getDate());
             response.setEventStadium(event.getStadium());
+
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response: " + response.getEventId() + " - " + event.getTitle());
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response Title: " + response.getEventTitle());
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response City: " + response.getEventCity());
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response Sport: " + response.getEventSport());
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response Date: " + response.getEventDate());
+            System.out.println("-- EventServiceImpl - GetAllEventsAdmin - Response Stadium: " + response.getEventStadium());
 
             /* Récupération des informations des billets */
             List<Ticket> tickets = ticketService.getTicketsByEventId(event.getId());
