@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -82,7 +81,7 @@ public class AuthControllerUnitTest {
 
         ResponseEntity<?> response = authController.account(authorizationHeader);
 
-        System.out.println("Response: " + response.toString());
+        //System.out.println("Response: " + response.toString());
         assert(response.getStatusCode().is2xxSuccessful());
         assert(response.getBody() != null);
         // Simulation du comportement du service
@@ -151,10 +150,10 @@ public class AuthControllerUnitTest {
         // Exécution de la requête POST
         mockMvc.perform(post("/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)) // Ajout du corps de la requête
-                .andExpect(status().isOk()) // Vérifie que le statut HTTP est 200
-                .andExpect(jsonPath("$.token").value(jwtToken)) // Vérifie que le token est correct
-                .andDo(print()); // Affiche la requête et la réponse dans la console
+                .content(requestBody)) 
+                .andExpect(status().isOk()) 
+                .andExpect(jsonPath("$.token").value(jwtToken)); 
+                //.andDo(print()); 
     }
 
     @Test
@@ -173,9 +172,9 @@ public class AuthControllerUnitTest {
         // Exécution de la requête POST
         mockMvc.perform(post("/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)) // Ajout du corps de la requête
-                .andExpect(status().isBadRequest()) // Vérifie que le statut HTTP est 400
-                .andDo(print()); // Affiche la requête et la réponse dans la console
+                .content(requestBody)) 
+                .andExpect(status().isBadRequest()); 
+                //.andDo(print()); 
     }
 
 // ---------------------------------------------------------------- 
@@ -220,8 +219,8 @@ public class AuthControllerUnitTest {
         mockMvc.perform(post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)) // Ajout du corps de la requête
-                .andExpect(status().isOk()) // Vérifie que le statut HTTP est 201
-                .andDo(print()); // Affiche la requête et la réponse dans la console
+                .andExpect(status().isOk()); // Vérifie que le statut HTTP est 201
+                //.andDo(print()); // Affiche la requête et la réponse dans la console
 
     }
 
@@ -254,7 +253,7 @@ public class AuthControllerUnitTest {
         mockMvc.perform(post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)) // Ajout du corps de la requête
-                .andExpect(status().isBadRequest()) // Vérifie que le statut HTTP est 201
-                .andDo(print()); // Affiche la requête et la réponse dans la console
+                .andExpect(status().isBadRequest()); // Vérifie que le statut HTTP est 201
+                //.andDo(print()); // Affiche la requête et la réponse dans la console
     }
 }

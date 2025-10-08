@@ -40,7 +40,7 @@ public class AdminController {
     public ResponseEntity<List<EventAdminResponse>> getAllEvents(@RequestHeader(value = "Authorization", required = true) String authorizationHeader) {
 
         List<EventAdminResponse> events = eventService.getAllEventsAdmin();
-
+       
         return ResponseEntity.ok(events);
     }
 
