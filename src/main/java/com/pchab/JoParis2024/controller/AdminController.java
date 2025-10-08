@@ -57,13 +57,14 @@ public class AdminController {
         event.setCapacity(newEventRequest.getEventCapacity());
         event.setPrice(newEventRequest.getEventPrice());
         event.setStadium(newEventRequest.getEventStadium());
-        eventService.createEvent(event);
-        return ResponseEntity.ok("Event created successfully");
+        Event createdEvent = eventService.createEvent(event);
+        return ResponseEntity.ok("Event created successfully with ID: " + createdEvent.getId());
     }
 
     @PutMapping("/updateEvent")
     @Operation(summary = "Update an existing event", description = "Update an existing event with the provided details")
     public ResponseEntity<?> updateEvent(@RequestHeader(value = "Authorization", required = true) String authorizationHeader,@Valid @RequestBody PutEventRequest putEventRequest) {
+        
         System.out.println("Received event update request: " + putEventRequest);
         System.out.println("ID: " + putEventRequest.getEventId());
         System.out.println("Title: " + putEventRequest.getEventTitle());
@@ -74,7 +75,7 @@ public class AdminController {
         System.out.println("Capacity: " + putEventRequest.getEventCapacity());
         System.out.println("Price: " + putEventRequest.getEventPrice());
         System.out.println("Stadium: " + putEventRequest.getEventStadium());
-
+        
         Event event = new Event();
         event.setId(putEventRequest.getEventId());
         event.setTitle(putEventRequest.getEventTitle());
@@ -87,8 +88,8 @@ public class AdminController {
         event.setStadium(putEventRequest.getEventStadium());
 
         /* Sauvegarde des modifications */
-        eventService.updateEvent(event, event.getId());
-        System.out.println("--- Event updated: " + event);
+        Event updatedEvent = eventService.updateEvent(event, event.getId());
+        System.out.println("--- Event updated: " + updatedEvent);
         return ResponseEntity.ok().body("Epreuve mise à jour avec succès !");
     }
 }
