@@ -72,10 +72,10 @@ VALUES (
         4,
         'Philippe',
         'CHABERT',
-        'ooodieu@hotmail.com',
+        'pchab@gmail.com',
         '$2a$10$hN8bpMMHRkgoeuIbpRYS8.S2DXY711PPrMQdLxfyReKOiZy0DeIWS',
         'key789',
-        'ADMIN'
+        'USER'
     );
 
 INSERT INTO
