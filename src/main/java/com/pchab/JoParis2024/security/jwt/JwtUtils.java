@@ -26,16 +26,14 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
 
-    // Génération du Token
+
     @Value("${JoParis2024.security.secret}")
     private String jwtSecret;
 
     @Value("${JoParis2024.security.expiration}")
     private long jwtExpirationMs;
-    // Récupérer l'email dans le token
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
     
     // Valider le token
     public boolean validateJwtToken(String token) {
@@ -71,6 +69,10 @@ public class JwtUtils {
     // Génération du Token
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
+        System.out.println("-- JWTUtils - Generating JWT token for user: " + userPrincipal.getUsername());
+        System.out.println("-- JWTUtils - Token will expire in (ms): " + jwtExpirationMs);
+
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .claim("role", userPrincipal.getAuthorities())
