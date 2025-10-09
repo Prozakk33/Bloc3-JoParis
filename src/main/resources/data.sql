@@ -92,10 +92,10 @@ INSERT INTO
     )
 VALUES (
         1,
-        'France - Espagne',
-        'Exciting football match',
+        'Groupe B - France - Espagne',
+        'Dans le cadre des phases de groupes, venez encourager les bleus face à l\'Espagne ! Dans la magnifique enceinte du Stade de France, venez rejoindre les 80 000 supporters pour un match qui s\'annonce déjà historique !',
         'PARIS',
-        'Stadium A',
+        'Stade de France',
         '2025-09-15T15:00:00',
         50000,
         'FOOTBALL',
