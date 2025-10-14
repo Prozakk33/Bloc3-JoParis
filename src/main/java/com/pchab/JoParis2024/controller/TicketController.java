@@ -138,9 +138,13 @@ public class TicketController {
     @Operation(summary = "Verify ticket", description = "Verifies the provided ticket key.")
     public ResponseEntity<DecodeQRCodeResponse> verifyTicket(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @RequestBody VerifyTicketKeyRequest ticketKeyRequest) {
 
-        String ticketKey = ticketKeyRequest.getTicketKey();
-        System.out.println("TICKET CONTROLLER - Decoding QR code for ticket key: " + ticketKey);
-        DecodeQRCodeResponse response = ticketService.verifyTicket(ticketKey);
+        if (ticketKeyRequest == null || ticketKeyRequest.getQrCode() == null || ticketKeyRequest.getQrCode().isEmpty()) {
+            System.err.println("TICKET CONTROLLER - Invalid request: QR code is missing");
+            return ResponseEntity.badRequest().build();
+        }
+        String qrCode = ticketKeyRequest.getQrCode();
+        System.out.println("TICKET CONTROLLER - Decoding QR code for ticket key: " + qrCode);
+        DecodeQRCodeResponse response = ticketService.verifyTicket(qrCode);
         if (response == null) {
             return ResponseEntity.badRequest().build();
         }

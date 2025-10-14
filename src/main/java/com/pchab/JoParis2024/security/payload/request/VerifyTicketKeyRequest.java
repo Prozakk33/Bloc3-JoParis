@@ -4,13 +4,13 @@ import lombok.Data;
 
 @Data
 public class VerifyTicketKeyRequest {
-    private String ticketKey;
+    private String qrCode;
 
-    public String getTicketKey() {
-        return ticketKey;
+    public String getQrCode() {
+        return qrCode;
     }
 
-    public void setTicketKey(String ticketKey) {
-        this.ticketKey = ticketKey;
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }

@@ -61,7 +61,7 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        System.out.println("AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
+        //System.out.println("AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -80,7 +80,7 @@ public class AuthController {
     //@PostMapping("/account")
     //@Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
     public ResponseEntity<?> account(String authorizationHeader) {
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -90,7 +90,7 @@ public class AuthController {
 
         // Extraire le token JWT de l'en-tête Authorization
         String token = authorizationHeader.substring(7); // Supprime "Bearer " pour obtenir le token
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
         
         if (!jwtUtils.validateJwtToken(token)) {
             System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
@@ -99,15 +99,15 @@ public class AuthController {
 
         // Si le token est valide, on continue de traiter la requête
         String email = jwtUtils.getEmailFromJwtToken(token); // Récupérer l'email depuis le token
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Email extrait du token : " + email);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Email extrait du token : " + email);
 
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
         User user = userService.findUserByEmail(email);
         if(user != null) {
-            System.out.println("ACCOUNT AUTH-CONTROLLER - Returning user details : " + ResponseEntity.ok().body(user).toString());
+            //System.out.println("ACCOUNT AUTH-CONTROLLER - Returning user details : " + ResponseEntity.ok().body(user).toString());
             return ResponseEntity.ok().body(user);
         } else {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
         }
     }

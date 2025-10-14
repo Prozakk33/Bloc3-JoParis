@@ -70,8 +70,8 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-        System.out.println("-- JWTUtils - Generating JWT token for user: " + userPrincipal.getUsername());
-        System.out.println("-- JWTUtils - Token will expire in (ms): " + jwtExpirationMs);
+        //System.out.println("-- JWTUtils - Generating JWT token for user: " + userPrincipal.getUsername());
+        //System.out.println("-- JWTUtils - Token will expire in (ms): " + jwtExpirationMs);
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())

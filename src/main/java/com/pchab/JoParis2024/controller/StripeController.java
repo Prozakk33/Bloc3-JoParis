@@ -3,8 +3,8 @@ package com.pchab.JoParis2024.controller;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.pchab.JoParis2024.pojo.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.security.payload.request.PaymentRequest;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
@@ -49,8 +49,8 @@ public class StripeController {
     @PostMapping("/payment")
     public Map<String, String> createCheckoutSession(@Valid @RequestBody PaymentRequest paymentRequest, @RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
 
-        System.out.println("Initiating Stripe checkout session creation...");
-        System.out.println("PaymentRequest received: " + paymentRequest);
+        //System.out.println("Initiating Stripe checkout session creation...");
+        //System.out.println("PaymentRequest received: " + paymentRequest);
 
         // Récupération de l'ID du client (userId)
         ResponseEntity<?> userResponse = userController.getUserFromToken(authorizationHeader);
@@ -61,11 +61,11 @@ public class StripeController {
         } else {
             System.out.println("User authenticated: " + userId);
         }
-        System.out.println("User ID for payment: " + userId);
+        //System.out.println("User ID for payment: " + userId);
 
 
         try {
-            System.out.println("Received payment request: " + paymentRequest);
+            //System.out.println("Received payment request: " + paymentRequest);
             // Domaine de l'application
             String YOUR_DOMAIN = myDomain;
 
@@ -74,7 +74,7 @@ public class StripeController {
             Long quantity = paymentRequest.getQuantity();
             Object cart = paymentRequest.getCart();
 
-            System.out.println("Creating checkout session with priceId: " + priceId + " and quantity: " + quantity);
+            //System.out.println("Creating checkout session with priceId: " + priceId + " and quantity: " + quantity);
             Stripe.apiKey = stripeSecretKey;
             System.out.println("Secret Key: " + Stripe.apiKey);
 
@@ -87,12 +87,12 @@ public class StripeController {
             "userId", userId,
             "cart", cart
             );
-            System.out.println("Cart Data (JSON) : " + cartData);
+            //System.out.println("Cart Data (JSON) : " + cartData);
             // Créer les paramètres de la session Stripe Checkout
             // Convertir cartData en JSON valide
             ObjectMapper objectMapper = new ObjectMapper();
             String cartJsonString = objectMapper.writeValueAsString(cartData);
-            System.out.println("Cart Data (JSON) : " + cartJsonString);
+            //System.out.println("Cart Data (JSON) : " + cartJsonString);
 
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -113,7 +113,7 @@ public class StripeController {
             // Retourner l'URL de la session Stripe Checkout
             System.out.println("Checkout session created successfully: " + session.getUrl());
 
-            System.out.println("MAP  = " + Map.of("url", session.getUrl()));
+            //System.out.println("MAP  = " + Map.of("url", session.getUrl()));
             
             return Map.of("url", session.getUrl());
         } catch (Exception e) {
@@ -132,11 +132,11 @@ public class StripeController {
 
             // Récupérer les métadonnées
             Map<String, String> metadata = session.getMetadata();
-            System.out.println("Metadata retrieved: " + metadata);
+            //System.out.println("Metadata retrieved: " + metadata);
 
             String cartJsonString = metadata.get("cart"); // Récupérer la chaîne JSON
 
-            System.out.println("Cart JSON String: " + cartJsonString);
+            //System.out.println("Cart JSON String: " + cartJsonString);
 
             // Convertir la chaîne JSON en objet Java
             ObjectMapper objectMapper = new ObjectMapper();

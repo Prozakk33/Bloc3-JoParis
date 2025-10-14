@@ -3,6 +3,9 @@ package com.pchab.JoParis2024.security.service;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SecurityKey {
 
     // Define Key Length
