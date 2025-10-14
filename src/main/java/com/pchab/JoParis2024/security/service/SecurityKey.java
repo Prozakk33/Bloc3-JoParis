@@ -12,7 +12,7 @@ public class SecurityKey {
     private static final int KEY_LENGTH = 24; 
 
     // Key generation method
-    public static String generateSecureKey() {
+    public String generateSecureKey() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[KEY_LENGTH];
         secureRandom.nextBytes(randomBytes);

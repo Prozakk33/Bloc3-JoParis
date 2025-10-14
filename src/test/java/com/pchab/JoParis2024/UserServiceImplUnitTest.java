@@ -16,6 +16,7 @@ import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +24,9 @@ public class UserServiceImplUnitTest {
     
     @Mock
     private TicketRepository ticketRepository;
+
+    @Mock
+    private SecurityKey securityKey;
 
     @Mock
     private EventRepository eventRepository;
@@ -75,15 +79,11 @@ public class UserServiceImplUnitTest {
         newUser.setPassword("P@ssword12456");
 
         String generatedUserKey = "mocked-user-key";
-        when(jwtUtils.generateUserKeyToken(newUser.getEmail(), newUser.getFirstName(), newUser.getLastName()))
-            .thenReturn(generatedUserKey);
-
+        when(securityKey.generateSecureKey()).thenReturn(generatedUserKey);
         when(userRepository.save(newUser)).thenReturn(newUser);
 
         // Appel de la méthode à tester
         userServiceImpl.createUser(newUser);
-
-        verify(jwtUtils, times(1)).generateUserKeyToken("jane.smith@example.com", "Jane", "Smith");
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(userCaptor.capture());

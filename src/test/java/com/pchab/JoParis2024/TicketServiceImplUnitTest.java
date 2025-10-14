@@ -4,9 +4,12 @@ package com.pchab.JoParis2024;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -32,8 +35,8 @@ import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
+import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.impl.TicketServiceImpl;
-
 
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +44,9 @@ public class TicketServiceImplUnitTest {
     
     @Mock
     private TicketRepository ticketRepository;
+
+    @Mock
+    private SecurityKey securityKey;
 
     @Mock
     private EventRepository eventRepository;
@@ -89,6 +95,9 @@ public class TicketServiceImplUnitTest {
 
     @Test
     public void testCreateTicket() {
+
+        System.out.println("---- Test Create Ticket ----");
+
         Ticket newTicket = new Ticket();
 
         Event event = new Event();
@@ -112,18 +121,21 @@ public class TicketServiceImplUnitTest {
 
         Ticket savedTicket = new Ticket();
         savedTicket.setId(1L);
+        when(securityKey.generateSecureKey()).thenReturn("mocked-ticket-key");
         when(ticketRepository.save(newTicket)).thenReturn(savedTicket);
-        when(jwtUtils.generateTicketKeyToken("John", "Doe", newTicket.getBuyDate(), 1L, newTicket.getTicketType())).thenReturn("mocked-ticket-key");
+        
         
         Ticket ticket = ticketServiceImpl.createTicket(newTicket);
         assertEquals(1L, ticket.getId());
         verify(ticketRepository, times(1)).save(newTicket);
+
+        System.out.println("Created Ticket ID: " + ticket.getId());
     } 
     
     @Test
     public void testGenerateQRCodeImage() throws Exception {
+        System.out.println("---- Test Generate QR Code Image ----");
         Long ticketId = 1L;
-        Ticket mockTicket = new Ticket();
 
         Event mockEvent = new Event();
         mockEvent.setId(1L);
@@ -133,7 +145,17 @@ public class TicketServiceImplUnitTest {
         mockEvent.setSport(null);
         mockEvent.setDate(LocalDateTime.now());
 
+        User mockUser = new User();
+        mockUser.setId(1L);
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        mockUser.setEmail("john.doe@example.com");
+        mockUser.setPassword("P@ssword12456");
+        mockUser.setUserKey("mock-userkey-valid");
+
+        Ticket mockTicket = new Ticket();
         mockTicket.setEvent(mockEvent);
+        mockTicket.setUser(mockUser);
         mockTicket.setId(ticketId);
         mockTicket.setTicketType("Solo");
         mockTicket.setTicketKey("mocked-ticket-key");
@@ -147,12 +169,12 @@ public class TicketServiceImplUnitTest {
         BufferedImage mockedImage = new BufferedImage(301, 301, BufferedImage.TYPE_INT_RGB);
         doReturn(mockedImage).when(spyTicketService).modifiedQRCode(any(BitMatrix.class), anyString(), anyString());
         
-        
         // Call the method to test
         BufferedImage qrCodeImage = spyTicketService.generateQRCodeImage(ticketId);
         // Assert that the returned image is not null
         assertEquals(301, qrCodeImage.getWidth());
         assertEquals(301, qrCodeImage.getHeight());
+        System.out.println("QR Code Image Width: " + qrCodeImage.getWidth());
 
     }
 
@@ -168,11 +190,9 @@ public class TicketServiceImplUnitTest {
         assert image != null;
     }
 
+
     @Test
     public void  testVerifyTicket() throws Exception {
-        String mockTicketToken = "mocked-ticket-key";
-        Long ticketId = 1L;
-        Ticket mockTicket = new Ticket();
 
         User mockUser = new User();
         mockUser.setId(1L);
@@ -180,7 +200,7 @@ public class TicketServiceImplUnitTest {
         mockUser.setLastName("Doe");
         mockUser.setEmail("john.doe@example.com");
         mockUser.setPassword("P@ssword12456");
-       
+        mockUser.setUserKey("mock-userkey-valid");
 
         Event mockEvent = new Event();
         mockEvent.setId(1L);
@@ -190,11 +210,12 @@ public class TicketServiceImplUnitTest {
         mockEvent.setSport(SportEnum.FOOTBALL);
         mockEvent.setDate(LocalDateTime.now());
 
+        Ticket mockTicket = new Ticket();
+        mockTicket.setId(1L);
         mockTicket.setEvent(mockEvent);
-        mockTicket.setId(ticketId);
         mockTicket.setUser(mockUser);
         mockTicket.setTicketType("Solo");
-        mockTicket.setTicketKey(mockTicketToken);
+        mockTicket.setTicketKey("mocked-ticket-key");
         mockTicket.setBuyDate(Timestamp.valueOf(LocalDateTime.now()));
 
         Map<String, Object> mockDecodedData = Map.of(
@@ -205,18 +226,28 @@ public class TicketServiceImplUnitTest {
             "eventCity", mockEvent.getCity().toString(),
             "eventDate", mockEvent.getDate(),            
             "ticketType", "Solo",
-            "ticketId", ticketId,
+            "ticketId", 1L,
             "eventId", 1L
         );
 
-        //when(ticketRepository.findTicketById(ticketId)).thenReturn(mockTicket);
-        when(jwtUtils.validateJwtToken(mockTicketToken)).thenReturn(true);
-        when(jwtUtils.decodeTicketToken(mockTicketToken)).thenReturn(mockDecodedData);
-        when(eventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
-        when(ticketRepository.findTicketByTicketKey(mockTicketToken)).thenReturn(mockTicket);
+        // Generate expected signature
+        String secretKey = mockUser.getUserKey() + mockTicket.getTicketKey();
+        String input = mockTicket.getId().toString();
+        
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+        Mac hmacSha256 = Mac.getInstance("HmacSHA256");
+        hmacSha256.init(secretKeySpec);
+        byte[] hmacBytes = hmacSha256.doFinal(input.getBytes());
+        String expectedSignature = Base64.getEncoder().encodeToString(hmacBytes);
 
-        DecodeQRCodeResponse response = ticketServiceImpl.verifyTicket(mockTicketToken);
-        System.out.println("---- Test Verify Ticket Response ----");    
+        String qrCode = "1#" + expectedSignature;
+
+        // Mock the dependencies
+        //when(eventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
+        when(ticketRepository.findTicketById(1L)).thenReturn(mockTicket);
+
+        DecodeQRCodeResponse response = ticketServiceImpl.verifyTicket(qrCode);
+        System.out.println("---- Test Verify Ticket Response ----");
         System.out.println(response);
         System.out.println(response.getUserFirstName());
         System.out.println(response.getUserLastName());
@@ -226,17 +257,6 @@ public class TicketServiceImplUnitTest {
         System.out.println(response.getEventDate());
         System.out.println(response.getTicketType());
         System.out.println("---- End of Response ----");    
-
-/*      
-        DecodeQRCodeResponse response = new DecodeQRCodeResponse();
-        response.setUserFirstName("John");
-        response.setUserLastName("Doe");
-        response.setTicketBuyDate(mockTicket.getBuyDate());
-        response.setEventTitle(mockEvent.getTitle());
-        response.setEventCity(mockEvent.getCity().toString());
-        response.setEventDate(mockEvent.getDate());
-        response.setTicketType(mockTicket.getTicketType());
-*/
         
         assertEquals("John", response.getUserFirstName());
         assertEquals("Doe", response.getUserLastName());
