@@ -5,9 +5,14 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,7 @@ import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
+import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.TicketService;
 
 @Service
@@ -35,6 +41,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SecurityKey securityKey;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -57,13 +66,8 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket createTicket(Ticket ticket) {
-        //ticket.setUser(userRepository.findById(ticket.getUser().getId()).orElse(null));
-        //ticket.setEvent(eventRepository.findById(ticket.getEvent().getId()).orElse(null));*
-        //System.out.println("**** SRVIMPL **** Creating ticket for user: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
-        //System.out.println("**** SRVIMPL **** Event: " + ticket.getEvent().getTitle() + " Id: " + ticket.getEvent().getId() + " Buy date: " + ticket.getBuyDate() + " Ticket type: " + ticket.getTicketType());
-        String ticketKey = jwtUtils.generateTicketKeyToken(ticket.getUser().getFirstName(), ticket.getUser().getLastName(), ticket.getBuyDate(), ticket.getEvent().getId(), ticket.getTicketType());
+        String ticketKey = securityKey.generateSecureKey();
         ticket.setTicketKey(ticketKey);
-
         return ticketRepository.save(ticket);
     }
 
@@ -73,17 +77,50 @@ public class TicketServiceImpl implements TicketService {
         if (ticket == null) {
             throw new IllegalArgumentException("Invalid ticket ID");
         }
-        String ticketToken = ticket.getTicketKey();
+
+        // Prepare data for QR code
+        String ticketKey = ticket.getTicketKey();
         String topText = ticket.getEvent().getTitle();
         String bottomText = ticket.getTicketType();
+        Long userId = ticket.getUser().getId();
+        String userKey = ticket.getUser().getUserKey();
+        Timestamp buyDate = ticket.getBuyDate();
 
-        System.out.println("**** Generating QR Code for Ticket ID: " + ticketId);
-        System.out.println("**** Top Text: " + topText);
-        System.out.println("**** Bottom Text: " + bottomText);
+        if (userKey == null || ticketKey == null || buyDate == null) {
+            throw new IllegalArgumentException("Invalid ticket data: userKey, ticketKey, or buyDate is null");
+        }
 
-        QRCodeWriter barcodeWriter = new QRCodeWriter();
-        BitMatrix matrix = barcodeWriter.encode(ticketToken, BarcodeFormat.QR_CODE, 300, 300);
-        return modifiedQRCode(matrix, topText, bottomText);
+        // Generate Secret Key for QR Code
+        byte[] secret = ArrayUtils.addAll(userKey.getBytes(), ticketKey.getBytes());
+
+        try {
+            // Create HMAC-SHA256 signature
+            SecretKeySpec secretKey = new SecretKeySpec(secret, "HmacSHA256");
+            Mac hmacSha256 = Mac.getInstance("HmacSHA256");
+            hmacSha256.init(secretKey);
+
+            // Concatenate all input data
+            String input = ticketId.toString() + "#" + userId.toString() + "#" + buyDate.toString();
+            byte[] signatureH_bytes = hmacSha256.doFinal(input.getBytes());
+
+            // Convert to Base64 String
+            String qrCodeData = Base64.getEncoder().encodeToString(signatureH_bytes);
+
+            System.out.println("**** Generating QR Code for Ticket ID: " + ticketId);
+            System.out.println("**** User Id = " + userId);
+            System.out.println("**** User Key = " + userKey);
+            System.out.println("**** Ticket Key = " + ticketKey);
+            System.out.println("**** Top Text: " + topText);
+            System.out.println("**** Bottom Text: " + bottomText);
+            System.out.println("**** QR Code Data: " + qrCodeData);
+
+            QRCodeWriter barcodeWriter = new QRCodeWriter();
+            BitMatrix matrix = barcodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, 300, 300);
+            return modifiedQRCode(matrix, topText, bottomText);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating QR code: " + e.getMessage());
+        }
     }
 
     @Override

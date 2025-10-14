@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.UserService;
 
 @Service
@@ -19,6 +20,9 @@ public class UserServiceImpl implements UserService {
     @Autowired 
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private SecurityKey securityKey;
+
     @Override
     public User findUserById(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -27,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(User user) {
         System.out.println("USERSERVICE-IMPL - Creating user: " + user.getEmail());
-        String userKey = jwtUtils.generateUserKeyToken(user.getEmail(), user.getFirstName(), user.getLastName());
+        String userKey = securityKey.generateSecureKey();
         user.setUserKey(userKey);
         userRepository.save(user);
     }
