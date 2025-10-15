@@ -25,6 +25,7 @@ import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
+import com.pchab.JoParis2024.security.service.EncryptionService;
 import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.TicketService;
 
@@ -33,6 +34,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private EncryptionService encryptionService;
 
     @Autowired
     private EventRepository eventRepository;
@@ -65,7 +69,14 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket createTicket(Ticket ticket) {
         String ticketKey = securityKey.generateSecureKey();
-        ticket.setTicketKey(ticketKey);
+        String encryptedTicketKey = null;
+            try {
+                encryptedTicketKey = encryptionService.encrypt(ticketKey);
+            } catch (Exception e) {
+                System.err.println("TicketServiceImpl - Error encrypting ticket key: " + e.getMessage());
+                throw new RuntimeException("Error encrypting ticket key", e);
+            }
+        ticket.setTicketKey(encryptedTicketKey);
         return ticketRepository.save(ticket);
     }
 
@@ -80,11 +91,28 @@ public class TicketServiceImpl implements TicketService {
         }
 
         // Prepare data for QR code
-        String ticketKey = ticket.getTicketKey();
+
+        // Decrypt ticket key
+        String encryptedTicketKey = ticket.getTicketKey();
+        String ticketKey = null;
+        try {
+            ticketKey = encryptionService.decrypt(encryptedTicketKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error decrypting ticket key: " + e.getMessage());
+        }
+
+        // Decrypt user key
+        String encryptedUserKey = ticket.getUser().getUserKey();
+        String userKey = null;
+        try {
+            userKey = encryptionService.decrypt(encryptedUserKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error decrypting user key: " + e.getMessage());
+        }
+
         String topText = ticket.getEvent().getTitle();
         String bottomText = ticket.getTicketType();
         Long userId = ticket.getUser().getId();
-        String userKey = ticket.getUser().getUserKey();
         Timestamp buyDate = ticket.getBuyDate();
 
         if (userKey == null || ticketKey == null || buyDate == null) {
@@ -168,7 +196,6 @@ public class TicketServiceImpl implements TicketService {
     public DecodeQRCodeResponse verifyTicket (String qrCode) {
 
         System.out.println("**** TicketServiceImpl - Verifying ticket");
-
         // Check if the token is valid
         if (qrCode == null || qrCode.isEmpty()) {
             throw new IllegalArgumentException("**** TicketServiceImpl - QR Code is null or empty");
@@ -179,14 +206,32 @@ public class TicketServiceImpl implements TicketService {
         Long ticketId = Long.parseLong(parts[0]);
         String signature = parts[1];
 
-        // Check of token exist in database
+        // Retrieve the ticket from the database
         Ticket ticket = ticketRepository.findTicketById(ticketId);
-        String ticketKey = ticket.getTicketKey();
-        String userKey = ticket.getUser().getUserKey();
+        String encryptedTicketKey = ticket.getTicketKey();
+
+        // Decode ticket key
+        String ticketKey = null;
+        try {
+            ticketKey = encryptionService.decrypt(encryptedTicketKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error decrypting ticket key: " + e.getMessage());
+        }
+
+        // Decode user key
+        String encryptedUserKey = ticket.getUser().getUserKey();
+        String userKey = null;
+        try {
+            userKey = encryptionService.decrypt(encryptedUserKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error decrypting user key: " + e.getMessage());
+        }
 
         if (ticket == null || ticketKey == null || userKey == null) {
             throw new IllegalArgumentException("**** TicketServiceImpl - Ticket not found");
         }
+
+        // Verify the signature
         System.out.println("**** TicketServiceImpl - Ticket found : " + ticket.toString());
         String expectedSignature = null;
         try {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pchab.JoParis2024.pojo.User;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.service.EncryptionService;
 import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.UserService;
 
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EncryptionService encryptionService;
 
     @Autowired 
     private JwtUtils jwtUtils;
@@ -32,7 +36,15 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         System.out.println("USERSERVICE-IMPL - Creating user: " + user.getEmail());
         String userKey = securityKey.generateSecureKey();
-        user.setUserKey(userKey);
+
+        String encryptedUserKey = null;
+        try {
+            encryptedUserKey = encryptionService.encrypt(userKey);
+        } catch (Exception e) {
+            System.err.println("USERSERVICE-IMPL - Error encrypting user key: " + e.getMessage());
+            throw new RuntimeException("Error encrypting user key", e);
+        }
+        user.setUserKey(encryptedUserKey);
         userRepository.save(user);
     }
 

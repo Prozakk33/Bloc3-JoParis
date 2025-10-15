@@ -6,7 +6,9 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EncryptionService {
 
     @Value("${AES_SECRET}") 
@@ -14,7 +16,7 @@ public class EncryptionService {
 
     private static final String ALGORITHM = "AES";
 
-    public static String encrypt(String data) throws Exception {
+    public String encrypt(String data) throws Exception {
         SecretKeySpec secretKey = new SecretKeySpec(aesSecret.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -23,7 +25,7 @@ public class EncryptionService {
     }
 
     // Déchiffrer une valeur
-    public static String decrypt(String encryptedData) throws Exception {
+    public String decrypt(String encryptedData) throws Exception {
         SecretKeySpec secretKey = new SecretKeySpec(aesSecret.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
