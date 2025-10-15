@@ -5,6 +5,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const eventsPerPage = 10; // Nombre d'événements par page
     let currentPage = 1; // Page actuelle
 
+    // Affichage du message si il y en a un
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("okMessage")) {
+        const okMessage = urlParams.get("okMessage");
+        document.getElementById("okMessage").innerText = okMessage;
+    }
+
     fetchEvents();
 
     sportList = await getAllEventsSports();
@@ -468,9 +475,10 @@ async function createEvent() {
         if (!response.ok) {
             throw new Error("Erreur lors de la création de l'événement");
         } else {
-            const data = await response.json();
-            console.log("Événement créé avec succès :", data);
+            //const data = await response.json();
+            console.log("Événement créé avec succès !");
             document.getElementById("okMessage").innerText = "Événement créé avec succès !";
+            window.location.href = "/adminAccount.html?okMessage=Evenement créé avec succès";
         }
     } catch (error) {
         console.error("Erreur lors de la création de l'événement :", error);
@@ -578,9 +586,9 @@ async function modifyEvent(eventId) {
             console.log("Response not ok:", response);
             throw new Error("Fetch - Erreur lors de la modification de l'événement");
         } else {
-            const data = await response.text();
-            console.log("Événement modifié avec succès :", data);
-            document.getElementById("okMessage").innerText = "Événement modifié avec succès !";
+            //const data = await response.text();
+            console.log("Événement modifié avec succès !");
+            window.location.href = "/adminAccount.html?okMessage=Evenement modifié avec succès";
         }
     } catch (error) {
         console.error("Erreur lors de la modification de l'événement :", error);
@@ -590,7 +598,6 @@ async function modifyEvent(eventId) {
     hideModifyEventForm(eventId);
     //alert("Événement modifié avec succès !");
     // Recharger la page pour afficher les modifications
-    window.location.reload();
 }
 
 function hideModifyEventForm(eventId) {
