@@ -470,9 +470,11 @@ async function createEvent() {
         } else {
             const data = await response.json();
             console.log("Événement créé avec succès :", data);
+            document.getElementById("okMessage").innerText = "Événement créé avec succès !";
         }
     } catch (error) {
         console.error("Erreur lors de la création de l'événement :", error);
+        document.getElementById("errorMessage").innerText = "Erreur lors de la création de l'événement.";
     }
 }
 
@@ -578,13 +580,15 @@ async function modifyEvent(eventId) {
         } else {
             const data = await response.text();
             console.log("Événement modifié avec succès :", data);
+            document.getElementById("okMessage").innerText = "Événement modifié avec succès !";
         }
     } catch (error) {
         console.error("Erreur lors de la modification de l'événement :", error);
+        document.getElementById("errorMessage").innerText = "Erreur lors de la modification de l'événement.";
     }
 
     hideModifyEventForm(eventId);
-    alert("Événement modifié avec succès !");
+    //alert("Événement modifié avec succès !");
     // Recharger la page pour afficher les modifications
     window.location.reload();
 }
