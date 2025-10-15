@@ -33,19 +33,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         System.out.println("AuthTokenFilter - Processing request: " + request.toString());
         try {
             String jwt = parseJwt(request);
-            
             // Log the extracted JWT for debugging
             System.out.println("Extracted JWT: " + jwt);
 
-            if(jwtUtils.validateJwtToken(jwt)){
-                System.out.println("JWT is valid. Proceeding with authentication.");
-            } else {
-                System.out.println("Invalid JWT token.");
-            }
-            // End Logging
-
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getEmailFromJwtToken(jwt);
+                System.out.println("JWT is valid. Email extracted: " + email);
                     // Load user details using email
                 UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(email);
 

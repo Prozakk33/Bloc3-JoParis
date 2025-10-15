@@ -1,9 +1,6 @@
 package com.pchab.JoParis2024.security.jwt;
 import java.security.Key;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +83,7 @@ public class JwtUtils {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
-
+/*
     public String getFirstNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().get("firstName", String.class);
@@ -108,7 +105,7 @@ public class JwtUtils {
                 .compact();
     }
 
-/*
+
     public String generateTicketKeyToken(String firstName, String lastName,  Timestamp buyDate, Long eventId, String ticketType) {
         return Jwts.builder()
                 .setSubject("Ticket")

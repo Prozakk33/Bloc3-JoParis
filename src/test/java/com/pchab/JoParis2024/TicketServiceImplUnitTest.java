@@ -12,6 +12,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -305,5 +306,37 @@ public class TicketServiceImplUnitTest {
         assertEquals(mockEvent.getCity().toString(), response.getEventCity());
         assertEquals(mockEvent.getDate(), response.getEventDate());
         assertEquals(mockTicket.getTicketType(), response.getTicketType());
+    }
+
+    @Test
+    public void testVerifyTicket_InvalidQRCodeFormat() {
+        String invalidQRCode = "invalid_format";
+        assertThrows(IllegalArgumentException.class, () -> {
+        ticketServiceImpl.verifyTicket(invalidQRCode);
+        });
+    }
+
+    @Test
+    public void testVerifyTicket_TicketNotFound() {
+        String qrCode = "999#some_signature"; // Ticket ID 999 does not exist
+
+        when(ticketRepository.findTicketById(999L)).thenReturn(null);
+        assertThrows(NullPointerException.class, () -> {
+        ticketServiceImpl.verifyTicket(qrCode);
+        });
+    }
+
+    @Test
+    public void testCreateTicket_EncryptionError() {
+        Ticket newTicket = new Ticket();
+        when(securityKey.generateSecureKey()).thenReturn("mocked-ticket-key");
+        try {
+        when(encryptionService.encrypt("mocked-ticket-key")).thenThrow(new RuntimeException("Error encrypting ticket key"));
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.encrypt", e);
+        }
+            assertThrows(RuntimeException.class, () -> {
+                ticketServiceImpl.createTicket(newTicket);
+            });
     }
 }

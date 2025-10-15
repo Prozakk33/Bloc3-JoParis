@@ -225,15 +225,53 @@ public class EventServiceImplUnitTest {
 
         List<Ticket> ticketsList = Arrays.asList(ticket1);
 
-
+        // Test with ticket type "Solo"
         when(eventRepository.findAll()).thenReturn(eventsList);
         when(ticketService.getTicketsByEventId(event1.getId())).thenReturn(ticketsList);
-
-
         List<EventAdminResponse> events = eventServiceImpl.getAllEventsAdmin();
 
         assertEquals(1, events.size());
         //assertEquals(event1.getId(), events.get(0).getId());
         //assertEquals("100m Sprint Final", events.get(0).getTitle());
+
+        events.clear();
+
+        // Test with ticket type "Duo"
+        ticket1.setTicketType("Duo");
+        when(eventRepository.findAll()).thenReturn(eventsList);
+        when(ticketService.getTicketsByEventId(event1.getId())).thenReturn(ticketsList);
+        events = eventServiceImpl.getAllEventsAdmin();
+        assertEquals(1, events.size());
+
+        events.clear();
+
+        // Test with ticket type "Famille"
+        ticket1.setTicketType("Famille");
+        when(eventRepository.findAll()).thenReturn(eventsList);
+        when(ticketService.getTicketsByEventId(event1.getId())).thenReturn(ticketsList);
+        events = eventServiceImpl.getAllEventsAdmin();
+        assertEquals(1, events.size());
+    }
+
+    @Test
+    public void testgetAllEventSports() {
+        List<SportEnum> sports = Arrays.asList(SportEnum.ATHLETISME, SportEnum.NATATION, SportEnum.BASKETBALL);
+
+        //when(eventRepository.findAllEventSports()).thenReturn(sports);
+
+        List<String> result = eventServiceImpl.getAllEventSports();
+
+        assertEquals(14, result.size());
+    }
+
+    @Test
+    public void testgetAllEventCities() {
+        List<CityEnum> cities = Arrays.asList(CityEnum.PARIS, CityEnum.LYON, CityEnum.MARSEILLE);
+
+        //when(eventRepository.findAllEventCities()).thenReturn(cities);
+
+        List<String> result = eventServiceImpl.getAllEventsCities();
+
+        assertEquals(8, result.size());
     }
 }
