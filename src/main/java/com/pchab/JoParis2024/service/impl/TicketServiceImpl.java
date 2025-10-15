@@ -20,10 +20,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.pchab.JoParis2024.pojo.Ticket;
-import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
-import com.pchab.JoParis2024.repository.UserRepository;
-import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
 import com.pchab.JoParis2024.security.service.EncryptionService;
 import com.pchab.JoParis2024.security.service.SecurityKey;
@@ -39,16 +36,7 @@ public class TicketServiceImpl implements TicketService {
     private EncryptionService encryptionService;
 
     @Autowired
-    private EventRepository eventRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private SecurityKey securityKey;
-
-    @Autowired
-    private JwtUtils jwtUtils;
 
     @Override
     public List<Ticket> getTicketsByUserId(Long userId) {
@@ -195,7 +183,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public DecodeQRCodeResponse verifyTicket (String qrCode) {
 
-        System.out.println("**** TicketServiceImpl - Verifying ticket");
+        //System.out.println("**** TicketServiceImpl - Verifying ticket");
         // Check if the token is valid
         if (qrCode == null || qrCode.isEmpty()) {
             throw new IllegalArgumentException("**** TicketServiceImpl - QR Code is null or empty");
@@ -232,7 +220,7 @@ public class TicketServiceImpl implements TicketService {
         }
 
         // Verify the signature
-        System.out.println("**** TicketServiceImpl - Ticket found : " + ticket.toString());
+        //System.out.println("**** TicketServiceImpl - Ticket found : " + ticket.toString());
         String expectedSignature = null;
         try {
             String secretKey = userKey + ticketKey;
@@ -251,7 +239,7 @@ public class TicketServiceImpl implements TicketService {
         if (!signature.equals(expectedSignature)) {
             throw new IllegalArgumentException("-- TicketServiceImpl - Ticket not valid: signature mismatch");
         }
-
+/*
         System.out.println("**** TicketServiceImpl - Event found for the ticket: " + ticket.getEvent().getTitle());
         System.out.println("**** TicketServiceImpl - Ticket belongs to: " + ticket.getUser().getFirstName() + " " + ticket.getUser().getLastName());
         System.out.println("**** TicketServiceImpl - Ticket type: " + ticket.getTicketType());
@@ -259,7 +247,7 @@ public class TicketServiceImpl implements TicketService {
         System.out.println("**** TicketServiceImpl - Event date: " + ticket.getEvent().getDate());
         System.out.println("**** TicketServiceImpl - Event city: " + ticket.getEvent().getCity().toString());
         System.out.println("**** TicketServiceImpl - Ticket verification completed successfully");
-
+*/
         // Map the token parts to the response fields
         DecodeQRCodeResponse response = new DecodeQRCodeResponse();
         response.setUserFirstName((String) ticket.getUser().getFirstName());
@@ -270,7 +258,7 @@ public class TicketServiceImpl implements TicketService {
         response.setEventDate(ticket.getEvent().getDate());
         response.setTicketType((String) ticket.getTicketType());
 
-        System.out.println("********** Ticket verification successful: " + response.toString());
+        //System.out.println("********** Ticket verification successful: " + response.toString());
         return response;
     }
 }
