@@ -37,7 +37,7 @@ public class JwtUtils {
     
     // Valider le token
     public boolean validateJwtToken(String token) {
-        System.out.println("-- JWTUtils - Validating JWT token: " + token);
+        System.out.println("!!!!!! JWTUtils - Validating JWT token: " + token);
         try {
             // Logique de validation du token
             Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
@@ -97,6 +97,7 @@ public class JwtUtils {
                 .parseClaimsJws(token).getBody().get("lastName", String.class);
     }
 
+
     public String generateUserKeyToken(String email, String firstName, String lastName) {
         return Jwts.builder()
                 .setSubject(email)
@@ -107,7 +108,7 @@ public class JwtUtils {
                 .compact();
     }
 
-
+/*
     public String generateTicketKeyToken(String firstName, String lastName,  Timestamp buyDate, Long eventId, String ticketType) {
         return Jwts.builder()
                 .setSubject("Ticket")
@@ -124,6 +125,7 @@ public class JwtUtils {
     public Map<String, Object> decodeTicketToken(String token) {
 
         System.out.println("-- JWTUtils - Decoding ticket token");
+        
         try {
             var claims = Jwts.parserBuilder().setSigningKey(key()).build()
                     .parseClaimsJws(token).getBody();
@@ -140,5 +142,6 @@ public class JwtUtils {
             return null;
         }
     }
+        */
 
 }

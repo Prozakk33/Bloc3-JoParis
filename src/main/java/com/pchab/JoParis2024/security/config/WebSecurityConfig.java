@@ -78,7 +78,8 @@ public class WebSecurityConfig {
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/payment").authenticated()
-                    .requestMatchers("/tickets/**").hasRole("ADMIN")
+                    .requestMatchers("/tickets/list").authenticated()
+                    .requestMatchers("/tickets/verify").hasRole("ADMIN")
                     .anyRequest().permitAll());
 
         http.authenticationProvider(authenticationProvider());

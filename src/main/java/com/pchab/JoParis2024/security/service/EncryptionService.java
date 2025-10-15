@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionService {
 
-    @Value("${AES_SECRET}") 
-    private static String aesSecret;
+    @Value("${JoParis2024.security.aesSecret}") 
+    private String aesSecret;
 
     private static final String ALGORITHM = "AES";
 
     public String encrypt(String data) throws Exception {
+        System.out.println("EncryptionService - AES Secret: " + aesSecret);
         SecretKeySpec secretKey = new SecretKeySpec(aesSecret.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -26,6 +27,7 @@ public class EncryptionService {
 
     // Déchiffrer une valeur
     public String decrypt(String encryptedData) throws Exception {
+        System.out.println("EncryptionService - AES Secret: " + aesSecret);
         SecretKeySpec secretKey = new SecretKeySpec(aesSecret.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);

@@ -82,30 +82,31 @@ public class TicketController {
     @Operation(summary = "List tickets for the authenticated user", description = "Returns a list of tickets associated with the authenticated user.")
     public ResponseEntity<?> listTickets(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
 
-        System.out.println("TICKET CONTROLLER - Listing tickets with token: " + authorizationHeader);  
+        System.out.println("****** TICKET CONTROLLER - Listing tickets with token: " + authorizationHeader);  
         ResponseEntity<?> responseUser = userController.getUserFromToken(authorizationHeader);
         if (!responseUser.getStatusCode().is2xxSuccessful() || responseUser.getBody() == null) {
             return ResponseEntity.status(401).body("Invalid user or unauthorized access");
         }
 
         User user = (User) responseUser.getBody();
-        //System.out.println("TICKET CONTROLLER - Retrieved user from token");
+        System.out.println("****** TICKET CONTROLLER - Retrieved user from token");
 
         // Implementation for listing tickets
         if (user == null) {
-            //System.err.println("TICKET CONTROLLER - No user found from token: " + authorizationHeader);
+            System.err.println("****** TICKET CONTROLLER - No user found from token: " + authorizationHeader);
             return ResponseEntity.status(401).body("Invalid user or unauthorized access");
         }
+
         Long userId = user.getId();
-        System.out.println("TICKET CONTROLLER - Listing tickets for user ID: " + userId);
+        System.out.println("****** TICKET CONTROLLER - Listing tickets for user ID: " + userId);
         List<Ticket> tickets = ticketService.getTicketsByUserId(userId);
         List<TicketListResponse> ticketList = new java.util.ArrayList<>();
         for (Ticket ticket : tickets) {
-            System.out.println("TICKET CONTROLLER - Ticket ID: " + ticket.getId() + ", Event: " + ticket.getEvent().getTitle() + ", Type: " + ticket.getTicketType());
+            System.out.println("****** TICKET CONTROLLER - Ticket ID: " + ticket.getId() + ", Event: " + ticket.getEvent().getTitle() + ", Type: " + ticket.getTicketType());
             TicketListResponse responseTicket = TicketListResponse.fromTicket(ticket);
             ticketList.add(responseTicket);
         }
-        System.out.println("TICKET CONTROLLER - List of tickets for user ID: " + userId + " - " + ticketList.toString());
+        System.out.println("****** TICKET CONTROLLER - List of tickets for user ID: " + userId + " - " + ticketList.toString());
         return ResponseEntity.ok(ticketList);
     }
 
