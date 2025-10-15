@@ -24,6 +24,7 @@ logging:
 JoParis2024:
     security:
         secret: ${JWT_SECRET}
+        aesSecret: ${AES_SECRET}
         expiration: 3600000 # 1 heure en millisecondes
 springdoc:
     api-docs:
