@@ -53,12 +53,12 @@ function displayTickets(tickets) {
         console.log("Processing ticket:", ticket);
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td class="px-4 py-3">${ticket.eventTitle}</td>
-            <td class="px-4 py-3">${ticket.eventSport}</td>
+            <td class="px-4 py-3">${sanitizeInput(ticket.eventTitle)}</td>
+            <td class="px-4 py-3">${sanitizeInput(ticket.eventSport)}</td>
             <td class="px-4 py-3">${formatLocalDateTime(ticket.eventDate)}</td>
-            <td class="px-4 py-3">${ticket.eventCity}</td>
-            <td class="px-4 py-3">${ticket.eventStadium}</td>
-            <td class="px-4 py-3">${ticket.ticketType}</td>
+            <td class="px-4 py-3">${sanitizeInput(ticket.eventCity)}</td>
+            <td class="px-4 py-3">${sanitizeInput(ticket.eventStadium)}</td>
+            <td class="px-4 py-3">${sanitizeInput(ticket.ticketType)}</td>
             <td>
                 <button id="eventDetailButton" onclick="showQRCode(${
                     ticket.ticketId
@@ -147,4 +147,12 @@ function displayQRCode(qrCodeData, ticketId) {
         button.classList.remove("bg-red-600", "hover:bg-red-800", "dark:bg-red-600", "dark:hover:bg-red-700");
         button.classList.add("bg-blue-600", "hover:bg-blue-800", "dark:bg-blue-600", "dark:hover:bg-blue-700");
     }
+}
+
+// Fonction pour échapper les caractères spéciaux dans une chaîne (prévention XSS)
+function sanitizeInput(input) {
+    const temp = document.createElement("div");
+    temp.innerText = input;
+    temp.remove();
+    return temp.innerHTML;
 }
