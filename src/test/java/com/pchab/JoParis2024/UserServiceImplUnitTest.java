@@ -16,6 +16,7 @@ import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.repository.UserRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.service.EncryptionService;
 import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.impl.UserServiceImpl;
 
@@ -24,6 +25,9 @@ public class UserServiceImplUnitTest {
     
     @Mock
     private TicketRepository ticketRepository;
+
+    @Mock
+    private EncryptionService encryptionService;
 
     @Mock
     private SecurityKey securityKey;
@@ -80,6 +84,11 @@ public class UserServiceImplUnitTest {
 
         String generatedUserKey = "mocked-user-key";
         when(securityKey.generateSecureKey()).thenReturn(generatedUserKey);
+            try {
+                when(encryptionService.encrypt(generatedUserKey)).thenReturn("mocked-encrypted-key");
+            } catch (Exception e) {
+                throw new RuntimeException("Error mocking encryptionService.encrypt", e);
+            }
         when(userRepository.save(newUser)).thenReturn(newUser);
 
         // Appel de la méthode à tester
@@ -92,6 +101,6 @@ public class UserServiceImplUnitTest {
         assertEquals("jane.smith@example.com", savedUser.getEmail());
         assertEquals("Jane", savedUser.getFirstName());
         assertEquals("Smith", savedUser.getLastName());
-        assertEquals(generatedUserKey, savedUser.getUserKey());
+        assertEquals("mocked-encrypted-key", savedUser.getUserKey());
     }
 }

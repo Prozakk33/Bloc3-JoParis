@@ -35,6 +35,7 @@ import com.pchab.JoParis2024.repository.EventRepository;
 import com.pchab.JoParis2024.repository.TicketRepository;
 import com.pchab.JoParis2024.security.jwt.JwtUtils;
 import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
+import com.pchab.JoParis2024.security.service.EncryptionService;
 import com.pchab.JoParis2024.security.service.SecurityKey;
 import com.pchab.JoParis2024.service.impl.TicketServiceImpl;
 
@@ -44,6 +45,9 @@ public class TicketServiceImplUnitTest {
     
     @Mock
     private TicketRepository ticketRepository;
+
+    @Mock
+    private EncryptionService encryptionService;
 
     @Mock
     private SecurityKey securityKey;
@@ -121,10 +125,15 @@ public class TicketServiceImplUnitTest {
 
         Ticket savedTicket = new Ticket();
         savedTicket.setId(1L);
+
         when(securityKey.generateSecureKey()).thenReturn("mocked-ticket-key");
         when(ticketRepository.save(newTicket)).thenReturn(savedTicket);
-        
-        
+        try {
+        when(encryptionService.encrypt("mocked-ticket-key")).thenReturn("mocked-encrypted-key");
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.encrypt", e);
+        }
+
         Ticket ticket = ticketServiceImpl.createTicket(newTicket);
         assertEquals(1L, ticket.getId());
         verify(ticketRepository, times(1)).save(newTicket);
@@ -136,6 +145,11 @@ public class TicketServiceImplUnitTest {
     public void testGenerateQRCodeImage() throws Exception {
         System.out.println("---- Test Generate QR Code Image ----");
         Long ticketId = 1L;
+
+        String mockedTicketKey = "mocked-ticket-key";
+        String mockedEncryptedTicketKey = "mocked-encrypted-ticketkey";
+        String mockedUserKey = "mocked-userkey";
+        String mockedEncryptedUserKey = "mock-encrypted-userkey";
 
         Event mockEvent = new Event();
         mockEvent.setId(1L);
@@ -151,19 +165,30 @@ public class TicketServiceImplUnitTest {
         mockUser.setLastName("Doe");
         mockUser.setEmail("john.doe@example.com");
         mockUser.setPassword("P@ssword12456");
-        mockUser.setUserKey("mock-userkey-valid");
+        mockUser.setUserKey(mockedEncryptedUserKey);
 
         Ticket mockTicket = new Ticket();
         mockTicket.setEvent(mockEvent);
         mockTicket.setUser(mockUser);
         mockTicket.setId(ticketId);
         mockTicket.setTicketType("Solo");
-        mockTicket.setTicketKey("mocked-ticket-key");
+        mockTicket.setTicketKey(mockedEncryptedTicketKey);
         mockTicket.setBuyDate(Timestamp.valueOf(LocalDateTime.now()));
 
         BitMatrix bitMatrix = new BitMatrix(200, 200);
 
         when(ticketRepository.findTicketById(ticketId)).thenReturn(mockTicket);
+        try {
+        when(encryptionService.decrypt(mockedEncryptedTicketKey)).thenReturn(mockedTicketKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.decrypt", e);
+        }
+        try {
+        when(encryptionService.decrypt(mockedEncryptedUserKey)).thenReturn(mockedUserKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.decrypt", e);
+        }
+        //when(barcodeWriter.encode(anyString(), any(), anyInt(), anyInt())).thenReturn(bitMatrix);
 
         TicketServiceImpl spyTicketService = org.mockito.Mockito.spy(ticketServiceImpl);
         BufferedImage mockedImage = new BufferedImage(301, 301, BufferedImage.TYPE_INT_RGB);
@@ -194,13 +219,18 @@ public class TicketServiceImplUnitTest {
     @Test
     public void  testVerifyTicket() throws Exception {
 
+        String mockedTicketKey = "mocked-ticket-key";
+        String mockedEncryptedTicketKey = "mocked-encrypted-ticketkey";
+        String mockedUserKey = "mocked-userkey";
+        String mockedEncryptedUserKey = "mock-encrypted-userkey";
+
         User mockUser = new User();
         mockUser.setId(1L);
         mockUser.setFirstName("John");
         mockUser.setLastName("Doe");
         mockUser.setEmail("john.doe@example.com");
         mockUser.setPassword("P@ssword12456");
-        mockUser.setUserKey("mock-userkey-valid");
+        mockUser.setUserKey(mockedEncryptedUserKey);
 
         Event mockEvent = new Event();
         mockEvent.setId(1L);
@@ -215,7 +245,7 @@ public class TicketServiceImplUnitTest {
         mockTicket.setEvent(mockEvent);
         mockTicket.setUser(mockUser);
         mockTicket.setTicketType("Solo");
-        mockTicket.setTicketKey("mocked-ticket-key");
+        mockTicket.setTicketKey(mockedEncryptedTicketKey);
         mockTicket.setBuyDate(Timestamp.valueOf(LocalDateTime.now()));
 
         Map<String, Object> mockDecodedData = Map.of(
@@ -231,7 +261,7 @@ public class TicketServiceImplUnitTest {
         );
 
         // Generate expected signature
-        String secretKey = mockUser.getUserKey() + mockTicket.getTicketKey();
+        String secretKey = mockedUserKey + mockedTicketKey;
         String input = mockTicket.getId().toString();
         
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
@@ -243,8 +273,19 @@ public class TicketServiceImplUnitTest {
         String qrCode = "1#" + expectedSignature;
 
         // Mock the dependencies
-        //when(eventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
         when(ticketRepository.findTicketById(1L)).thenReturn(mockTicket);
+        try {
+        when(encryptionService.decrypt(mockedEncryptedTicketKey)).thenReturn(mockedTicketKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.decrypt", e);
+        }
+        try {
+        when(encryptionService.decrypt(mockedEncryptedUserKey)).thenReturn(mockedUserKey);
+        } catch (Exception e) {
+            throw new RuntimeException("Error mocking encryptionService.decrypt", e);
+        }
+
+
 
         DecodeQRCodeResponse response = ticketServiceImpl.verifyTicket(qrCode);
         System.out.println("---- Test Verify Ticket Response ----");
