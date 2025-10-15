@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JoParis2024</a> &gt; <a href="index.source.html" class="el_package">com.pchab.JoParis2024.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.pchab.JoParis2024.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.pchab.JoParis2024.pojo.User;
+import com.pchab.JoParis2024.repository.UserRepository;
+import com.pchab.JoParis2024.security.jwt.JwtUtils;
+import com.pchab.JoParis2024.security.service.EncryptionService;
+import com.pchab.JoParis2024.security.service.SecurityKey;
+import com.pchab.JoParis2024.service.UserService;
+
+@Service
+
+<span class="fc" id="L16">public class UserServiceImpl implements UserService {</span>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EncryptionService encryptionService;
+
+    @Autowired 
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private SecurityKey securityKey;
+
+    @Override
+    public User findUserById(Long id) {
+<span class="fc" id="L32">        return userRepository.findById(id).orElse(null);</span>
+    }
+
+    @Override
+    public void createUser(User user) {
+<span class="fc" id="L37">        System.out.println(&quot;USERSERVICE-IMPL - Creating user: &quot; + user.getEmail());</span>
+<span class="fc" id="L38">        String userKey = securityKey.generateSecureKey();</span>
+
+<span class="fc" id="L40">        String encryptedUserKey = null;</span>
+        try {
+<span class="fc" id="L42">            encryptedUserKey = encryptionService.encrypt(userKey);</span>
+<span class="nc" id="L43">        } catch (Exception e) {</span>
+<span class="nc" id="L44">            System.err.println(&quot;USERSERVICE-IMPL - Error encrypting user key: &quot; + e.getMessage());</span>
+<span class="nc" id="L45">            throw new RuntimeException(&quot;Error encrypting user key&quot;, e);</span>
+<span class="fc" id="L46">        }</span>
+<span class="fc" id="L47">        user.setUserKey(encryptedUserKey);</span>
+<span class="fc" id="L48">        userRepository.save(user);</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public User findUserByEmail(String email) {
+<span class="fc" id="L53">        System.out.println(&quot;USERSERVICE-IMPL - Searching for user with email: &quot; + email);</span>
+        try {
+<span class="fc" id="L55">            User user = userRepository.findByEmail(email);</span>
+<span class="fc" id="L56">            System.out.println(&quot;USERSERVICE-IMPL - User found: &quot; + user);</span>
+<span class="fc" id="L57">            return user;</span>
+<span class="nc" id="L58">        } catch (Exception e) {</span>
+<span class="nc" id="L59">            throw new UsernameNotFoundException(&quot;User Not Found with email : &quot; + email);</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JoParis2024</a> &gt; <a href="index.source.html" class="el_package">com.pchab.JoParis2024.service.impl</a> &gt; <span class="el_source">TicketServiceImpl.java</span></div><h1>TicketServiceImpl.java</h1><pre class="source lang-java linenums">package com.pchab.JoParis2024.service.impl;
+
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.sql.Timestamp;
+import java.util.Base64;
+import java.util.List;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.pchab.JoParis2024.pojo.Ticket;
+import com.pchab.JoParis2024.repository.TicketRepository;
+import com.pchab.JoParis2024.security.payload.response.DecodeQRCodeResponse;
+import com.pchab.JoParis2024.security.service.EncryptionService;
+import com.pchab.JoParis2024.security.service.SecurityKey;
+import com.pchab.JoParis2024.service.TicketService;
+
+@Service
+<span class="fc" id="L30">public class TicketServiceImpl implements TicketService {</span>
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private EncryptionService encryptionService;
+
+    @Autowired
+    private SecurityKey securityKey;
+
+    @Override
+    public List&lt;Ticket&gt; getTicketsByUserId(Long userId) {
+<span class="fc" id="L43">        System.out.println(&quot;TicketServiceImpl - Fetching tickets for userId: &quot; + userId);</span>
+<span class="fc" id="L44">        return ticketRepository.findByUserId(userId);</span>
+    }
+
+    @Override
+    public List&lt;Ticket&gt; getTicketsByEventId(Long eventId) {
+<span class="fc" id="L49">        return ticketRepository.findByEventId(eventId);</span>
+    }
+
+    @Override
+    public Ticket getTicketById(Long id) {
+<span class="fc" id="L54">        return ticketRepository.findTicketById(id);</span>
+    }
+
+    @Override
+    public Ticket createTicket(Ticket ticket) {
+<span class="fc" id="L59">        String ticketKey = securityKey.generateSecureKey();</span>
+<span class="fc" id="L60">        String encryptedTicketKey = null;</span>
+            try {
+<span class="fc" id="L62">                encryptedTicketKey = encryptionService.encrypt(ticketKey);</span>
+<span class="fc" id="L63">            } catch (Exception e) {</span>
+<span class="fc" id="L64">                System.err.println(&quot;TicketServiceImpl - Error encrypting ticket key: &quot; + e.getMessage());</span>
+<span class="fc" id="L65">                throw new RuntimeException(&quot;Error encrypting ticket key&quot;, e);</span>
+<span class="fc" id="L66">            }</span>
+<span class="fc" id="L67">        ticket.setTicketKey(encryptedTicketKey);</span>
+<span class="fc" id="L68">        return ticketRepository.save(ticket);</span>
+    }
+
+    @Override
+    public BufferedImage generateQRCodeImage(Long ticketId) throws WriterException {
+
+<span class="fc" id="L74">        System.out.println(&quot;**** TicketServiceImpl - Generating QR Code for Ticket ID: &quot; + ticketId);</span>
+
+<span class="fc" id="L76">        Ticket ticket = ticketRepository.findTicketById(ticketId);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (ticket == null) {</span>
+<span class="nc" id="L78">            throw new IllegalArgumentException(&quot;Invalid ticket ID&quot;);</span>
+        }
+
+        // Prepare data for QR code
+
+        // Decrypt ticket key
+<span class="fc" id="L84">        String encryptedTicketKey = ticket.getTicketKey();</span>
+<span class="fc" id="L85">        String ticketKey = null;</span>
+        try {
+<span class="fc" id="L87">            ticketKey = encryptionService.decrypt(encryptedTicketKey);</span>
+<span class="nc" id="L88">        } catch (Exception e) {</span>
+<span class="nc" id="L89">            throw new RuntimeException(&quot;Error decrypting ticket key: &quot; + e.getMessage());</span>
+<span class="fc" id="L90">        }</span>
+
+        // Decrypt user key
+<span class="fc" id="L93">        String encryptedUserKey = ticket.getUser().getUserKey();</span>
+<span class="fc" id="L94">        String userKey = null;</span>
+        try {
+<span class="fc" id="L96">            userKey = encryptionService.decrypt(encryptedUserKey);</span>
+<span class="nc" id="L97">        } catch (Exception e) {</span>
+<span class="nc" id="L98">            throw new RuntimeException(&quot;Error decrypting user key: &quot; + e.getMessage());</span>
+<span class="fc" id="L99">        }</span>
+
+<span class="fc" id="L101">        String topText = ticket.getEvent().getTitle();</span>
+<span class="fc" id="L102">        String bottomText = ticket.getTicketType();</span>
+<span class="fc" id="L103">        Long userId = ticket.getUser().getId();</span>
+<span class="fc" id="L104">        Timestamp buyDate = ticket.getBuyDate();</span>
+
+<span class="pc bpc" id="L106" title="3 of 6 branches missed.">        if (userKey == null || ticketKey == null || buyDate == null) {</span>
+<span class="nc" id="L107">            throw new IllegalArgumentException(&quot;Invalid ticket data: userKey, ticketKey, or buyDate is null&quot;);</span>
+        }
+
+        // Generate Secret Key for QR Code
+<span class="fc" id="L111">        byte[] secret = ArrayUtils.addAll(userKey.getBytes(), ticketKey.getBytes());</span>
+
+        try {
+            // Create HMAC-SHA256 signature
+<span class="fc" id="L115">            SecretKeySpec secretKey = new SecretKeySpec(secret, &quot;HmacSHA256&quot;);</span>
+<span class="fc" id="L116">            Mac hmacSha256 = Mac.getInstance(&quot;HmacSHA256&quot;);</span>
+<span class="fc" id="L117">            hmacSha256.init(secretKey);</span>
+
+            // Concatenate all input data
+<span class="fc" id="L120">            String input = ticketId.toString();</span>
+<span class="fc" id="L121">            byte[] signatureH_bytes = hmacSha256.doFinal(input.getBytes());</span>
+
+<span class="fc" id="L123">            String signature = Base64.getEncoder().encodeToString(signatureH_bytes);</span>
+
+            // Convert to Base64 String
+<span class="fc" id="L126">            String qrCodeData = ticketId + &quot;#&quot; + signature;</span>
+
+
+<span class="fc" id="L129">            System.out.println(&quot;**** Generating QR Code for Ticket ID: &quot; + ticketId);</span>
+<span class="fc" id="L130">            System.out.println(&quot;**** User Id = &quot; + userId);</span>
+<span class="fc" id="L131">            System.out.println(&quot;**** User Key = &quot; + userKey);</span>
+<span class="fc" id="L132">            System.out.println(&quot;**** Ticket Key = &quot; + ticketKey);</span>
+<span class="fc" id="L133">            System.out.println(&quot;**** Top Text: &quot; + topText);</span>
+<span class="fc" id="L134">            System.out.println(&quot;**** Bottom Text: &quot; + bottomText);</span>
+<span class="fc" id="L135">            System.out.println(&quot;**** QR Code Data: &quot; + qrCodeData);</span>
+
+<span class="fc" id="L137">            QRCodeWriter barcodeWriter = new QRCodeWriter();</span>
+<span class="fc" id="L138">            BitMatrix matrix = barcodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, 300, 300);</span>
+<span class="fc" id="L139">            return modifiedQRCode(matrix, topText, bottomText);</span>
+
+<span class="nc" id="L141">        } catch (Exception e) {</span>
+<span class="nc" id="L142">            throw new RuntimeException(&quot;Error generating QR code: &quot; + e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public BufferedImage modifiedQRCode(BitMatrix matrix, String topText, String bottomText) {
+<span class="fc" id="L148">        int matrixWidth = matrix.getWidth();</span>
+<span class="fc" id="L149">        int matrixHeight = matrix.getHeight();</span>
+
+<span class="fc" id="L151">        BufferedImage image = new BufferedImage(matrixWidth, matrixHeight, BufferedImage.TYPE_INT_RGB);</span>
+<span class="fc" id="L152">        Graphics2D graphics = image.createGraphics();</span>
+<span class="fc" id="L153">        graphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L154">        graphics.fillRect(0, 0, matrixWidth, matrixHeight);</span>
+<span class="fc" id="L155">        graphics.setColor(Color.BLACK);</span>
+
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for (int i = 0; i &lt; matrixWidth; i++) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            for (int j = 0; j &lt; matrixHeight; j++) {</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">                if (matrix.get(i, j)) {</span>
+<span class="nc" id="L160">                    graphics.fillRect(i, j, 1, 1);</span>
+                }
+            }
+        }
+<span class="fc" id="L164">        FontMetrics fontMetrics = graphics.getFontMetrics();</span>
+<span class="fc" id="L165">        int topTextWidth = fontMetrics.stringWidth(topText);</span>
+<span class="fc" id="L166">        int bottomTextWidth = fontMetrics.stringWidth(bottomText);</span>
+<span class="fc" id="L167">        int finalWidth = Math.max(matrixWidth, Math.max(topTextWidth, bottomTextWidth)) + 1;</span>
+<span class="fc" id="L168">        int finalHeight = matrixHeight + fontMetrics.getHeight() + fontMetrics.getAscent() + 1;</span>
+
+<span class="fc" id="L170">        BufferedImage finalImage = new BufferedImage(finalWidth, finalHeight, BufferedImage.TYPE_INT_RGB);</span>
+<span class="fc" id="L171">        Graphics2D finalGraphics = finalImage.createGraphics();</span>
+<span class="fc" id="L172">        finalGraphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L173">        finalGraphics.fillRect(0, 0, finalWidth, finalHeight);</span>
+<span class="fc" id="L174">        finalGraphics.setColor(Color.BLACK);</span>
+
+<span class="fc" id="L176">        finalGraphics.drawImage(image, (finalWidth - matrixWidth) / 2, fontMetrics.getAscent() + 2, null);</span>
+<span class="fc" id="L177">        finalGraphics.drawString(topText, (finalWidth - topTextWidth) / 2, fontMetrics.getAscent() + 2);</span>
+<span class="fc" id="L178">        finalGraphics.drawString(bottomText, (finalWidth - bottomTextWidth) / 2, finalHeight - fontMetrics.getDescent() - 5);</span>
+
+<span class="fc" id="L180">        return finalImage;</span>
+    }
+
+    @Override
+    public DecodeQRCodeResponse verifyTicket (String qrCode) {
+
+        //System.out.println(&quot;**** TicketServiceImpl - Verifying ticket&quot;);
+        // Check if the token is valid
+<span class="pc bpc" id="L188" title="2 of 4 branches missed.">        if (qrCode == null || qrCode.isEmpty()) {</span>
+<span class="nc" id="L189">            throw new IllegalArgumentException(&quot;**** TicketServiceImpl - QR Code is null or empty&quot;);</span>
+        }
+
+        // Decode the QR code data
+<span class="fc" id="L193">        String[] parts = qrCode.split(&quot;#&quot;);</span>
+<span class="fc" id="L194">        Long ticketId = Long.parseLong(parts[0]);</span>
+<span class="fc" id="L195">        String signature = parts[1];</span>
+
+        // Retrieve the ticket from the database
+<span class="fc" id="L198">        Ticket ticket = ticketRepository.findTicketById(ticketId);</span>
+<span class="fc" id="L199">        String encryptedTicketKey = ticket.getTicketKey();</span>
+
+        // Decode ticket key
+<span class="fc" id="L202">        String ticketKey = null;</span>
+        try {
+<span class="fc" id="L204">            ticketKey = encryptionService.decrypt(encryptedTicketKey);</span>
+<span class="nc" id="L205">        } catch (Exception e) {</span>
+<span class="nc" id="L206">            throw new RuntimeException(&quot;Error decrypting ticket key: &quot; + e.getMessage());</span>
+<span class="fc" id="L207">        }</span>
+
+        // Decode user key
+<span class="fc" id="L210">        String encryptedUserKey = ticket.getUser().getUserKey();</span>
+<span class="fc" id="L211">        String userKey = null;</span>
+        try {
+<span class="fc" id="L213">            userKey = encryptionService.decrypt(encryptedUserKey);</span>
+<span class="nc" id="L214">        } catch (Exception e) {</span>
+<span class="nc" id="L215">            throw new RuntimeException(&quot;Error decrypting user key: &quot; + e.getMessage());</span>
+<span class="fc" id="L216">        }</span>
+
+<span class="pc bpc" id="L218" title="3 of 6 branches missed.">        if (ticket == null || ticketKey == null || userKey == null) {</span>
+<span class="nc" id="L219">            throw new IllegalArgumentException(&quot;**** TicketServiceImpl - Ticket not found&quot;);</span>
+        }
+
+        // Verify the signature
+        //System.out.println(&quot;**** TicketServiceImpl - Ticket found : &quot; + ticket.toString());
+<span class="fc" id="L224">        String expectedSignature = null;</span>
+        try {
+<span class="fc" id="L226">            String secretKey = userKey + ticketKey;</span>
+<span class="fc" id="L227">            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), &quot;HmacSHA256&quot;);</span>
+<span class="fc" id="L228">            Mac hmacSha256 = Mac.getInstance(&quot;HmacSHA256&quot;);</span>
+<span class="fc" id="L229">            hmacSha256.init(secretKeySpec);</span>
+
+<span class="fc" id="L231">            String input = ticketId.toString();</span>
+<span class="fc" id="L232">            byte[] expectedSignatureBytes = hmacSha256.doFinal(input.getBytes());</span>
+<span class="fc" id="L233">            expectedSignature = Base64.getEncoder().encodeToString(expectedSignatureBytes);</span>
+<span class="nc" id="L234">        } catch (Exception e) {</span>
+<span class="nc" id="L235">            throw new RuntimeException(&quot;Error verifying ticket: &quot; + e.getMessage());</span>
+<span class="fc" id="L236">        }</span>
+        
+        // Fetch event details
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        if (!signature.equals(expectedSignature)) {</span>
+<span class="nc" id="L240">            throw new IllegalArgumentException(&quot;-- TicketServiceImpl - Ticket not valid: signature mismatch&quot;);</span>
+        }
+/*
+        System.out.println(&quot;**** TicketServiceImpl - Event found for the ticket: &quot; + ticket.getEvent().getTitle());
+        System.out.println(&quot;**** TicketServiceImpl - Ticket belongs to: &quot; + ticket.getUser().getFirstName() + &quot; &quot; + ticket.getUser().getLastName());
+        System.out.println(&quot;**** TicketServiceImpl - Ticket type: &quot; + ticket.getTicketType());
+        System.out.println(&quot;**** TicketServiceImpl - Ticket buy date: &quot; + ticket.getBuyDate());
+        System.out.println(&quot;**** TicketServiceImpl - Event date: &quot; + ticket.getEvent().getDate());
+        System.out.println(&quot;**** TicketServiceImpl - Event city: &quot; + ticket.getEvent().getCity().toString());
+        System.out.println(&quot;**** TicketServiceImpl - Ticket verification completed successfully&quot;);
+*/
+        // Map the token parts to the response fields
+<span class="fc" id="L252">        DecodeQRCodeResponse response = new DecodeQRCodeResponse();</span>
+<span class="fc" id="L253">        response.setUserFirstName((String) ticket.getUser().getFirstName());</span>
+<span class="fc" id="L254">        response.setUserLastName((String) ticket.getUser().getLastName());</span>
+<span class="fc" id="L255">        response.setTicketBuyDate(ticket.getBuyDate());</span>
+<span class="fc" id="L256">        response.setEventTitle(ticket.getEvent().getTitle());</span>
+<span class="fc" id="L257">        response.setEventCity((String) ticket.getEvent().getCity().toString());</span>
+<span class="fc" id="L258">        response.setEventDate(ticket.getEvent().getDate());</span>
+<span class="fc" id="L259">        response.setTicketType((String) ticket.getTicketType());</span>
+
+        //System.out.println(&quot;********** Ticket verification successful: &quot; + response.toString());
+<span class="fc" id="L262">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
