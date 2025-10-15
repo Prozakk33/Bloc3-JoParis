@@ -29,7 +29,13 @@ document.getElementById("signUpForm").addEventListener("submit", async function 
         document.getElementById("errorEmail").innerText = "L'Email doit être saisi.";
         return;
     } else {
-        document.getElementById("errorEmail").innerText = "";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Vérification du format de l'email
+        if (!emailRegex.test(email)) {
+            document.getElementById("errorEmail").innerText = "L'Email n'est pas valide.";
+            return;
+        } else {
+            document.getElementById("errorEmail").innerText = "";
+        }
     }
 
     if (password == "") {
@@ -52,7 +58,12 @@ document.getElementById("signUpForm").addEventListener("submit", async function 
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ firstName, lastName, email, password }),
+            body: JSON.stringify({
+                firstName: sanitizeInput(firstName),
+                lastName: sanitizeInput(lastName),
+                email: sanitizeInput(email),
+                password: sanitizeInput(password),
+            }),
         });
 
         if (response.ok) {
@@ -68,3 +79,11 @@ document.getElementById("signUpForm").addEventListener("submit", async function 
         document.getElementById("errorMessage").innerText = error.message;
     }
 });
+
+// Fonction pour échapper les caractères spéciaux dans une chaîne (prévention XSS)
+function sanitizeInput(input) {
+    const temp = document.createElement("div");
+    temp.innerText = input;
+    temp.remove();
+    return temp.innerHTML;
+}

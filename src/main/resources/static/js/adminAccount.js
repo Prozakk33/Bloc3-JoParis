@@ -73,31 +73,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (let i = startIndex; i < endIndex; i++) {
             const event = events[i];
             const row = document.createElement("tr");
-            row.id = `${event.eventId}`;
+            row.id = `${sanitizeInput(event.eventId)}`;
 
             row.innerHTML = `
-                <td class="px-4 py-3">${event.eventTitle}</td>
-                <td class="px-4 py-3">${event.eventSport}</td>
-                <td class="px-4 py-3">${formatLocalDateTime(event.eventDate)}</td>
-                <td class="px-4 py-3">${event.eventCity}</td>
-                <td class="px-4 py-3">${event.eventStadium}</td>
-                <td class="px-4 py-3">${event.totalTicketsSold || 0}</td>
-                <td class="px-4 py-3">${event.totalRevenue ? event.totalRevenue.toFixed(2) + " €" : "0.00 €"}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.eventTitle)}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.eventSport)}</td>
+                <td class="px-4 py-3">${sanitizeInput(formatLocalDateTime(event.eventDate))}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.eventCity)}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.eventStadium)}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.totalTicketsSold) || 0}</td>
+                <td class="px-4 py-3">${sanitizeInput(
+                    event.totalRevenue ? event.totalRevenue.toFixed(2) + " €" : "0.00 €"
+                )}</td>
                 <td>
-                    <button id="eventModifyButton" onclick="showModifyEventForm(${
-                        event.eventId
-                    })" class="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Modifier</button>
+                    <button id="eventModifyButton" onclick="showModifyEventForm(${event.eventId})"
+                    class="text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Modifier
+                    </button>
                 </td>
             `;
             tbody.appendChild(row);
 
             // Créer une ligne pour l'accordéon (initialement masquée)
             const accordionRow = document.createElement("tr");
-            accordionRow.classList.add(`accordion-row-${event.eventId}`, "hidden");
-            accordionRow.id = `accordion-row-${event.eventId}`;
+            accordionRow.classList.add(`accordion-row-${sanitizeInput(event.eventId)}`, "hidden");
+            accordionRow.id = `accordion-row-${sanitizeInput(event.eventId)}`;
             accordionRow.innerHTML = `
             <td colspan="8">
-                <div class="grid accordion-content justify-items-center" id="accordion-${event.eventId}">
+                <div class="grid accordion-content justify-items-center" id="accordion-${sanitizeInput(event.eventId)}">
                     <!-- Le contenu du QR code sera inséré ici -->
                 </div>
             </td>
@@ -300,6 +303,7 @@ function hideNewEventForm() {
 // Show the modify event form
 async function showModifyEventForm(eventId) {
     // Créer un accordéon pour afficher le formulaire de modification
+    eventId = sanitizeInput(eventId);
     const accordionContent = document.getElementById(`accordion-${eventId}`);
     accordionContent.innerHTML = `
             <div class="accordion-body text-center justify-items-center h-full">
@@ -462,14 +466,14 @@ async function createEvent() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                eventTitle,
-                eventSport,
-                eventDate,
-                eventCity,
-                eventStadium,
-                eventDescription,
-                eventCapacity,
-                eventPrice,
+                eventTitle: sanitizeInput(eventTitle),
+                eventSport: sanitizeInput(eventSport),
+                eventDate: sanitizeInput(eventDate),
+                eventCity: sanitizeInput(eventCity),
+                eventStadium: sanitizeInput(eventStadium),
+                eventDescription: sanitizeInput(eventDescription),
+                eventCapacity: sanitizeInput(eventCapacity),
+                eventPrice: sanitizeInput(eventPrice),
             }),
         });
         if (!response.ok) {
@@ -501,6 +505,7 @@ document.addEventListener("submit", async function (event) {
 async function modifyEvent(eventId) {
     console.log("Modifier l'événement avec l'ID :", eventId);
     // Récupérer les valeurs du formulaire
+    enventId = sanitizeInput(eventId);
 
     // Check si formulaire est OK
     if (document.getElementById(`modifiedTitle-${eventId}`).value == "") {
@@ -572,14 +577,14 @@ async function modifyEvent(eventId) {
             },
             body: JSON.stringify({
                 eventId,
-                eventTitle,
-                eventSport,
-                eventDate,
-                eventCity,
-                eventStadium,
-                eventDescription,
-                eventCapacity,
-                eventPrice,
+                eventTitle: sanitizeInput(eventTitle),
+                eventSport: sanitizeInput(eventSport),
+                eventDate: sanitizeInput(eventDate),
+                eventCity: sanitizeInput(eventCity),
+                eventStadium: sanitizeInput(eventStadium),
+                eventDescription: sanitizeInput(eventDescription),
+                eventCapacity: sanitizeInput(eventCapacity),
+                eventPrice: sanitizeInput(eventPrice),
             }),
         });
         if (!response.ok) {
@@ -608,4 +613,12 @@ function hideModifyEventForm(eventId) {
     accordionContent.innerHTML = "";
     accordionRow.classList.add("hidden");
     //accordionRow.innerHTML = "";
+}
+
+// Fonction pour échapper les caractères spéciaux dans une chaîne (prévention XSS)
+function sanitizeInput(input) {
+    const temp = document.createElement("div");
+    temp.innerText = input;
+    temp.remove();
+    return temp.innerHTML;
 }
