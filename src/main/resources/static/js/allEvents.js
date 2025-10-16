@@ -8,9 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(apiUrl)
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error(
-                        "Erreur lors de la récupération des événements"
-                    );
+                    throw new Error("Erreur lors de la récupération des événements");
                 }
                 return response.json(); // Convertir la réponse en JSON
             })
@@ -49,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const event = events[i];
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td class="px-4 py-3">${event.title}</td>
-                <td class="px-4 py-3">${event.sport}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.title)}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.sport)}</td>
                 <td class="px-4 py-3">${formatLocalDateTime(event.date)}</td>
-                <td class="px-4 py-3">${event.city}</td>
-                <td class="px-4 py-3">${event.stadium}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.city)}</td>
+                <td class="px-4 py-3">${sanitizeInput(event.stadium)}</td>
                 <td>
                     <a id="eventDetailButton" href="/eventDetail.html?id=${
                         event.id
@@ -75,8 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 1; i <= totalPages; i++) {
             const button = document.createElement("button");
             button.textContent = i;
-            button.className =
-                "px-4 py-2 mx-1 bg-blue-600 text-white rounded hover:bg-blue-800";
+            button.className = "px-4 py-2 mx-1 bg-blue-600 text-white rounded hover:bg-blue-800";
             if (i === currentPage) {
                 button.classList.add("bg-blue-800"); // Mettre en surbrillance la page actuelle
             }
@@ -91,3 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Appeler la fonction pour récupérer les événements
     fetchEvents();
 });
+
+// Fonction pour échapper les caractères spéciaux dans une chaîne (prévention XSS)
+function sanitizeInput(input) {
+    const temp = document.createElement("div");
+    temp.innerText = input;
+    temp.remove();
+    return temp.innerHTML;
+}
