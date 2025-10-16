@@ -29,6 +29,8 @@ public class Ticket {
 
     private String ticketType;
 
+    private Timestamp controlDate;
+
     //private Long userId;
 
     //private Long eventId;
