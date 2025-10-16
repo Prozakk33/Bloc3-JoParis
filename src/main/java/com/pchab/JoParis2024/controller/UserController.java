@@ -27,16 +27,12 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
-  // Find a user by ID
-    //@Operation(summary = "Find user by ID", description = "Retrieve user details by their ID")
-    //@GetMapping("/id/{id}")
+    // Find a user by ID
     public User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
  
     // Find a user by email
-    //@Operation(summary = "Find user by email", description = "Retrieve user details by their email address")
-    //@GetMapping("/email/{email}")
     public User findByEmail(@PathVariable String email) {
         System.out.println("USERCONTROLLER - Searching for user with email: " + email);
         try {
@@ -47,8 +43,7 @@ public class UserController {
         }
     }
 
-    //@PostMapping("/userId")
-    //@Operation(summary = "Get user Id", description = "Retrieve user Id using JWT token")
+    // Get user from JWT token
     public ResponseEntity<User> getUserFromToken(@RequestHeader (value = "Authorization", required = true) String authorizationHeader) {
         System.out.println("USERID AUTH-CONTROLLER - Accessing userId with token: " + authorizationHeader);
 
