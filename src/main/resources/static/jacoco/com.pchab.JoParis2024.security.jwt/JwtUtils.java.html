@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JoParis2024</a> &gt; <a href="index.source.html" class="el_package">com.pchab.JoParis2024.security.jwt</a> &gt; <span class="el_source">JwtUtils.java</span></div><h1>JwtUtils.java</h1><pre class="source lang-java linenums">package com.pchab.JoParis2024.security.jwt;
+import java.security.Key;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import com.pchab.JoParis2024.security.service.UserDetailsImpl;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
+@EnableConfigurationProperties
+@Component
+<span class="fc" id="L27">public class JwtUtils {</span>
+
+
+    @Value(&quot;${JoParis2024.security.secret}&quot;)
+    private String jwtSecret;
+
+    @Value(&quot;${JoParis2024.security.expiration}&quot;)
+    private long jwtExpirationMs;
+
+<span class="fc" id="L36">    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);</span>
+    
+    // Valider le token
+    public boolean validateJwtToken(String token) {
+<span class="fc" id="L40">        System.out.println(&quot;-- JWTUtils - Validating JWT token: &quot; + token);</span>
+        try {
+            // Logique de validation du token
+<span class="fc" id="L43">            Jwts.parserBuilder().setSigningKey(key()).build().parse(token);</span>
+<span class="fc" id="L44">            return true;</span>
+<span class="fc" id="L45">        } catch (MalformedJwtException e) {</span>
+            // Gérer les exceptions de validation
+<span class="fc" id="L47">            logger.error(&quot;-- JWTUtils - Invalid JWT token: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L48">            return false;</span>
+<span class="nc" id="L49">        } catch (ExpiredJwtException e) {</span>
+            // Token expiré
+<span class="nc" id="L51">            logger.error(&quot;-- JWTUtils - JWT token is expired: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L52">            return false;</span>
+<span class="nc" id="L53">        } catch (UnsupportedJwtException e) {</span>
+            // Token non supporté
+<span class="nc" id="L55">            logger.error(&quot;-- JWTUtils - JWT token is unsupported: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L56">            return false;</span>
+<span class="fc" id="L57">        } catch (IllegalArgumentException e) {</span>
+            // Token vide ou null
+<span class="fc" id="L59">            logger.error(&quot;-- JWTUtils - JWT claims string is empty: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L60">            return false;</span>
+        }
+    }
+
+    // Clé secrète pour la signature du token
+    private Key key(){
+<span class="fc" id="L66">        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));</span>
+    }
+
+    // Génération du Token
+    public String generateJwtToken(Authentication authentication) {
+<span class="fc" id="L71">        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();</span>
+
+<span class="fc" id="L73">        System.out.println(&quot;-- JWTUtils - Generating JWT token for user: &quot; + userPrincipal.getUsername());</span>
+<span class="fc" id="L74">        System.out.println(&quot;-- JWTUtils - Token will expire in (ms): &quot; + jwtExpirationMs);</span>
+
+<span class="fc" id="L76">        return Jwts.builder()</span>
+<span class="fc" id="L77">                .setSubject(userPrincipal.getUsername())</span>
+<span class="fc" id="L78">                .claim(&quot;role&quot;, userPrincipal.getAuthorities())</span>
+<span class="fc" id="L79">                .setIssuedAt(new Date())</span>
+<span class="fc" id="L80">                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))</span>
+<span class="fc" id="L81">                .signWith(key(), SignatureAlgorithm.HS256)</span>
+<span class="fc" id="L82">                .compact();</span>
+    }
+
+    public String getEmailFromJwtToken(String token) {
+<span class="fc" id="L86">        return Jwts.parserBuilder().setSigningKey(key()).build()</span>
+<span class="fc" id="L87">                .parseClaimsJws(token).getBody().getSubject();</span>
+    }
+
+    public String getFirstNameFromJwtToken(String token) {
+<span class="fc" id="L91">        return Jwts.parserBuilder().setSigningKey(key()).build()</span>
+<span class="fc" id="L92">                .parseClaimsJws(token).getBody().get(&quot;firstName&quot;, String.class);</span>
+    }
+
+    public String getLastNameFromJwtToken(String token) {
+<span class="fc" id="L96">        return Jwts.parserBuilder().setSigningKey(key()).build()</span>
+<span class="fc" id="L97">                .parseClaimsJws(token).getBody().get(&quot;lastName&quot;, String.class);</span>
+    }
+
+    public String generateUserKeyToken(String email, String firstName, String lastName) {
+<span class="fc" id="L101">        return Jwts.builder()</span>
+<span class="fc" id="L102">                .setSubject(email)</span>
+<span class="fc" id="L103">                .claim(&quot;firstName&quot;, firstName)</span>
+<span class="fc" id="L104">                .claim(&quot;lastName&quot;, lastName)</span>
+<span class="fc" id="L105">                .setIssuedAt(new Date())</span>
+<span class="fc" id="L106">                .signWith(key(), SignatureAlgorithm.HS256)</span>
+<span class="fc" id="L107">                .compact();</span>
+    }
+
+
+    public String generateTicketKeyToken(String firstName, String lastName,  Timestamp buyDate, Long eventId, String ticketType) {
+<span class="fc" id="L112">        return Jwts.builder()</span>
+<span class="fc" id="L113">                .setSubject(&quot;Ticket&quot;)</span>
+<span class="fc" id="L114">                .claim(&quot;firstName&quot;, firstName)</span>
+<span class="fc" id="L115">                .claim(&quot;lastName&quot;, lastName)</span>
+<span class="fc" id="L116">                .claim(&quot;buyDate&quot;, buyDate)</span>
+<span class="fc" id="L117">                .claim(&quot;eventId&quot;, eventId)</span>
+<span class="fc" id="L118">                .claim(&quot;ticketType&quot;, ticketType)</span>
+<span class="fc" id="L119">                .setIssuedAt(new Date())</span>
+<span class="fc" id="L120">                .signWith(key(), SignatureAlgorithm.HS256)</span>
+<span class="fc" id="L121">                .compact();</span>
+    }
+
+    public Map&lt;String, Object&gt; decodeTicketToken(String token) {
+
+<span class="fc" id="L126">        System.out.println(&quot;-- JWTUtils - Decoding ticket token&quot;);</span>
+        try {
+<span class="fc" id="L128">            var claims = Jwts.parserBuilder().setSigningKey(key()).build()</span>
+<span class="fc" id="L129">                    .parseClaimsJws(token).getBody();</span>
+<span class="fc" id="L130">            Map&lt;String, Object&gt; ticketData = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L131">            ticketData.put(&quot;firstName&quot;, claims.get(&quot;firstName&quot;));</span>
+<span class="fc" id="L132">            ticketData.put(&quot;lastName&quot;, claims.get(&quot;lastName&quot;));</span>
+<span class="fc" id="L133">            ticketData.put(&quot;buyDate&quot;, claims.get(&quot;buyDate&quot;));</span>
+<span class="fc" id="L134">            ticketData.put(&quot;ticketType&quot;, claims.get(&quot;ticketType&quot;));</span>
+<span class="fc" id="L135">            ticketData.put(&quot;eventId&quot;, claims.get(&quot;eventId&quot;));</span>
+           
+<span class="fc" id="L137">            return ticketData;</span>
+<span class="nc" id="L138">        } catch (Exception e) {</span>
+<span class="nc" id="L139">            logger.error(&quot;-- JWTUtils - Error decoding ticket token: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L140">            return null;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

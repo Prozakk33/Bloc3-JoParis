@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewEventRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JoParis2024</a> &gt; <a href="index.source.html" class="el_package">com.pchab.JoParis2024.security.payload.request</a> &gt; <span class="el_source">NewEventRequest.java</span></div><h1>NewEventRequest.java</h1><pre class="source lang-java linenums">package com.pchab.JoParis2024.security.payload.request;
+
+import java.time.LocalDateTime;
+
+import com.pchab.JoParis2024.pojo.CityEnum;
+import com.pchab.JoParis2024.pojo.SportEnum;
+
+import lombok.Data;
+
+@Data
+public class NewEventRequest {
+    private String eventTitle;
+    private String eventDescription;
+    private LocalDateTime eventDate;
+    private SportEnum eventSport;
+    private String eventStadium;
+    private CityEnum eventCity;
+    private Integer eventCapacity;
+    private Float eventPrice;
+
+
+    // Getters and Setters
+    public String getEventTitle() {
+<span class="fc" id="L24">        return eventTitle;</span>
+    }
+    public void setEventTitle(String eventTitle) {
+<span class="fc" id="L27">        this.eventTitle = eventTitle;</span>
+<span class="fc" id="L28">    }</span>
+
+    public void setEventDescription(String eventDescription) {
+<span class="fc" id="L31">        this.eventDescription = eventDescription;</span>
+<span class="fc" id="L32">    }</span>
+    public String getEventDescription() {
+<span class="fc" id="L34">        return eventDescription;</span>
+    }
+
+    public void setEventDate(LocalDateTime eventDate) {
+<span class="fc" id="L38">        this.eventDate = eventDate;</span>
+<span class="fc" id="L39">    }</span>
+    public LocalDateTime getEventDate() {
+<span class="fc" id="L41">        return eventDate;</span>
+    }
+
+    public void setEventSport(SportEnum eventSport) {
+<span class="fc" id="L45">        this.eventSport = eventSport;</span>
+<span class="fc" id="L46">    }</span>
+    public SportEnum getEventSport() {
+<span class="fc" id="L48">        return eventSport;</span>
+    }
+
+    public void setEventCity(CityEnum eventCity) {
+<span class="fc" id="L52">        this.eventCity = eventCity;</span>
+<span class="fc" id="L53">    }</span>
+    public CityEnum getEventCity() {
+<span class="fc" id="L55">        return eventCity;</span>
+    }
+
+    public void setEventPrice(Float eventPrice) {
+<span class="fc" id="L59">        this.eventPrice = eventPrice;</span>
+<span class="fc" id="L60">    }</span>
+    public Float getEventPrice() {
+<span class="fc" id="L62">        return eventPrice;</span>
+    }
+    public void setEventCapacity(Integer eventCapacity) {
+<span class="fc" id="L65">        this.eventCapacity = eventCapacity;</span>
+<span class="fc" id="L66">    }</span>
+    public Integer getEventCapacity() {
+<span class="fc" id="L68">        return eventCapacity;</span>
+    }
+
+    public void setEventStadium(String eventStadium) {
+<span class="fc" id="L72">        this.eventStadium = eventStadium;</span>
+<span class="fc" id="L73">    }</span>
+    public String getEventStadium() {
+<span class="fc" id="L75">        return eventStadium;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
