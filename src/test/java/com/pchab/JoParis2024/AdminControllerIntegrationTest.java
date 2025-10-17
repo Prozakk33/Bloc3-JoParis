@@ -50,23 +50,25 @@ public class AdminControllerIntegrationTest {
         // Convertir l'objet en JSON
         String eventJson = """
             {
-            "id": 1,
-            "title": "France - Italie",
-            "description": "Match d'ouverture du tournoi de football",
-            "city": "PARIS",
-            "stadium": "Stade de France",
-            "date": "2025-10-16T16:06:37.754",
-            "capacity": 2000,
-            "sport": "FOOTBALL",
-            "price": 25.0
+            "eventTitle": "France - Italie",
+            "eventDescription": "Match d'ouverture du tournoi de football",
+            "eventDate": "2025-10-16T16:06:37.754",
+            "eventSport": "FOOTBALL",
+            "eventCity": "PARIS",
+            "eventCapacity": 2000,
+            "eventPrice": 25.0,
+            "eventStadium": "Stade de France"
             }
         """;
 
         // Configurer le comportement du mock
-        when(eventService.createEvent(event)).thenReturn(event);
+        when(eventService.createEvent(Mockito.any(Event.class))).thenReturn(event);
+
+        //System.out.println("************** Event JSON: " + eventJson);
 
         // Exécuter la requête et vérifier la réponse
         mockMvc.perform(post("/admin/createEvent")
+                .header("Authorization", "Bearer " + "mock-admin-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(eventJson))
                 .andExpect(status().isOk());
@@ -89,15 +91,15 @@ public class AdminControllerIntegrationTest {
 
         String eventJson = """
             {
-            "ID": 1,
-            "Title": "France - Italie",
-            "Description": "Match d'ouverture du tournoi de football",
-            "City": "PARIS",
-            "Stadium": "Stade de France",
-            "Date": "2025-10-16T16:06:37.754",
-            "Capacity": 2000,
-            "Sport": "FOOTBALL",
-            "Price": 25.0
+            "eventId": 1,
+            "eventTitle": "France - Italie",
+            "eventDescription": "Match d'ouverture du tournoi de football",
+            "eventCity": "PARIS",
+            "eventStadium": "Stade de France",
+            "eventDate": "2025-10-16T16:06:37.754",
+            "eventCapacity": 2000,
+            "eventSport": "FOOTBALL",
+            "eventPrice": 25.0
             }
         """;
 
@@ -105,7 +107,8 @@ public class AdminControllerIntegrationTest {
         when(eventService.updateEvent(Mockito.any(Event.class), Mockito.eq(eventId))).thenReturn(updatedEvent);
 
         // Exécuter la requête et vérifier la réponse
-        mockMvc.perform(put("/admin/updateEvent", eventId)
+        mockMvc.perform(put("/admin/updateEvent")
+                .header("Authorization", "Bearer " + "mock-admin-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(eventJson))
                 .andExpect(status().isOk());

@@ -57,20 +57,24 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-        System.err.println("AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
+        //System.err.println("*************** AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        System.out.println("AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
+        //System.out.println("*************** AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtUtils.generateJwtToken(authentication);
+        //System.out.println("*************** AUTH-CONTROLLER - Generated JWT token for email: " + loginRequest.getEmail());
+        //System.out.println("*************** AUTH-CONTROLLER - JWT Token: " + jwt);
+
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        //System.out.println("*************** AUTH-CONTROLLER - UserDetails: " + userDetails.getUsername());
      
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername()));
         } catch (Exception e) {
-            System.err.println("AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
+            //System.err.println("*************** AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
             return ResponseEntity
                     .badRequest()
                     .body("Erreur: Email ou mot de passe invalide");
@@ -80,34 +84,34 @@ public class AuthController {
     //@PostMapping("/account")
     //@Operation(summary = "Get user account", description = "Retrieve user account details using JWT token")
     public ResponseEntity<?> account(String authorizationHeader) {
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Accessing account with token: " + authorizationHeader);
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
         }
 
         // Extraire le token JWT de l'en-tête Authorization
         String token = authorizationHeader.substring(7); // Supprime "Bearer " pour obtenir le token
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
         
         if (!jwtUtils.validateJwtToken(token)) {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Token invalide");
         }
 
         // Si le token est valide, on continue de traiter la requête
         String email = jwtUtils.getEmailFromJwtToken(token); // Récupérer l'email depuis le token
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Email extrait du token : " + email);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Email extrait du token : " + email);
 
-        System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
+        //System.out.println("ACCOUNT AUTH-CONTROLLER - Utilisateur trouvé pour l'email : " + email);
         User user = userService.findUserByEmail(email);
         if(user != null) {
-            System.out.println("ACCOUNT AUTH-CONTROLLER - Returning user details : " + ResponseEntity.ok().body(user).toString());
+            //System.out.println("ACCOUNT AUTH-CONTROLLER - Returning user details : " + ResponseEntity.ok().body(user).toString());
             return ResponseEntity.ok().body(user);
         } else {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun utilisateur trouvé pour l'email : " + email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
         }
     }
@@ -116,8 +120,9 @@ public class AuthController {
     @PostMapping("/signup")
     @Operation(summary = "User registration", description = "Register a new user account")  
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest, BindingResult result) {
-        //System.out.println("AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
+        System.out.println("********* AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
         if(result.hasErrors()) {
+            System.err.println("********* AUTH-CONTROLLER - Registration failed due to result error : " + result.toString());
             return ResponseEntity.badRequest().body("Erreur: Saisie incorrecte ou incomplète !");
         }
 
