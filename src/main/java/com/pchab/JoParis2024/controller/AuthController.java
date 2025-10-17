@@ -57,20 +57,28 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-        System.err.println("AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
+        //System.err.println("*************** AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
+<<<<<<< HEAD
         //System.out.println("AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
+=======
+        //System.out.println("*************** AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
+>>>>>>> tests
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtUtils.generateJwtToken(authentication);
+        //System.out.println("*************** AUTH-CONTROLLER - Generated JWT token for email: " + loginRequest.getEmail());
+        //System.out.println("*************** AUTH-CONTROLLER - JWT Token: " + jwt);
+
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        //System.out.println("*************** AUTH-CONTROLLER - UserDetails: " + userDetails.getUsername());
      
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername()));
         } catch (Exception e) {
-            System.err.println("AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
+            //System.err.println("*************** AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
             return ResponseEntity
                     .badRequest()
                     .body("Erreur: Email ou mot de passe invalide");
@@ -84,7 +92,7 @@ public class AuthController {
 
         // Vérifier si l'en-tête Authorization est présent et commence par "Bearer "
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Aucun token JWT trouvé dans l'en-tête Authorization.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Accès non autorisé");
         }
 
@@ -93,7 +101,7 @@ public class AuthController {
         //System.out.println("ACCOUNT AUTH-CONTROLLER - Token JWT reçu : " + token);
         
         if (!jwtUtils.validateJwtToken(token)) {
-            System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
+            //System.err.println("ACCOUNT AUTH-CONTROLLER - Token JWT invalide.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erreur: Token invalide");
         }
 
@@ -116,8 +124,9 @@ public class AuthController {
     @PostMapping("/signup")
     @Operation(summary = "User registration", description = "Register a new user account")  
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest, BindingResult result) {
-        //System.out.println("AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
+        System.out.println("********* AUTH-CONTROLLER - Registration attempt for email: " + signUpRequest.getUserEmail()  + " with password: " + signUpRequest.getUserPassword() + ", firstName: " + signUpRequest.getFirstName() + ", lastName: " + signUpRequest.getLastName());    
         if(result.hasErrors()) {
+            System.err.println("********* AUTH-CONTROLLER - Registration failed due to result error : " + result.toString());
             return ResponseEntity.badRequest().body("Erreur: Saisie incorrecte ou incomplète !");
         }
 
