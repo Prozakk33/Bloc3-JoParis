@@ -29,8 +29,6 @@ JoParis2024:
 springdoc:
     api-docs:
         path: /v3/api-docs
-        title: Documentation API JoParis2024
-        description: Bienvenue sur la documentation de l'API JoParis2024.
     swagger-ui:
         path: /v3/swagger-ui.html
 stripe:

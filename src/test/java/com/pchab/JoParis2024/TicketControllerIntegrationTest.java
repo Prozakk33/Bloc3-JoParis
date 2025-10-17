@@ -142,7 +142,7 @@ public class TicketControllerIntegrationTest {
     public void testVerifyTicket_Success() throws Exception {
         // Préparer les données
         VerifyTicketKeyRequest verifyTicketKeyRequest = new VerifyTicketKeyRequest();
-        verifyTicketKeyRequest.setTicketKey("mock-ticket-key");
+        verifyTicketKeyRequest.setQrCode("mock-ticket-key");
 
         DecodeQRCodeResponse decodeResponse = new DecodeQRCodeResponse();
         //decodeResponse.setValid(true);

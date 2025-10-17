@@ -57,28 +57,23 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-        //System.err.println("*************** AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
+        //System.err.println("AUTH-CONTROLLER - Login attempt for email: " + loginRequest.getEmail()  + " with password: " + loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-<<<<<<< HEAD
         //System.out.println("AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
-=======
-        //System.out.println("*************** AUTH-CONTROLLER - Authentication successful for email: " + loginRequest.getEmail());
->>>>>>> tests
-        
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtUtils.generateJwtToken(authentication);
-        //System.out.println("*************** AUTH-CONTROLLER - Generated JWT token for email: " + loginRequest.getEmail());
-        //System.out.println("*************** AUTH-CONTROLLER - JWT Token: " + jwt);
+        //System.out.println(" AUTH-CONTROLLER - Generated JWT token for email: " + loginRequest.getEmail());
+        //System.out.println("AUTH-CONTROLLER - JWT Token: " + jwt);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        //System.out.println("*************** AUTH-CONTROLLER - UserDetails: " + userDetails.getUsername());
+        //System.out.println("AUTH-CONTROLLER - UserDetails: " + userDetails.getUsername());
      
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername()));
         } catch (Exception e) {
-            //System.err.println("*************** AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
+            //System.err.println("AUTH-CONTROLLER - Authentication failed for email: " + loginRequest.getEmail() + " - " + e.getMessage());
             return ResponseEntity
                     .badRequest()
                     .body("Erreur: Email ou mot de passe invalide");
